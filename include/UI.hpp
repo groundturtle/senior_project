@@ -1,66 +1,131 @@
+#ifndef UI_HPP
+#define UI_HPP
+
 #include <vector>
+#include <string>
+#include "debugger.hpp"
+#include <gtk/gtk.h>
 #include <sys/ptrace.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <sstream>
 #include <iostream>
 #include <sys/personality.h>
+#include <stdio.h>
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-#include <stdio.h>
-#include <string>
 
-#define GL_SILENCE_DEPRECATION
 
-#include <GLFW/glfw3.h> // Will drag system OpenGL headers
-
-#include "debugger.hpp"
 #include "breakpoint.hpp"
 #include "registers.hpp"
 #include "asmparaser.hpp"
-#include "UI.hpp"
 
-using namespace minigdb;
+namespace minidbg {
 
-debugger dbg;
+char* openFileDialog() {
+    GtkWidget *dialog;
+    GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
+    gint res;
 
-static bool show_program = true;
-static bool show_stack = true;
-static bool show_src = true;
-static bool show_global_stack = true;
-static bool show_ram = true;
-static bool show_option_bar = true;
-static bool show_call_stack = true;
-static bool show_demo_window = false;
+    gtk_init(NULL, NULL);
 
-//static int windows_status = (ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
-static int windows_status = (ImGuiWindowFlags_None);
+    dialog = gtk_file_chooser_dialog_new("Open File",
+                                         NULL,
+                                         action,
+                                         "_Cancel",
+                                         GTK_RESPONSE_CANCEL,
+                                         "_Open",
+                                         GTK_RESPONSE_ACCEPT,
+                                         NULL);
 
-static void glfw_error_callback(int error, const char *description)
-{
-    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
+    res = gtk_dialog_run(GTK_DIALOG(dialog));
+    char* filename = NULL;
+    if (res == GTK_RESPONSE_ACCEPT) {
+        GtkFileChooser *chooser = GTK_FILE_CHOOSER(dialog);
+        filename = gtk_file_chooser_get_filename(chooser);
+    }
+
+    gtk_widget_destroy(dialog);
+    while (g_main_context_iteration(NULL, FALSE));
+    return filename;
 }
 
-static void HelpMarker(const char *desc)
+
+class UI {
+public:
+    UI(debugger& dbg) : dbg(dbg) {}
+    void render();
+
+private:
+    debugger& dbg;
+    static bool show_program;
+    static bool show_stack;
+    static bool show_src;
+    static bool show_global_stack;
+    static bool show_ram;
+    static bool show_option_bar;
+    static bool show_call_stack;
+    static bool show_demo_window;
+
+    void showProgram(bool* p_open);
+    void showStack(bool* p_open);
+    void showSrc(bool* p_open);
+    void showGlobalStack(bool* p_open);
+    void showRam(bool* p_open);
+    void showCallStack(bool* p_open);
+    void showOptionBar(bool* p_open);
+    void showOptionMainMenuBar();
+};
+
+// Initialization of static members
+bool UI::show_program = true;
+bool UI::show_stack = true;
+bool UI::show_src = true;
+bool UI::show_global_stack = true;
+bool UI::show_ram = true;
+bool UI::show_option_bar = true;
+bool UI::show_call_stack = true;
+bool UI::show_demo_window = false;
+
+
+void UI::render()
 {
-    ImGui::TextDisabled("(?)");
-    if (ImGui::BeginItemTooltip())
-    {
-        ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-        ImGui::TextUnformatted(desc);
-        ImGui::PopTextWrapPos();
-        ImGui::EndTooltip();
+    if (show_program) {
+        showProgram(&show_program);
+    }
+    if (show_stack) {
+        showStack(&show_stack);
+    }
+    if (show_src) {
+        showSrc(&show_src);
+    }
+    if (show_global_stack) {
+        showGlobalStack(&show_global_stack);
+    }
+    if (show_ram) {
+        showRam(&show_ram);
+    }
+    if (show_option_bar) {
+        showOptionBar(&show_option_bar);
+    }
+    if (show_call_stack) {
+        showCallStack(&show_call_stack);        
+    }
+    if (show_demo_window) {
+        ImGui::ShowDemoWindow(&show_demo_window);
     }
 }
+
+
 
 /**
  * @brief 在 ImGui 窗口中显示程序信息。
  * 
  * @param p_open 指向一个布尔值，指示窗口是否打开
  */
-void ShowProgram(bool *p_open)
+void UI::ShowProgram(bool *p_open)
 {
     ImGui::Begin("Program", p_open, windows_status);
 
@@ -100,7 +165,7 @@ void ShowProgram(bool *p_open)
  * 
  * @param p_open 指向一个布尔值，指示窗口是否打开
  */
-void ShowStack(bool *p_open)
+void UI::ShowStack(bool *p_open)
 {
     ImGui::Begin("Stack", p_open, windows_status);
     ImGui::SetWindowFontScale(1.5f);
@@ -123,7 +188,7 @@ void ShowStack(bool *p_open)
  * 
  * @param p_open 
  */
-void ShowSrc(bool *p_open)
+void UI::ShowSrc(bool *p_open)
 {
     ImGui::Begin("Src", p_open, windows_status);
     ImGui::SetWindowFontScale(1.5f);
@@ -166,7 +231,7 @@ void ShowSrc(bool *p_open)
  * 
  * @param p_open 
  */
-void ShowGlobalStack(bool *p_open)
+void UI::ShowGlobalStack(bool *p_open)
 {
     ImGui::Begin("Global Satck", p_open, windows_status);
     ImGui::SetWindowFontScale(1.5f);
@@ -235,7 +300,13 @@ void ShowGlobalStack(bool *p_open)
     ImGui::End();
 }
 
-void ShowRam(bool *p_open)
+
+/**
+ * @brief 显示内存中的数据
+ * 
+ * @param p_open 
+ */
+void UI::ShowRam(bool *p_open)
 {
     ImGui::Begin("Ram", p_open, windows_status);
     ImGui::SetWindowFontScale(1.5f);
@@ -265,12 +336,13 @@ void ShowRam(bool *p_open)
 }
 
 
+
 /**
  * @brief 显示全局堆栈信息的ImGui窗口
  * 
  * @param p_open 
  */
-void ShowCallStack(bool *p_open)
+void UI::ShowCallStack(bool *p_open)
 {
     ImGui::Begin("Call Stack", p_open, windows_status);
 
@@ -298,7 +370,7 @@ void ShowCallStack(bool *p_open)
  * 
  * @todo complete 'File -> Load Program'
  */
-void ShowOptionMainMenuBar()
+void UI::ShowOptionMainMenuBar()
 {
     if (ImGui::BeginMainMenuBar())
     {
@@ -415,7 +487,7 @@ void ShowOptionMainMenuBar()
  * 
  * @param p_open 控制窗口是否可见的指针。
  */
-void ShowOptionBar(bool *p_open)
+void UI::ShowOptionBar(bool *p_open)
 {
     ImGui::Begin("Option Bar", p_open, windows_status | ImGuiWindowFlags_NoTitleBar);
     ImGui::SetWindowFontScale(1.5f);
@@ -438,7 +510,7 @@ void ShowOptionBar(bool *p_open)
                     execl(filePath.c_str(), filePath.c_str(), nullptr);
                 } else if (pid > 0) {
                     // 父进程: 重新初始化调试器并在main函数设置断点
-                    dbg.initGdb(filePath, pid);
+                    dbg.initDbg(filePath, pid);
                     dbg.break_execution("main");
                     dbg.continue_execution();
                 }
@@ -481,7 +553,7 @@ void ShowOptionBar(bool *p_open)
     ImGui::End();
 }
 
-int buildWindows()
+int UI::buildWindows()
 {
     glfwSetErrorCallback(glfw_error_callback);          // 设置 GLFW 的错误回调函数
     if (!glfwInit())             // 初始化 GLFW
@@ -493,7 +565,7 @@ int buildWindows()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
     // 创建窗口及上下文
-    GLFWwindow *window = glfwCreateWindow(1680, 896, "minigdb", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(1680, 896, "minidbg", nullptr, nullptr);
     if (window == nullptr)
         return 1;
     glfwMakeContextCurrent(window);
@@ -588,31 +660,8 @@ int buildWindows()
     return 0;
 }
 
-int main(int argc, char *argv[])
-{
-    if (argc < 2)
-    {
-        std::cerr << "Program name not specified";
-        return -1;
-    }
 
-    auto prog = argv[1];
+} // namespace minidbg
 
-    auto pid = fork();
-    if (pid == 0)
-    {
-        personality(ADDR_NO_RANDOMIZE); // 关闭随机内存地址的分配
-        ptrace(PTRACE_TRACEME, 0, nullptr, nullptr);        // PTRACE_TRACEME 将当前进程标记为跟踪目标, 等待父进程发出信号(ptrace)来控制其执行
-        execl(prog, prog, nullptr);
-    }
-    else if (pid >= 1)
-    {
-        // parent
-        std::cout << "start debugging process " << pid << "\n";
 
-        dbg.initGdb(prog, pid);
-        dbg.break_execution("main");
-        dbg.continue_execution();
-        buildWindows();
-    }
-}
+#endif // UI_HPP

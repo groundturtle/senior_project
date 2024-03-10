@@ -1,5 +1,5 @@
-#ifndef MINIGDB_DEBUGGER_HPP
-#define MINIGDB_DEBUGGER_HPP
+#ifndef MINIDBG_DEBUGGER_HPP
+#define MINIDBG_DEBUGGER_HPP
 
 #include <unordered_map>
 #include <utility>
@@ -24,7 +24,7 @@
 #include "symboltype.hpp"
 #include "asmparaser.hpp"
 
-namespace minigdb
+namespace minidbg
 {
 
 /**
@@ -189,12 +189,12 @@ public:
         }
 
         /**
-         * @brief 初始化minigdb调试器。
+         * @brief 初始化mini调试器。
          * 
          * @param prog_name 目标程序的名称。
          * @param pid 目标程序的进程ID。
         */
-        void initGdb(std::string prog_name, pid_t pid)
+        void initDbg(std::string prog_name, pid_t pid)
         {
             m_prog_name = std::move(prog_name);
             m_pid = pid;
@@ -211,7 +211,7 @@ public:
 
             initialise_load_src();
 
-            std::cout << "init minigdb successfully\n";
+            std::cout << "init minidbg successfully\n";
         }
 
         /**

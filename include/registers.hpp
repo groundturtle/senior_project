@@ -1,10 +1,10 @@
-#ifndef MINIGDB_REGISTERS_HPP
-#define MINIGDB_REGISTERS_HPP
+#ifndef MINIDBG_REGISTERS_HPP
+#define MINIDBG_REGISTERS_HPP
 
 #include <sys/user.h>
 #include <algorithm>
 
-namespace minigdb
+namespace minidbg
 {
     /**
      * @brief 常见的寄存器名称
