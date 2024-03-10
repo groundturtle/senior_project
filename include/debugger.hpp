@@ -1,5 +1,5 @@
-#ifndef MINIDBG_DEBUGGER_HPP
-#define MINIDBG_DEBUGGER_HPP
+#ifndef MINIGDB_DEBUGGER_HPP
+#define MINIGDB_DEBUGGER_HPP
 
 #include <unordered_map>
 #include <utility>
@@ -24,7 +24,7 @@
 #include "symboltype.hpp"
 #include "asmparaser.hpp"
 
-namespace minidbg
+namespace minigdb
 {
 
 /**

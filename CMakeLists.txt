@@ -1,18 +1,21 @@
 cmake_minimum_required (VERSION 3.0)
 cmake_policy(SET CMP0072 NEW)
 
-
-project (MiniDbg)
-
+project (MiniGdb)
 
 find_package(glfw3 REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
 
 add_compile_options(-std=c++14 -g)
 
-include_directories(ext/libelfin include imgui)
-add_executable(minidbg 
-src/minidbg.cpp 
+include_directories(${GTK3_INCLUDE_DIRS} ext/libelfin include imgui)
+link_directories(${GTK3_LIBRARY_DIRS})
+add_definitions(${GTK3_CFLAGS_OTHER})
+
+add_executable(minigdb
+src/minigdb.cpp 
 imgui/imgui.cpp
 imgui/imgui_widgets.cpp
 imgui/imgui_tables.cpp
@@ -40,9 +43,9 @@ add_custom_target(
    COMMAND make
    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/ext/libelfin
 )
-target_link_libraries(minidbg
+target_link_libraries(minigdb
+                      ${GTK3_LIBRARIES}
                       ${PROJECT_SOURCE_DIR}/ext/libelfin/dwarf/libdwarf++.so
-                      ${PROJECT_SOURCE_DIR}/ext/libelfin/elf/libelf++.so)
-add_dependencies(minidbg libelfin)
-
-target_link_libraries(minidbg  GL glfw -ldl)
+                      ${PROJECT_SOURCE_DIR}/ext/libelfin/elf/libelf++.so
+                      GL glfw -ldl)
+add_dependencies(minigdb libelfin)

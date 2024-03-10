@@ -1,11 +1,11 @@
-#ifndef MINIDBG_DREAKPOINT_HPP
-#define MINIDBG_DREAKPOINT_HPP
+#ifndef MINIGDB_DREAKPOINT_HPP
+#define MINIGDB_DREAKPOINT_HPP
 
 #include <linux/types.h>
 #include <utility>
 #include <string>
 
-namespace minidbg
+namespace minigdb
 {
     class breakpoint
     {

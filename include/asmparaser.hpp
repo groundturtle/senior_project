@@ -7,15 +7,15 @@
  * @copyright Copyright (c) 2024
  * 
  */
-#ifndef MINIDBG_ASMPARASER_HPP
-#define MINIDBG_ASMPARASER_HPP
+#ifndef MINIGDB_ASMPARASER_HPP
+#define MINIGDB_ASMPARASER_HPP
 
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <string>
 #include <sstream>
-namespace minidbg
+namespace minigdb
 {
     // split a string into parts
     std::vector<std::string> split(const std::string &s, char delimiter)

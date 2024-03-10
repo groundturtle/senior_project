@@ -5,32 +5,36 @@
     https://github.com/ocornut/imgui  前端显示ui
 
 1、安装依赖
-glfw3库
+```
+# glfw3库
 sudo apt-get install libglfw3-dev
-OpenGL库
+# OpenGL库
 sudo apt-get install libgl1-mesa-dev
-CMake
+# CMake
 sudo apt-get install cmake
-g++
+# g++
 sudo apt-get install g++
-objdump
+# objdump
 sudo apt-get install binutils
-python3
+# python3
 sudo apt-get install python3
+# gtk
+sudo apt-get install libgtk-3-dev
+```
 
 2、编译程序
-cd ./mindbgWithUI
-cd ./ext/libelfin
+```
 make
-mkdir build
-cd build
+mkdir build && cd build 
 cmake ..
 make clean
 make
+```
 
 3、运行
 ./mindbg fileYouWantToDbg
-要求fileYouWantToDbg需要以-g选项编译
+
+fileYouWantToDbg需要以-g选项编译
 
 4、bug
     1) 源文件的中文注释无法显示

@@ -20,8 +20,9 @@
 #include "breakpoint.hpp"
 #include "registers.hpp"
 #include "asmparaser.hpp"
+#include "UI.hpp"
 
-using namespace minidbg;
+using namespace minigdb;
 
 debugger dbg;
 
@@ -426,6 +427,23 @@ void ShowOptionBar(bool *p_open)
         // @todo open file and debug.
         if (ImGui::Button("file", ImVec2(-FLT_MIN, -FLT_MIN)))
         {
+            // 弹出文件选择对话框并获取用户选择的文件路径
+            std::string filePath = openFileDialog();
+            if (!filePath.empty()) {
+                auto pid = fork();
+                if (pid == 0) {
+                    // 子进程: 设置被调试程序
+                    personality(ADDR_NO_RANDOMIZE);
+                    ptrace(PTRACE_TRACEME, 0, nullptr, nullptr);
+                    execl(filePath.c_str(), filePath.c_str(), nullptr);
+                } else if (pid > 0) {
+                    // 父进程: 重新初始化调试器并在main函数设置断点
+                    dbg.initGdb(filePath, pid);
+                    dbg.break_execution("main");
+                    dbg.continue_execution();
+                }
+            }
+
         };
         ImGui::TableNextColumn();
         if (ImGui::Button("start", ImVec2(-FLT_MIN, -FLT_MIN)))
