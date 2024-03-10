@@ -51,6 +51,6 @@ int main(int argc, char *argv[])
         dbg.initDbg(prog, pid);
         dbg.break_execution("main");
         dbg.continue_execution();
-        UI.buildWindows();
+        ui.buildWindows();
     }
 }

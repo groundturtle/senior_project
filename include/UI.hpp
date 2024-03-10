@@ -52,11 +52,16 @@ char* openFileDialog() {
     return filename;
 }
 
+static void glfw_error_callback(int error, const char *description)
+{
+    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
+}
 
 class UI {
 public:
     UI(debugger& dbg) : dbg(dbg) {}
     void render();
+    int buildWindows(); 
 
 private:
     debugger& dbg;
@@ -68,6 +73,7 @@ private:
     static bool show_option_bar;
     static bool show_call_stack;
     static bool show_demo_window;
+    static int windows_status;
 
     void showProgram(bool* p_open);
     void showStack(bool* p_open);
@@ -88,6 +94,7 @@ bool UI::show_ram = true;
 bool UI::show_option_bar = true;
 bool UI::show_call_stack = true;
 bool UI::show_demo_window = false;
+int UI::windows_status = (ImGuiWindowFlags_None);
 
 
 void UI::render()
@@ -125,7 +132,7 @@ void UI::render()
  * 
  * @param p_open 指向一个布尔值，指示窗口是否打开
  */
-void UI::ShowProgram(bool *p_open)
+void UI::showProgram(bool *p_open)
 {
     ImGui::Begin("Program", p_open, windows_status);
 
@@ -165,7 +172,7 @@ void UI::ShowProgram(bool *p_open)
  * 
  * @param p_open 指向一个布尔值，指示窗口是否打开
  */
-void UI::ShowStack(bool *p_open)
+void UI::showStack(bool *p_open)
 {
     ImGui::Begin("Stack", p_open, windows_status);
     ImGui::SetWindowFontScale(1.5f);
@@ -188,7 +195,7 @@ void UI::ShowStack(bool *p_open)
  * 
  * @param p_open 
  */
-void UI::ShowSrc(bool *p_open)
+void UI::showSrc(bool *p_open)
 {
     ImGui::Begin("Src", p_open, windows_status);
     ImGui::SetWindowFontScale(1.5f);
@@ -231,7 +238,7 @@ void UI::ShowSrc(bool *p_open)
  * 
  * @param p_open 
  */
-void UI::ShowGlobalStack(bool *p_open)
+void UI::showGlobalStack(bool *p_open)
 {
     ImGui::Begin("Global Satck", p_open, windows_status);
     ImGui::SetWindowFontScale(1.5f);
@@ -306,7 +313,7 @@ void UI::ShowGlobalStack(bool *p_open)
  * 
  * @param p_open 
  */
-void UI::ShowRam(bool *p_open)
+void UI::showRam(bool *p_open)
 {
     ImGui::Begin("Ram", p_open, windows_status);
     ImGui::SetWindowFontScale(1.5f);
@@ -342,7 +349,7 @@ void UI::ShowRam(bool *p_open)
  * 
  * @param p_open 
  */
-void UI::ShowCallStack(bool *p_open)
+void UI::showCallStack(bool *p_open)
 {
     ImGui::Begin("Call Stack", p_open, windows_status);
 
@@ -370,7 +377,7 @@ void UI::ShowCallStack(bool *p_open)
  * 
  * @todo complete 'File -> Load Program'
  */
-void UI::ShowOptionMainMenuBar()
+void UI::showOptionMainMenuBar()
 {
     if (ImGui::BeginMainMenuBar())
     {
@@ -487,11 +494,11 @@ void UI::ShowOptionMainMenuBar()
  * 
  * @param p_open 控制窗口是否可见的指针。
  */
-void UI::ShowOptionBar(bool *p_open)
+void UI::showOptionBar(bool *p_open)
 {
     ImGui::Begin("Option Bar", p_open, windows_status | ImGuiWindowFlags_NoTitleBar);
     ImGui::SetWindowFontScale(1.5f);
-    ShowOptionMainMenuBar();
+    showOptionMainMenuBar();
 
     if (ImGui::BeginTable("split", 10, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
     {
@@ -606,31 +613,31 @@ int UI::buildWindows()
         // 显示不同的窗口和内容
         if (show_program)
         {
-            ShowProgram(&show_program);
+            showProgram(&show_program);
         }
         if (show_stack)
         {
-            ShowStack(&show_stack);
+            showStack(&show_stack);
         }
         if (show_src)
         {
-            ShowSrc(&show_src);
+            showSrc(&show_src);
         }
         if (show_global_stack)
         {
-            ShowGlobalStack(&show_global_stack);
+            showGlobalStack(&show_global_stack);
         }
         if (show_ram)
         {
-            ShowRam(&show_ram);
+            showRam(&show_ram);
         }
         if (show_option_bar)
         {
-            ShowOptionBar(&show_option_bar);
+            showOptionBar(&show_option_bar);
         }
         if (show_call_stack)
         {
-            ShowCallStack(&show_call_stack);
+            showCallStack(&show_call_stack);
         }
         if (show_demo_window)
         {
