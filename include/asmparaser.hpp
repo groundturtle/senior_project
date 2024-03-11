@@ -40,7 +40,7 @@ namespace minidbg
         std::string comment;       // Comment associated with the instruction
     };
 
-    // a block of assembly code 函数
+    // a block of assembly code
     struct asm_head {
         uint64_t start_addr;            // Start address of the block
         uint64_t end_addr;              // End address of the block

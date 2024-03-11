@@ -1,3 +1,13 @@
+/**
+ * @file symboltype.hpp
+ * @author your name (you@domain.com)
+ * @brief 定义了符号类型的枚举类、符号描述结构体，符号与elf中的符号类型一一对应并有转换函数。
+ * @version 0.1
+ * @date 2024-03-11
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #include "elf/elf++.hh"
 namespace symboltype
 {

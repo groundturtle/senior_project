@@ -52,6 +52,12 @@ char* openFileDialog() {
     return filename;
 }
 
+/**
+ * @brief glf发生错误时的回调函数
+ * 
+ * @param error 
+ * @param description 
+ */
 static void glfw_error_callback(int error, const char *description)
 {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
@@ -59,12 +65,14 @@ static void glfw_error_callback(int error, const char *description)
 
 class UI {
 public:
-    UI(debugger& dbg) : dbg(dbg) {}
+    UI(debugger& dbg) : dbg(dbg) {  }
+    int buildWindows();
     void render();
-    int buildWindows(); 
+    void renewWindow(){}        // @todo 如何实现刷新显示?
 
 private:
     debugger& dbg;
+    bool m_close_window;
     static bool show_program;
     static bool show_stack;
     static bool show_src;
@@ -126,11 +134,10 @@ void UI::render()
 }
 
 
-
 /**
- * @brief 在 ImGui 窗口中显示程序信息。
+ * @brief 在 ImGui 窗口中显示源代码。
  * 
- * @param p_open 指向一个布尔值，指示窗口是否打开
+ * @param p_open 指向一个布尔值，指示窗口是否应打开
  */
 void UI::showProgram(bool *p_open)
 {
@@ -338,7 +345,6 @@ void UI::showRam(bool *p_open)
         ImGui::EndChild();
         ImGui::PopStyleVar();
     }
-
     ImGui::End();
 }
 
@@ -503,26 +509,35 @@ void UI::showOptionBar(bool *p_open)
     if (ImGui::BeginTable("split", 10, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings))
     {
         ImGui::TableNextColumn();
-        // @todo open file and debug.
+        //@todo: 结束旧的被调试程序，并修改所有有关变量（包括但不限于pid、程序路径）。
         if (ImGui::Button("file", ImVec2(-FLT_MIN, -FLT_MIN)))
         {
-            // 弹出文件选择对话框并获取用户选择的文件路径
             std::string filePath = openFileDialog();
             if (!filePath.empty()) {
-                auto pid = fork();
-                if (pid == 0) {
-                    // 子进程: 设置被调试程序
+                //@todo: close old program
+                // close_window();
+                if(!dbg.kill_prog()){
+                    std::cerr<<"Error: kill child program failed\n";
+                }
+                pid_t pid = fork();     // 新建进程
+                if (pid == -1) {
+                    std::cerr << "Error: fork() failed\n";
+                    exit(EXIT_FAILURE);
+                }
+                if (pid == 0) {     //子进程: 设置被调试程序
                     personality(ADDR_NO_RANDOMIZE);
                     ptrace(PTRACE_TRACEME, 0, nullptr, nullptr);
                     execl(filePath.c_str(), filePath.c_str(), nullptr);
-                } else if (pid > 0) {
+                } 
+                else if (pid > 0) {
                     // 父进程: 重新初始化调试器并在main函数设置断点
+                    std::cout << "start debugging process " << pid << "\n";
                     dbg.initDbg(filePath, pid);
                     dbg.break_execution("main");
                     dbg.continue_execution();
+                    // buildWindows();
                 }
             }
-
         };
         ImGui::TableNextColumn();
         if (ImGui::Button("start", ImVec2(-FLT_MIN, -FLT_MIN)))
@@ -562,8 +577,8 @@ void UI::showOptionBar(bool *p_open)
 
 int UI::buildWindows()
 {
-    glfwSetErrorCallback(glfw_error_callback);          // 设置 GLFW 的错误回调函数
-    if (!glfwInit())             // 初始化 GLFW
+    glfwSetErrorCallback(glfw_error_callback);      // 设置 GLFW 的错误回调函数
+    if (!glfwInit())         // 初始化 GLFW
         return 1;
 
     // 设置 OpenGL 版本和相关参数
@@ -575,20 +590,21 @@ int UI::buildWindows()
     GLFWwindow *window = glfwCreateWindow(1680, 896, "minidbg", nullptr, nullptr);
     if (window == nullptr)
         return 1;
+
+    // 使新创建的窗口的OpenGL上下文成为当前线程的主上下文
     glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
+    glfwSwapInterval(1);     //启用垂直同步（V-Sync），限制帧率与显示器的刷新率同步
 
     IMGUI_CHECKVERSION();
 
-    // 初始化 Dear ImGui 上下文
+    //创建ImGui上下文。每个ImGui程序都必须精确地调用一次
     ImGui::CreateContext();
-    ImGuiIO &io = ImGui::GetIO();
+    ImGuiIO &io = ImGui::GetIO();       // 获取ImGui的IO对象，用于后续配置
     (void)io;                           // 消除编译器产生的未使用变量的警告
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // Enable Gamepad Controls
 
-
-    // ImGui::StyleColorsDark();
+    // 设置ImGui的颜色主题为浅色
     ImGui::StyleColorsLight();
 
     // Setup Platform/Renderer backends
@@ -610,39 +626,8 @@ int UI::buildWindows()
         ImGui_ImplGlfw_NewFrame();          // 检查 GLFW 的输入事件
         ImGui::NewFrame();                  // 构建新的界面布局
 
-        // 显示不同的窗口和内容
-        if (show_program)
-        {
-            showProgram(&show_program);
-        }
-        if (show_stack)
-        {
-            showStack(&show_stack);
-        }
-        if (show_src)
-        {
-            showSrc(&show_src);
-        }
-        if (show_global_stack)
-        {
-            showGlobalStack(&show_global_stack);
-        }
-        if (show_ram)
-        {
-            showRam(&show_ram);
-        }
-        if (show_option_bar)
-        {
-            showOptionBar(&show_option_bar);
-        }
-        if (show_call_stack)
-        {
-            showCallStack(&show_call_stack);
-        }
-        if (show_demo_window)
-        {
-            ImGui::ShowDemoWindow(&show_demo_window);
-        }
+        // 显示窗口和内容
+        render();
 
         // 渲染
         ImGui::Render();

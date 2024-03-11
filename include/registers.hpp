@@ -1,3 +1,12 @@
+/**
+ * @file registers.hpp
+ * @brief 本文件定义了常用寄存器枚举类型、寄存器描述符（结构体，包括寄存器对应的枚举变量、名称、dwarf编号），读取和设置寄存器值的函数。
+ * @version 0.1
+ * @date 2024-03-11
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef MINIDBG_REGISTERS_HPP
 #define MINIDBG_REGISTERS_HPP
 

@@ -1,3 +1,12 @@
+/**
+ * @file breakpoint.hpp
+ * @brief 断点类，包含启用和禁用功能，实例化后存储于debugger类中的m_breakpoints向量。
+ * @version 0.1
+ * @date 2024-03-11
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef MINIDBG_DREAKPOINT_HPP
 #define MINIDBG_DREAKPOINT_HPP
 
@@ -7,6 +16,10 @@
 
 namespace minidbg
 {
+    /**
+     * @brief 断点类，包含启用和禁用功能，实例化后存储于debugger类中的m_breakpoints向量。
+     * 
+     */
     class breakpoint
     {
     public:
