@@ -397,7 +397,6 @@ private:
             single_step_instruction_with_breakpoint_check();
             auto offset_pc = offset_load_address(get_pc());
             auto line_entry = get_line_entry_from_pc(offset_pc);
-        //    print_source(line_entry->file->path, line_entry->line);      // debug
         }
         else if (is_prefix(command, "step"))
         {
@@ -926,6 +925,8 @@ private:
         std::string binaryFile = m_prog_name;
         std::string middleFile = m_prog_name + ".asm";
 
+        m_src_vct.clear();              //fatal!
+
         // 使用 objdump 命令生成反汇编代码
         std::string command = "objdump -d " + binaryFile + "  | tail -n +4 > " + middleFile;
         int result = std::system(command.c_str());
@@ -945,7 +946,7 @@ private:
         auto offset_pc = offset_load_address(get_pc());
         auto line_entry = m_dwarf.compilation_units().begin()->get_line_table().begin();
         std::string file_path = std::string(line_entry->file->path);
-        // std::cout<<"trying to open src "<<file_path<<"\n";
+        std::cout<<"trying to open src "<<file_path<<"\n";
 
         std::ifstream inFile(file_path);
         std::string line;
