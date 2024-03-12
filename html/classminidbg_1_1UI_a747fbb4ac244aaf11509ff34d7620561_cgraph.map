@@ -1,0 +1,9 @@
+<map id="minidbg::UI::showProgram" name="minidbg::UI::showProgram">
+<area shape="rect" id="node1" title="在 ImGui 窗口中显示源代码。" alt="" coords="5,46,200,73"/>
+<area shape="rect" id="node2" href="$classminidbg_1_1debugger.html#a8d63db538666ebb38ea899d1821a370b" title="获取当前源代码行号。" alt="" coords="248,39,400,80"/>
+<area shape="rect" id="node3" href="$classminidbg_1_1debugger.html#ab0a72f56b837540af184db2c53de4aef" title="Get the line entry from pc object" alt="" coords="448,5,623,47"/>
+<area shape="rect" id="node4" href="$classminidbg_1_1debugger.html#a56e26f0c99ba1bd0390cf2dba4e24a29" title=" " alt="" coords="459,71,611,112"/>
+<area shape="rect" id="node5" href="$classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127" title="获取当前程序计数器（PC）的值。" alt="" coords="671,37,823,79"/>
+<area shape="rect" id="node7" href="$classminidbg_1_1debugger.html#ace071934f7fedb171618a830e0b2f856" title="从实际地址转换为相对地址" alt="" coords="671,103,823,144"/>
+<area shape="rect" id="node6" href="$namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b" title="根据给定的进程ID和寄存器枚举变量，获取该寄存器的值。" alt="" coords="871,37,1032,79"/>
+</map>

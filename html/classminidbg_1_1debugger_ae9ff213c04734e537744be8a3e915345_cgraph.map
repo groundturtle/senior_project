@@ -1,0 +1,10 @@
+<map id="minidbg::debugger::single_step_instruction" name="minidbg::debugger::single_step_instruction">
+<area shape="rect" id="node1" title="向子进程发送信号，让子进程只执行一条指令" alt="" coords="5,39,177,80"/>
+<area shape="rect" id="node2" href="$classminidbg_1_1debugger.html#ade2972e37458f63870e18c34f0a44bc1" title="等待目标进程发送信号并做出相应处理." alt="" coords="225,39,377,80"/>
+<area shape="rect" id="node3" href="$classminidbg_1_1debugger.html#a4875fc7f36cb21d20c02bc0778f986d5" title="Get the signal info" alt="" coords="425,5,577,47"/>
+<area shape="rect" id="node4" href="$classminidbg_1_1debugger.html#a5679e71844ee8af9206377b3f9d61f82" title="根据siginfo_t结构体中的si_code字段来判断SIGTRAP信号的具体类型，并进行相应的处理：" alt="" coords="425,71,577,112"/>
+<area shape="rect" id="node5" href="$classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127" title="获取当前程序计数器（PC）的值。" alt="" coords="625,37,777,79"/>
+<area shape="rect" id="node7" href="$classminidbg_1_1debugger.html#ab6efac5e854a13f0bc1e6a07a8a208d2" title=" " alt="" coords="625,103,777,144"/>
+<area shape="rect" id="node6" href="$namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b" title="根据给定的进程ID和寄存器枚举变量，获取该寄存器的值。" alt="" coords="825,37,987,79"/>
+<area shape="rect" id="node8" href="$namespaceminidbg.html#a1d7f2dc1f8a79d86673a623564b97cc8" title="设置（改写）指定寄存器的值。" alt="" coords="826,103,986,144"/>
+</map>

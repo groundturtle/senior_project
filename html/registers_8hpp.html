@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>My Project: include/registers.hpp 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">My Project
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">类</a> &#124;
+<a href="#namespaces">命名空间</a> &#124;
+<a href="#enum-members">枚举</a> &#124;
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle">
+<div class="title">registers.hpp 文件参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>本文件定义了常用寄存器枚举类型、寄存器描述符（结构体，包括寄存器对应的枚举变量、名称、dwarf编号），读取和设置寄存器值的函数。  
+<a href="#details">更多...</a></p>
+<div class="textblock"><code>#include &lt;sys/user.h&gt;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
+</div><div class="textblock"><div class="dynheader">
+registers.hpp 的引用(Include)关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="registers_8hpp__incl.png" border="0" usemap="#include_2registers_8hpp" alt=""/></div>
+<map name="include_2registers_8hpp" id="include_2registers_8hpp">
+<area shape="rect" title="本文件定义了常用寄存器枚举类型、寄存器描述符（结构体，包括寄存器对应的枚举变量、名称、dwarf编号），读取和设置寄存器值的函数。" alt="" coords="24,5,183,32"/>
+<area shape="rect" title=" " alt="" coords="5,80,92,107"/>
+<area shape="rect" title=" " alt="" coords="117,80,202,107"/>
+</map>
+</div>
+</div><div class="textblock"><div class="dynheader">
+此图展示该文件直接或间接的被哪些文件引用了:</div>
+<div class="dyncontent">
+<div class="center"><img src="registers_8hpp__dep__incl.png" border="0" usemap="#include_2registers_8hppdep" alt=""/></div>
+<map name="include_2registers_8hppdep" id="include_2registers_8hppdep">
+<area shape="rect" title="本文件定义了常用寄存器枚举类型、寄存器描述符（结构体，包括寄存器对应的枚举变量、名称、dwarf编号），读取和设置寄存器值的函数。" alt="" coords="18,5,177,32"/>
+<area shape="rect" href="debugger_8hpp.html" title=" " alt="" coords="77,80,238,107"/>
+<area shape="rect" href="UI_8hpp.html" title=" " alt="" coords="5,155,120,181"/>
+<area shape="rect" href="minidbg_8cpp.html" title=" " alt="" coords="47,229,172,256"/>
+</map>
+</div>
+</div>
+<p><a href="registers_8hpp_source.html">浏览源代码.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+类</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structminidbg_1_1reg__descriptor.html">minidbg::reg_descriptor</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">包含寄存器名称、对应的dwarf寄存器编号  <a href="structminidbg_1_1reg__descriptor.html#details">更多...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+命名空间</h2></td></tr>
+<tr class="memitem:namespaceminidbg"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceminidbg.html">minidbg</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+枚举</h2></td></tr>
+<tr class="memitem:a00453778d7af0a2473834d873322a83d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83d">minidbg::reg</a> { <br />
+&#160;&#160;<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da0b1c108d8b9c46d402a502c5b6b9261c">minidbg::reg::rax</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da004fabe7cfcb250d5662eb53b16293a2">minidbg::reg::rbx</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da690ac99ca47423f97ec67e7cbfe15a1b">minidbg::reg::rcx</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da3cfac727c3b7a5feb2f9d11ee4fe4a70">minidbg::reg::rdx</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83dafba662cc36fc65e57623b25288b1e689">minidbg::reg::rdi</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83daa893136449f724af7726ba78208a1c86">minidbg::reg::rsi</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da5fb4c09ffcf0a2564a2eca001edde421">minidbg::reg::rbp</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da451e86cb8c690e064ceb3078192d8615">minidbg::reg::rsp</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da90a071d6a73f529da5efeb75b4cec839">minidbg::reg::r8</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da1e95ec65c03e06c5057a1659d1788dbd">minidbg::reg::r9</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83daa2a1f63d98e3755f63fb60485a56c853">minidbg::reg::r10</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da4678f5a997d3c42551331e04596491d3">minidbg::reg::r11</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83dae249a6ebf27391725552f1d90f559f14">minidbg::reg::r12</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da0839f88ae61efaa3e91fdf5b732b242f">minidbg::reg::r13</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da2d337e4372792a35c557c24dc3144f62">minidbg::reg::r14</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da003a63aa0b2e193ef81111bc8c0b56c3">minidbg::reg::r15</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83dab50a2e500294807caa75f3a835796682">minidbg::reg::rip</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da25fe4beda0214ac3a9debdfe7bc3dafd">minidbg::reg::rflags</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da95cc64dd2825f9df13ec4ad683ecf339">minidbg::reg::cs</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da2c29d0041eaf1cfcd335398d4990ede4">minidbg::reg::orig_rax</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da42853b619eab1b18a1778e9eb35f4767">minidbg::reg::fs_base</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83dafdabd9154959ceac11d217ace6d9e51d">minidbg::reg::gs_base</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83dabc7b36fe4d2924e49800d9b3dc4a325c">minidbg::reg::fs</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da1d8d5e912302108b5e88c3e77fcad378">minidbg::reg::gs</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da3691308f2a4c2f6983f2880d32e29c84">minidbg::reg::ss</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da522748524ad010358705b6852b81be4c">minidbg::reg::ds</a>, 
+<a class="el" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da12470fe406d44017d96eab37dd65fc14">minidbg::reg::es</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a00453778d7af0a2473834d873322a83d"><td class="mdescLeft">&#160;</td><td class="mdescRight">常见的寄存器名称  <a href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83d">更多...</a><br /></td></tr>
+<tr class="separator:a00453778d7af0a2473834d873322a83d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:aaa5b1886e9ba4a1885c36441d2a7fb2b"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b">minidbg::get_register_value</a> (pid_t pid, reg r)</td></tr>
+<tr class="memdesc:aaa5b1886e9ba4a1885c36441d2a7fb2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">根据给定的进程ID和寄存器枚举变量，获取该寄存器的值。  <a href="namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b">更多...</a><br /></td></tr>
+<tr class="separator:aaa5b1886e9ba4a1885c36441d2a7fb2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d7f2dc1f8a79d86673a623564b97cc8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceminidbg.html#a1d7f2dc1f8a79d86673a623564b97cc8">minidbg::set_register_value</a> (pid_t pid, reg r, uint64_t value)</td></tr>
+<tr class="memdesc:a1d7f2dc1f8a79d86673a623564b97cc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">设置（改写）指定寄存器的值。  <a href="namespaceminidbg.html#a1d7f2dc1f8a79d86673a623564b97cc8">更多...</a><br /></td></tr>
+<tr class="separator:a1d7f2dc1f8a79d86673a623564b97cc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6580941059b09457811c95e15bb2927f"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceminidbg.html#a6580941059b09457811c95e15bb2927f">minidbg::get_register_value_from_dwarf_register</a> (pid_t pid, unsigned regnum)</td></tr>
+<tr class="memdesc:a6580941059b09457811c95e15bb2927f"><td class="mdescLeft">&#160;</td><td class="mdescRight">根据给定的进程ID和DWARF寄存器编号，获取该寄存器的值。  <a href="namespaceminidbg.html#a6580941059b09457811c95e15bb2927f">更多...</a><br /></td></tr>
+<tr class="separator:a6580941059b09457811c95e15bb2927f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac591b2ee425532a58f85a7f8878bde7a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceminidbg.html#ac591b2ee425532a58f85a7f8878bde7a">minidbg::get_register_name</a> (reg r)</td></tr>
+<tr class="memdesc:ac591b2ee425532a58f85a7f8878bde7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">获取给定寄存器枚举变量的人类可读名称。  <a href="namespaceminidbg.html#ac591b2ee425532a58f85a7f8878bde7a">更多...</a><br /></td></tr>
+<tr class="separator:ac591b2ee425532a58f85a7f8878bde7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40ee5a3032ff64e74bbc60f507ee61e6"><td class="memItemLeft" align="right" valign="top">reg&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceminidbg.html#a40ee5a3032ff64e74bbc60f507ee61e6">minidbg::get_register_from_name</a> (const std::string &amp;name)</td></tr>
+<tr class="memdesc:a40ee5a3032ff64e74bbc60f507ee61e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">根据给定的寄存器名称字符串，获取对应的寄存器枚举变量。  <a href="namespaceminidbg.html#a40ee5a3032ff64e74bbc60f507ee61e6">更多...</a><br /></td></tr>
+<tr class="separator:a40ee5a3032ff64e74bbc60f507ee61e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">详细描述</h2>
+<div class="textblock"><p>本文件定义了常用寄存器枚举类型、寄存器描述符（结构体，包括寄存器对应的枚举变量、名称、dwarf编号），读取和设置寄存器值的函数。 </p>
+<dl class="section version"><dt>版本</dt><dd>0.1 </dd></dl>
+<dl class="section date"><dt>日期</dt><dd>2024-03-11</dd></dl>
+<dl class="section copyright"><dt>版权所有</dt><dd>Copyright (c) 2024 </dd></dl>
+</div></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

@@ -1,0 +1,4 @@
+<map id="include/symboltype.hpp" name="include/symboltype.hpp">
+<area shape="rect" id="node1" title="定义了符号类型的枚举类、符号描述结构体，符号与elf中的符号类型一一对应并有转换函数。" alt="" coords="5,5,184,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="43,80,146,107"/>
+</map>

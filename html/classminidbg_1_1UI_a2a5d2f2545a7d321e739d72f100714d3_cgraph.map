@@ -1,0 +1,8 @@
+<map id="minidbg::UI::showGlobalStack" name="minidbg::UI::showGlobalStack">
+<area shape="rect" id="node1" title="显示全局堆栈信息" alt="" coords="5,78,223,105"/>
+<area shape="rect" id="node2" href="$classminidbg_1_1debugger.html#a622b0db8714bdea3a20003d0a0fc3cb6" title="获取全局堆栈信息。" alt="" coords="271,5,429,47"/>
+<area shape="rect" id="node4" href="$classminidbg_1_1debugger.html#abbf1ba35f894fac6403185e0acdd4536" title="获取当前基址寄存器（RBP）的值。" alt="" coords="274,71,426,112"/>
+<area shape="rect" id="node6" href="$classminidbg_1_1debugger.html#a7326411326dc7be2ca1780747b73c668" title="获取当前栈指针寄存器（RSP）的值。" alt="" coords="274,136,426,177"/>
+<area shape="rect" id="node3" href="$classminidbg_1_1debugger.html#aabde5dd3945efd3cffdec4e6cd245cff" title=" " alt="" coords="482,5,634,47"/>
+<area shape="rect" id="node5" href="$namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b" title="根据给定的进程ID和寄存器枚举变量，获取该寄存器的值。" alt="" coords="477,103,639,144"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="minidbg::breakpoint" name="minidbg::breakpoint">
+<area shape="rect" id="node1" title="断点类，包含启用和禁用功能，实例化后存储于debugger类中的m_breakpoints向量。" alt="" coords="93,145,246,296"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,75,83"/>
+<area shape="rect" id="node3" title=" " alt="" coords="101,5,155,83"/>
+<area shape="rect" id="node4" title=" " alt="" coords="180,5,247,83"/>
+<area shape="rect" id="node5" title=" " alt="" coords="313,5,364,83"/>
+</map>

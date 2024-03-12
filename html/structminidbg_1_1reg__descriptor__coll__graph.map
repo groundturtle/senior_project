@@ -1,0 +1,6 @@
+<map id="minidbg::reg_descriptor" name="minidbg::reg_descriptor">
+<area shape="rect" id="node1" title="包含寄存器名称、对应的dwarf寄存器编号" alt="" coords="33,145,209,223"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,44,83"/>
+<area shape="rect" id="node3" title=" " alt="" coords="91,5,150,83"/>
+<area shape="rect" id="node4" title=" " alt="" coords="183,5,226,83"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="minidbg::debugger::get_offset_pc" name="minidbg::debugger::get_offset_pc">
+<area shape="rect" id="node1" title=" " alt="" coords="5,39,157,80"/>
+<area shape="rect" id="node2" href="$classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127" title="获取当前程序计数器（PC）的值。" alt="" coords="205,5,357,47"/>
+<area shape="rect" id="node4" href="$classminidbg_1_1debugger.html#ace071934f7fedb171618a830e0b2f856" title="从实际地址转换为相对地址" alt="" coords="205,71,357,112"/>
+<area shape="rect" id="node3" href="$namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b" title="根据给定的进程ID和寄存器枚举变量，获取该寄存器的值。" alt="" coords="405,5,567,47"/>
+</map>

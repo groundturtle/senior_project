@@ -1,0 +1,8 @@
+<map id="minidbg::UI::showCallStack" name="minidbg::UI::showCallStack">
+<area shape="rect" id="node1" title="显示全局堆栈信息的ImGui窗口" alt="" coords="5,107,205,134"/>
+<area shape="rect" id="node2" href="$classminidbg_1_1debugger.html#a5c019420f24ef96e95a145b3a62c5973" title="获取当前线程的函数调用链回溯信息息。" alt="" coords="253,100,405,141"/>
+<area shape="rect" id="node3" href="$classminidbg_1_1debugger.html#a1f8a4061ffd8420395b9d8a83358567a" title="确定当前指令所属的函数" alt="" coords="453,5,616,47"/>
+<area shape="rect" id="node4" href="$classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127" title="获取当前程序计数器（PC）的值。" alt="" coords="459,71,611,112"/>
+<area shape="rect" id="node5" href="$namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b" title="根据给定的进程ID和寄存器枚举变量，获取该寄存器的值。" alt="" coords="664,100,825,141"/>
+<area shape="rect" id="node6" href="$classminidbg_1_1debugger.html#aabde5dd3945efd3cffdec4e6cd245cff" title=" " alt="" coords="459,188,611,229"/>
+</map>

@@ -1,0 +1,52 @@
+<map id="minidbg::UI::buildWindows" name="minidbg::UI::buildWindows">
+<area shape="rect" id="node1" title=" " alt="" coords="5,259,201,286"/>
+<area shape="rect" id="node2" href="$classminidbg_1_1UI.html#a8669908c8bfca34d22aa836f37330d1c" title=" " alt="" coords="249,259,396,286"/>
+<area shape="rect" id="node3" href="$classminidbg_1_1UI.html#ad78e165c63743eff03e9d37d6c4736e7" title="显示全局堆栈信息的ImGui窗口" alt="" coords="959,158,1159,185"/>
+<area shape="rect" id="node9" href="$classminidbg_1_1UI.html#a2a5d2f2545a7d321e739d72f100714d3" title="显示全局堆栈信息" alt="" coords="1927,225,2144,251"/>
+<area shape="rect" id="node13" href="$classminidbg_1_1UI.html#a4057830d6e44c15e768c4f78029a3a61" title="显示选项栏窗口，包含多个按钮用于执行调试器操作。" alt="" coords="444,553,648,579"/>
+<area shape="rect" id="node45" href="$classminidbg_1_1UI.html#a747fbb4ac244aaf11509ff34d7620561" title="在 ImGui 窗口中显示源代码。" alt="" coords="449,703,643,730"/>
+<area shape="rect" id="node47" href="$classminidbg_1_1UI.html#a3e8f81dfb529aaa3fd1494d92938d6c8" title="显示内存中的数据" alt="" coords="461,78,631,105"/>
+<area shape="rect" id="node49" href="$classminidbg_1_1UI.html#a51764ce4bc5010c076d9ff613505b856" title="显示汇编代码的ImGui" alt="" coords="467,954,625,981"/>
+<area shape="rect" id="node50" href="$classminidbg_1_1UI.html#aed68e4187f1659f4186c7d916d24286a" title="在 ImGui 窗口中显示堆栈信息。显示程序计数器rip、基址指针rbp和栈指针rsp的值。" alt="" coords="1948,381,2123,407"/>
+<area shape="rect" id="node4" href="$classminidbg_1_1debugger.html#a5c019420f24ef96e95a145b3a62c5973" title="获取当前线程的函数调用链回溯信息息。" alt="" coords="2195,224,2347,265"/>
+<area shape="rect" id="node5" href="$classminidbg_1_1debugger.html#a1f8a4061ffd8420395b9d8a83358567a" title="确定当前指令所属的函数" alt="" coords="2399,173,2561,215"/>
+<area shape="rect" id="node6" href="$classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127" title="获取当前程序计数器（PC）的值。" alt="" coords="2404,640,2556,681"/>
+<area shape="rect" id="node7" href="$namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b" title="根据给定的进程ID和寄存器枚举变量，获取该寄存器的值。" alt="" coords="2609,312,2771,353"/>
+<area shape="rect" id="node8" href="$classminidbg_1_1debugger.html#aabde5dd3945efd3cffdec4e6cd245cff" title=" " alt="" coords="2404,108,2556,149"/>
+<area shape="rect" id="node10" href="$classminidbg_1_1debugger.html#a622b0db8714bdea3a20003d0a0fc3cb6" title="获取全局堆栈信息。" alt="" coords="2192,159,2351,200"/>
+<area shape="rect" id="node11" href="$classminidbg_1_1debugger.html#abbf1ba35f894fac6403185e0acdd4536" title="获取当前基址寄存器（RBP）的值。" alt="" coords="2195,407,2347,448"/>
+<area shape="rect" id="node12" href="$classminidbg_1_1debugger.html#a7326411326dc7be2ca1780747b73c668" title="获取当前栈指针寄存器（RSP）的值。" alt="" coords="2195,341,2347,383"/>
+<area shape="rect" id="node14" href="$classminidbg_1_1debugger.html#aab4f65554d4750e16bc1c01b046edb0d" title="根据命令设置断点" alt="" coords="983,648,1135,689"/>
+<area shape="rect" id="node22" href="$classminidbg_1_1debugger.html#a2686dd54e6d39c86d0321bd617b115d4" title="step_over()_breakpoint()跳过当前断点，然后ptrace_continue，让子进程继续执行" alt="" coords="1493,461,1645,503"/>
+<area shape="rect" id="node27" href="$classminidbg_1_1debugger.html#a9075df44cb4df2729c1036c035b0c85c" title=" " alt="" coords="727,428,879,469"/>
+<area shape="rect" id="node30" href="$classminidbg_1_1debugger.html#a644b99a4260aa9c5373a1c0b375cf9c5" title="初始化mini调试器。" alt="" coords="1721,905,1873,947"/>
+<area shape="rect" id="node35" href="$classminidbg_1_1debugger.html#a634ab39fc9fbfa7c213629aaa9b0a9eb" title="终止被调试程序" alt="" coords="727,311,879,352"/>
+<area shape="rect" id="node36" href="$classminidbg_1_1debugger.html#aa06d1327a1c6b32427035bee28cc83dd" title=" " alt="" coords="983,545,1135,587"/>
+<area shape="rect" id="node39" href="$namespaceminidbg.html#a79b8875d3b6ac55e5cb23e8fd6037dc5" title=" " alt="" coords="713,377,893,403"/>
+<area shape="rect" id="node40" href="$classminidbg_1_1UI.html#aed8f3e652bb8a4b6f1a2ed40e3012a62" title="显示主菜单栏，包括 &quot;File&quot;、&quot;View&quot; 和 &quot;Run&quot; 三个菜单。 这些菜单提供了加载程序、切换视图元素以及运行调试器操作的选项。" alt="" coords="696,545,911,587"/>
+<area shape="rect" id="node41" href="$classminidbg_1_1debugger.html#aaff1e34730485fa0ac3900fb8c88d448" title=" " alt="" coords="983,713,1135,755"/>
+<area shape="rect" id="node43" href="$classminidbg_1_1debugger.html#acb73e8080bbd2fa305b8d383b4ddd3e4" title=" " alt="" coords="727,823,879,864"/>
+<area shape="rect" id="node15" href="$classminidbg_1_1debugger.html#a33de60b0cf721c1fd24e5a3b5159e205" title="Set breakpoint by address" alt="" coords="1471,628,1668,669"/>
+<area shape="rect" id="node17" href="$classminidbg_1_1debugger.html#ad4e95fd23fd5391089f97a198c04c8b5" title="Set the breakpoint at function object" alt="" coords="1215,756,1414,797"/>
+<area shape="rect" id="node20" href="$classminidbg_1_1debugger.html#a3953940c630495e035444371643727aa" title="通过&#39;file:line&#39;形式的命令设置断点。" alt="" coords="1207,691,1423,732"/>
+<area shape="rect" id="node21" href="$namespaceminidbg.html#a53e4cc1dcf1b9920f8128717c710b6b3" title=" " alt="" coords="1259,589,1370,615"/>
+<area shape="rect" id="node16" href="$classminidbg_1_1breakpoint.html#a8c4099c042923198070f27bd5c9edcb8" title="启用断点 通过ptrace系统调用读取原始数据，将其最低有效字节（LSB） 替换为软件中断0xcc（用于暂停程序执行）， 然后使用PTRACE_POKEDATA将修改后的数据写入目标地址" alt="" coords="1721,633,1874,675"/>
+<area shape="rect" id="node18" href="$classminidbg_1_1debugger.html#ab0a72f56b837540af184db2c53de4aef" title="Get the line entry from pc object" alt="" coords="1482,905,1657,947"/>
+<area shape="rect" id="node19" href="$classminidbg_1_1debugger.html#aadec3114b66ec64774be46873a97e307" title="将相对地址转换为实际地址" alt="" coords="1489,693,1650,735"/>
+<area shape="rect" id="node23" href="$classminidbg_1_1debugger.html#acc81497da4da399495135ed332fe01e7" title="跳过当前断点（执行一条指令），若当前指令没有断点，则不做任何事。" alt="" coords="1716,516,1879,557"/>
+<area shape="rect" id="node24" href="$classminidbg_1_1debugger.html#ade2972e37458f63870e18c34f0a44bc1" title="等待目标进程发送信号并做出相应处理." alt="" coords="1959,575,2111,616"/>
+<area shape="rect" id="node25" href="$classminidbg_1_1debugger.html#a4875fc7f36cb21d20c02bc0778f986d5" title="Get the signal info" alt="" coords="2195,575,2347,616"/>
+<area shape="rect" id="node26" href="$classminidbg_1_1debugger.html#a5679e71844ee8af9206377b3f9d61f82" title="根据siginfo_t结构体中的si_code字段来判断SIGTRAP信号的具体类型，并进行相应的处理：" alt="" coords="2195,640,2347,681"/>
+<area shape="rect" id="node28" href="$classminidbg_1_1debugger.html#a16c19e64daba632bf0807d58bff713f7" title="跳出函数：从rbp获取返回地址，检查是否有断点，无则设置，然后continue；如刚设置了断点，则去除，如原有则不动。" alt="" coords="1239,355,1391,396"/>
+<area shape="rect" id="node29" href="$classminidbg_1_1debugger.html#a57cd3a2d4d8a89d1c61e516f0d0db128" title="移除地址addr上的断点。" alt="" coords="1493,527,1645,568"/>
+<area shape="rect" id="node31" href="$classminidbg_1_1debugger.html#aa16b14e2a5c30f85a19b60dfed2436ee" title="初始化" alt="" coords="1950,873,2121,915"/>
+<area shape="rect" id="node32" href="$classminidbg_1_1debugger.html#a6d445a16899ac9ced43f17bc61e5ce20" title="加载汇编数据到m_asm_vct向量中" alt="" coords="1959,939,2111,980"/>
+<area shape="rect" id="node33" href="$classminidbg_1_1debugger.html#a859bd0fa6bf7b2981ca554be9d13505b" title="逐行读取源码到m_src_vct向量中" alt="" coords="2195,899,2347,940"/>
+<area shape="rect" id="node34" href="$classminidbg_1_1debugger.html#a61dff0e30d6837427da037845dca7516" title="使用 objdump 命令生成反汇编代码" alt="" coords="1950,808,2121,849"/>
+<area shape="rect" id="node37" href="$classminidbg_1_1debugger.html#aa08ae391b77f28a593e435516dc2f50b" title="检查下一行源码是否设置了断点，如没有则设置，然后continue，再删除；如有则直接continue." alt="" coords="1239,523,1391,564"/>
+<area shape="rect" id="node38" href="$classminidbg_1_1debugger.html#a56e26f0c99ba1bd0390cf2dba4e24a29" title=" " alt="" coords="1493,840,1645,881"/>
+<area shape="rect" id="node42" href="$classminidbg_1_1debugger.html#a60c395083ae6156ababe81561ab17a76" title="让子进程执行一条指令。根据当前指令是否有断点，分别调用step_over_breakpoint()和single_step()" alt="" coords="1480,759,1659,815"/>
+<area shape="rect" id="node44" href="$classminidbg_1_1debugger.html#a36f22ffa07e4cf1d70480573c2075328" title="单步进入/进入到下一个源代码行: 循环执行单条指令，源代码行号发生变化，循环结束" alt="" coords="1239,873,1391,915"/>
+<area shape="rect" id="node46" href="$classminidbg_1_1debugger.html#a8d63db538666ebb38ea899d1821a370b" title="获取当前源代码行号。" alt="" coords="1239,939,1391,980"/>
+<area shape="rect" id="node48" href="$classminidbg_1_1debugger.html#ad91741cf22396213a7f23dfa440d52a6" title="获取程序中各个寄存器的值。" alt="" coords="1721,41,1873,83"/>
+</map>

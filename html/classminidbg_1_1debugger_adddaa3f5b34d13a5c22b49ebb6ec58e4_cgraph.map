@@ -1,0 +1,4 @@
+<map id="minidbg::debugger::dump_registers" name="minidbg::debugger::dump_registers">
+<area shape="rect" id="node1" title="打印目标进程的寄存器信息" alt="" coords="5,5,157,47"/>
+<area shape="rect" id="node2" href="$namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b" title="根据给定的进程ID和寄存器枚举变量，获取该寄存器的值。" alt="" coords="205,5,367,47"/>
+</map>

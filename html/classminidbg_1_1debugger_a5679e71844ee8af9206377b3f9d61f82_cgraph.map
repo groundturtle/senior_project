@@ -1,0 +1,7 @@
+<map id="minidbg::debugger::handle_sigtrap" name="minidbg::debugger::handle_sigtrap">
+<area shape="rect" id="node1" title="根据siginfo_t结构体中的si_code字段来判断SIGTRAP信号的具体类型，并进行相应的处理：" alt="" coords="5,39,157,80"/>
+<area shape="rect" id="node2" href="$classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127" title="获取当前程序计数器（PC）的值。" alt="" coords="205,5,357,47"/>
+<area shape="rect" id="node4" href="$classminidbg_1_1debugger.html#ab6efac5e854a13f0bc1e6a07a8a208d2" title=" " alt="" coords="205,71,357,112"/>
+<area shape="rect" id="node3" href="$namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b" title="根据给定的进程ID和寄存器枚举变量，获取该寄存器的值。" alt="" coords="405,5,567,47"/>
+<area shape="rect" id="node5" href="$namespaceminidbg.html#a1d7f2dc1f8a79d86673a623564b97cc8" title="设置（改写）指定寄存器的值。" alt="" coords="406,71,566,112"/>
+</map>

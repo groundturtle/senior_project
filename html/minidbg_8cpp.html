@@ -1,0 +1,252 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>My Project: src/minidbg.cpp 文件参考</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">My Project
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#define-members">宏定义</a> &#124;
+<a href="#func-members">函数</a>  </div>
+  <div class="headertitle">
+<div class="title">minidbg.cpp 文件参考</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;vector&gt;</code><br />
+<code>#include &lt;sys/ptrace.h&gt;</code><br />
+<code>#include &lt;sys/wait.h&gt;</code><br />
+<code>#include &lt;unistd.h&gt;</code><br />
+<code>#include &lt;sstream&gt;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;sys/personality.h&gt;</code><br />
+<code>#include &quot;imgui.h&quot;</code><br />
+<code>#include &quot;imgui_impl_glfw.h&quot;</code><br />
+<code>#include &quot;imgui_impl_opengl3.h&quot;</code><br />
+<code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &lt;GLFW/glfw3.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="debugger_8hpp_source.html">debugger.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="UI_8hpp_source.html">UI.hpp</a>&quot;</code><br />
+</div><div class="textblock"><div class="dynheader">
+minidbg.cpp 的引用(Include)关系图:</div>
+<div class="dyncontent">
+<div class="center"><img src="minidbg_8cpp__incl.png" border="0" usemap="#src_2minidbg_8cpp" alt=""/></div>
+<map name="src_2minidbg_8cpp" id="src_2minidbg_8cpp">
+<area shape="rect" title=" " alt="" coords="640,5,765,32"/>
+<area shape="rect" title=" " alt="" coords="995,304,1058,331"/>
+<area shape="rect" title=" " alt="" coords="624,229,725,256"/>
+<area shape="rect" title=" " alt="" coords="749,229,837,256"/>
+<area shape="rect" title=" " alt="" coords="106,155,181,181"/>
+<area shape="rect" title=" " alt="" coords="1141,304,1216,331"/>
+<area shape="rect" title=" " alt="" coords="860,304,940,331"/>
+<area shape="rect" title=" " alt="" coords="205,155,336,181"/>
+<area shape="rect" title=" " alt="" coords="360,155,431,181"/>
+<area shape="rect" title=" " alt="" coords="455,155,595,181"/>
+<area shape="rect" title=" " alt="" coords="619,155,786,181"/>
+<area shape="rect" title=" " alt="" coords="1269,155,1336,181"/>
+<area shape="rect" title=" " alt="" coords="2725,304,2784,331"/>
+<area shape="rect" title=" " alt="" coords="1462,80,1572,107"/>
+<area shape="rect" href="debugger_8hpp.html" title=" " alt="" coords="1734,155,1844,181"/>
+<area shape="rect" href="UI_8hpp.html" title=" " alt="" coords="918,80,982,107"/>
+<area shape="rect" title=" " alt="" coords="2212,229,2336,256"/>
+<area shape="rect" title=" " alt="" coords="2835,304,2895,331"/>
+<area shape="rect" title=" " alt="" coords="2933,304,3040,331"/>
+<area shape="rect" title=" " alt="" coords="1251,304,1324,331"/>
+<area shape="rect" title=" " alt="" coords="2361,229,2436,256"/>
+<area shape="rect" title=" " alt="" coords="2460,229,2528,256"/>
+<area shape="rect" title=" " alt="" coords="2552,229,2615,256"/>
+<area shape="rect" title=" " alt="" coords="1550,229,1636,256"/>
+<area shape="rect" title=" " alt="" coords="1660,229,1734,256"/>
+<area shape="rect" title=" " alt="" coords="1758,229,1820,256"/>
+<area shape="rect" title=" " alt="" coords="1469,304,1554,331"/>
+<area shape="rect" href="breakpoint_8hpp.html" title="断点类，包含启用和禁用功能，实例化后存储于debugger类中的m_breakpoints向量。" alt="" coords="2842,229,2962,256"/>
+<area shape="rect" href="registers_8hpp.html" title="本文件定义了常用寄存器枚举类型、寄存器描述符（结构体，包括寄存器对应的枚举变量、名称、dwarf编号），读取和设置寄存器值的函数。" alt="" coords="1368,229,1474,256"/>
+<area shape="rect" title=" " alt="" coords="1895,229,2038,256"/>
+<area shape="rect" title=" " alt="" coords="1940,304,2043,331"/>
+<area shape="rect" href="symboltype_8hpp.html" title="定义了符号类型的枚举类、符号描述结构体，符号与elf中的符号类型一一对应并有转换函数。" alt="" coords="2062,229,2188,256"/>
+<area shape="rect" href="asmparaser_8hpp.html" title="逐行解析汇编文件，分为函数头asm_head和指令asm_entry" alt="" coords="1115,229,1242,256"/>
+<area shape="rect" title=" " alt="" coords="1358,304,1444,331"/>
+<area shape="rect" title=" " alt="" coords="1114,155,1194,181"/>
+</map>
+</div>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+宏定义</h2></td></tr>
+<tr class="memitem:a1ce7c516538704e5b04a99450edc572f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="minidbg_8cpp.html#a1ce7c516538704e5b04a99450edc572f">GL_SILENCE_DEPRECATION</a></td></tr>
+<tr class="separator:a1ce7c516538704e5b04a99450edc572f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+函数</h2></td></tr>
+<tr class="memitem:a0ddf1224851353fc92bfbff6f499fa97"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="minidbg_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main</a> (int argc, char *argv[])</td></tr>
+<tr class="separator:a0ddf1224851353fc92bfbff6f499fa97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">宏定义说明</h2>
+<a id="a1ce7c516538704e5b04a99450edc572f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ce7c516538704e5b04a99450edc572f">&#9670;&nbsp;</a></span>GL_SILENCE_DEPRECATION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define GL_SILENCE_DEPRECATION</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">函数说明</h2>
+<a id="a0ddf1224851353fc92bfbff6f499fa97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ddf1224851353fc92bfbff6f499fa97">&#9670;&nbsp;</a></span>main()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int main </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>argc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>argv</em>[]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+函数调用图:</div>
+<div class="dyncontent">
+<div class="center"><img src="minidbg_8cpp_a0ddf1224851353fc92bfbff6f499fa97_cgraph.png" border="0" usemap="#minidbg_8cpp_a0ddf1224851353fc92bfbff6f499fa97_cgraph" alt=""/></div>
+<map name="minidbg_8cpp_a0ddf1224851353fc92bfbff6f499fa97_cgraph" id="minidbg_8cpp_a0ddf1224851353fc92bfbff6f499fa97_cgraph">
+<area shape="rect" title=" " alt="" coords="5,407,60,433"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#aab4f65554d4750e16bc1c01b046edb0d" title="根据命令设置断点" alt="" coords="830,257,982,298"/>
+<area shape="rect" href="classminidbg_1_1UI.html#a464518b745c7e278dd275f83b18d7981" title=" " alt="" coords="108,379,304,405"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a2686dd54e6d39c86d0321bd617b115d4" title="step_over()_breakpoint()跳过当前断点，然后ptrace_continue，让子进程继续执行" alt="" coords="1093,634,1245,675"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a644b99a4260aa9c5373a1c0b375cf9c5" title="初始化mini调试器。" alt="" coords="830,1009,982,1050"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a33de60b0cf721c1fd24e5a3b5159e205" title="Set breakpoint by address" alt="" coords="1325,253,1523,294"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#ad4e95fd23fd5391089f97a198c04c8b5" title="Set the breakpoint at function object" alt="" coords="1070,325,1269,366"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a3953940c630495e035444371643727aa" title="通过&#39;file:line&#39;形式的命令设置断点。" alt="" coords="1061,259,1277,301"/>
+<area shape="rect" href="namespaceminidbg.html#a53e4cc1dcf1b9920f8128717c710b6b3" title=" " alt="" coords="1832,1016,1943,1043"/>
+<area shape="rect" href="classminidbg_1_1breakpoint.html#a8c4099c042923198070f27bd5c9edcb8" title="启用断点 通过ptrace系统调用读取原始数据，将其最低有效字节（LSB） 替换为软件中断0xcc（用于暂停程序执行）， 然后使用PTRACE_POKEDATA将修改后的数据写入目标地址" alt="" coords="1574,253,1727,294"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#ab0a72f56b837540af184db2c53de4aef" title="Get the line entry from pc object" alt="" coords="1337,383,1511,425"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#aadec3114b66ec64774be46873a97e307" title="将相对地址转换为实际地址" alt="" coords="1343,318,1505,359"/>
+<area shape="rect" href="classminidbg_1_1UI.html#a8669908c8bfca34d22aa836f37330d1c" title=" " alt="" coords="352,351,499,377"/>
+<area shape="rect" href="classminidbg_1_1UI.html#ad78e165c63743eff03e9d37d6c4736e7" title="显示全局堆栈信息的ImGui窗口" alt="" coords="549,324,749,351"/>
+<area shape="rect" href="classminidbg_1_1UI.html#a2a5d2f2545a7d321e739d72f100714d3" title="显示全局堆栈信息" alt="" coords="1779,200,1996,227"/>
+<area shape="rect" href="classminidbg_1_1UI.html#a4057830d6e44c15e768c4f78029a3a61" title="显示选项栏窗口，包含多个按钮用于执行调试器操作。" alt="" coords="547,709,751,736"/>
+<area shape="rect" href="classminidbg_1_1UI.html#a747fbb4ac244aaf11509ff34d7620561" title="在 ImGui 窗口中显示源代码。" alt="" coords="551,379,746,405"/>
+<area shape="rect" href="classminidbg_1_1UI.html#a3e8f81dfb529aaa3fd1494d92938d6c8" title="显示内存中的数据" alt="" coords="564,5,733,32"/>
+<area shape="rect" href="classminidbg_1_1UI.html#a51764ce4bc5010c076d9ff613505b856" title="显示汇编代码的ImGui" alt="" coords="569,437,728,464"/>
+<area shape="rect" href="classminidbg_1_1UI.html#aed68e4187f1659f4186c7d916d24286a" title="在 ImGui 窗口中显示堆栈信息。显示程序计数器rip、基址指针rbp和栈指针rsp的值。" alt="" coords="1800,275,1975,301"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a5c019420f24ef96e95a145b3a62c5973" title="获取当前线程的函数调用链回溯信息息。" alt="" coords="1811,477,1963,518"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a1f8a4061ffd8420395b9d8a83358567a" title="确定当前指令所属的函数" alt="" coords="2044,418,2207,459"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127" title="获取当前程序计数器（PC）的值。" alt="" coords="2049,535,2201,577"/>
+<area shape="rect" href="namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b" title="根据给定的进程ID和寄存器枚举变量，获取该寄存器的值。" alt="" coords="2255,291,2416,333"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a622b0db8714bdea3a20003d0a0fc3cb6" title="获取全局堆栈信息。" alt="" coords="2046,161,2205,202"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#abbf1ba35f894fac6403185e0acdd4536" title="获取当前基址寄存器（RBP）的值。" alt="" coords="2049,291,2201,333"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a7326411326dc7be2ca1780747b73c668" title="获取当前栈指针寄存器（RSP）的值。" alt="" coords="2049,226,2201,267"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a9075df44cb4df2729c1036c035b0c85c" title=" " alt="" coords="830,761,982,802"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a634ab39fc9fbfa7c213629aaa9b0a9eb" title="终止被调试程序" alt="" coords="830,826,982,867"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#aa06d1327a1c6b32427035bee28cc83dd" title=" " alt="" coords="1093,699,1245,741"/>
+<area shape="rect" href="namespaceminidbg.html#a79b8875d3b6ac55e5cb23e8fd6037dc5" title=" " alt="" coords="816,541,996,568"/>
+<area shape="rect" href="classminidbg_1_1UI.html#aed8f3e652bb8a4b6f1a2ed40e3012a62" title="显示主菜单栏，包括 &quot;File&quot;、&quot;View&quot; 和 &quot;Run&quot; 三个菜单。 这些菜单提供了加载程序、切换视图元素以及运行调试器操作的选项。" alt="" coords="799,891,1013,933"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#aaff1e34730485fa0ac3900fb8c88d448" title=" " alt="" coords="1093,765,1245,806"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#acb73e8080bbd2fa305b8d383b4ddd3e4" title=" " alt="" coords="830,593,982,634"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#acc81497da4da399495135ed332fe01e7" title="跳过当前断点（执行一条指令），若当前指令没有断点，则不做任何事。" alt="" coords="1343,594,1505,635"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#ade2972e37458f63870e18c34f0a44bc1" title="等待目标进程发送信号并做出相应处理." alt="" coords="1575,651,1727,693"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a4875fc7f36cb21d20c02bc0778f986d5" title="Get the signal info" alt="" coords="1811,651,1963,693"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a5679e71844ee8af9206377b3f9d61f82" title="根据siginfo_t结构体中的si_code字段来判断SIGTRAP信号的具体类型，并进行相应的处理：" alt="" coords="1811,769,1963,810"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#ab6efac5e854a13f0bc1e6a07a8a208d2" title=" " alt="" coords="2049,769,2201,810"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#aa16b14e2a5c30f85a19b60dfed2436ee" title="初始化" alt="" coords="1084,1013,1255,1054"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a6d445a16899ac9ced43f17bc61e5ce20" title="加载汇编数据到m_asm_vct向量中" alt="" coords="1093,1078,1245,1119"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a859bd0fa6bf7b2981ca554be9d13505b" title="逐行读取源码到m_src_vct向量中" alt="" coords="1093,882,1245,923"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a61dff0e30d6837427da037845dca7516" title="使用 objdump 命令生成反汇编代码" alt="" coords="1084,947,1255,989"/>
+<area shape="rect" href="namespacesymboltype.html#a9bd44f3f011af37e528a03f3584f1dd7" title="将 enum symbol_type 类型转换为字符串" alt="" coords="1342,1020,1506,1047"/>
+<area shape="rect" href="classminidbg_1_1asmparaser.html#a570ad5713f2f54e9472ea6edb857bc3a" title=" " alt="" coords="1344,1074,1504,1115"/>
+<area shape="rect" href="classminidbg_1_1asmparaser.html#a64ce750db87bae204f7409d6d4b6b513" title=" " alt="" coords="1571,1009,1731,1050"/>
+<area shape="rect" href="classminidbg_1_1asmparaser.html#a3d3b427fe29386e5a676f83f7ab663d7" title=" " alt="" coords="1571,1074,1731,1115"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#ace071934f7fedb171618a830e0b2f856" title="从实际地址转换为相对地址" alt="" coords="1348,882,1500,923"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#a8d63db538666ebb38ea899d1821a370b" title="获取当前源代码行号。" alt="" coords="830,374,982,415"/>
+<area shape="rect" href="classminidbg_1_1debugger.html#ad91741cf22396213a7f23dfa440d52a6" title="获取程序中各个寄存器的值。" alt="" coords="1575,30,1727,71"/>
+</map>
+</div>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

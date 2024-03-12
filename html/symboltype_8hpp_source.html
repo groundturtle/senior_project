@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>My Project: include/symboltype.hpp 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">My Project
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">symboltype.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="symboltype_8hpp.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;elf/elf++.hh&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno"><a class="line" href="namespacesymboltype.html">   12</a></span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacesymboltype.html">symboltype</a></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;{</div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1">   19</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1">symbol_type</a></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    {</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a80625811f7f76305c1158d5601435896">notype</a>,  </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1aa8cfde6331bd59eb2ac96f8911c4b666">object</a>,  </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a7df4935f4a5a2865191ef74f64df8754">func</a>,    </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a73d5342eba070f636ac3246f319bf77f">section</a>, </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a8c7dd922ad47494fc02c388e12c00eac">file</a>,    </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    };           </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="namespacesymboltype.html#a9bd44f3f011af37e528a03f3584f1dd7">   34</a></span>&#160;    std::string <a class="code" href="namespacesymboltype.html#a9bd44f3f011af37e528a03f3584f1dd7">to_string</a>(<a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1">symbol_type</a> st)</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keywordflow">switch</span> (st)</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a80625811f7f76305c1158d5601435896">symbol_type::notype</a>:</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <span class="keywordflow">return</span> <span class="stringliteral">&quot;notype&quot;</span>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1aa8cfde6331bd59eb2ac96f8911c4b666">symbol_type::object</a>:</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            <span class="keywordflow">return</span> <span class="stringliteral">&quot;object&quot;</span>;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a7df4935f4a5a2865191ef74f64df8754">symbol_type::func</a>:</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            <span class="keywordflow">return</span> <span class="stringliteral">&quot;func&quot;</span>;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a73d5342eba070f636ac3246f319bf77f">symbol_type::section</a>:</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;            <span class="keywordflow">return</span> <span class="stringliteral">&quot;section&quot;</span>;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">case</span> <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a8c7dd922ad47494fc02c388e12c00eac">symbol_type::file</a>:</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;            <span class="keywordflow">return</span> <span class="stringliteral">&quot;file&quot;</span>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            <span class="keywordflow">return</span> <span class="stringliteral">&quot;unknown&quot;</span>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        }</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    }</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="structsymboltype_1_1symbol.html">   56</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structsymboltype_1_1symbol.html">symbol</a></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    {</div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="structsymboltype_1_1symbol.html#a0f980413cc130cf58cb686b6d0cf47a2">   58</a></span>&#160;        <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1">symbol_type</a> <a class="code" href="structsymboltype_1_1symbol.html#a0f980413cc130cf58cb686b6d0cf47a2">type</a>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="structsymboltype_1_1symbol.html#ab4ad2bb61012f04d7ed63c0be02fe928">   59</a></span>&#160;        std::string <a class="code" href="structsymboltype_1_1symbol.html#ab4ad2bb61012f04d7ed63c0be02fe928">name</a>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="structsymboltype_1_1symbol.html#a1eef53dd12c08ff0a6b6dc6c14279429">   60</a></span>&#160;        std::uintptr_t <a class="code" href="structsymboltype_1_1symbol.html#a1eef53dd12c08ff0a6b6dc6c14279429">addr</a>;</div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="structsymboltype_1_1symbol.html#ac078d0395ee291bf3a7b0c5dcce4c1e9">   61</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="structsymboltype_1_1symbol.html#ac078d0395ee291bf3a7b0c5dcce4c1e9">operator==</a>(<span class="keyword">const</span> <a class="code" href="structsymboltype_1_1symbol.html">symbol</a> &amp;other)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;           <span class="keywordflow">return</span> (<a class="code" href="structsymboltype_1_1symbol.html#a0f980413cc130cf58cb686b6d0cf47a2">type</a>==other.<a class="code" href="structsymboltype_1_1symbol.html#a0f980413cc130cf58cb686b6d0cf47a2">type</a>)&amp;&amp;(<a class="code" href="structsymboltype_1_1symbol.html#ab4ad2bb61012f04d7ed63c0be02fe928">name</a>==other.<a class="code" href="structsymboltype_1_1symbol.html#ab4ad2bb61012f04d7ed63c0be02fe928">name</a>)&amp;&amp;(<a class="code" href="structsymboltype_1_1symbol.html#a1eef53dd12c08ff0a6b6dc6c14279429">addr</a>==other.<a class="code" href="structsymboltype_1_1symbol.html#a1eef53dd12c08ff0a6b6dc6c14279429">addr</a>);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        }</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    };</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="namespacesymboltype.html#a92af0a7d66c478a7baef4d31867b6c72">   73</a></span>&#160;    <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1">symbol_type</a> <a class="code" href="namespacesymboltype.html#a92af0a7d66c478a7baef4d31867b6c72">to_symbol_type</a>(elf::stt sym)</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordflow">switch</span> (sym)</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        {</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keywordflow">case</span> elf::stt::notype:</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a80625811f7f76305c1158d5601435896">symbol_type::notype</a>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordflow">case</span> elf::stt::object:</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1aa8cfde6331bd59eb2ac96f8911c4b666">symbol_type::object</a>;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keywordflow">case</span> elf::stt::func:</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a7df4935f4a5a2865191ef74f64df8754">symbol_type::func</a>;</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordflow">case</span> elf::stt::section:</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a73d5342eba070f636ac3246f319bf77f">symbol_type::section</a>;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordflow">case</span> elf::stt::file:</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a8c7dd922ad47494fc02c388e12c00eac">symbol_type::file</a>;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a80625811f7f76305c1158d5601435896">symbol_type::notype</a>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        }</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    };</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;}</div>
+</div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="anamespacesymboltype_html_a08ae65ac1a342e0291c33e161162f2f1a8c7dd922ad47494fc02c388e12c00eac"><div class="ttname"><a href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a8c7dd922ad47494fc02c388e12c00eac">symboltype::symbol_type::file</a></div><div class="ttdeci">@ file</div></div>
+<div class="ttc" id="anamespacesymboltype_html_a9bd44f3f011af37e528a03f3584f1dd7"><div class="ttname"><a href="namespacesymboltype.html#a9bd44f3f011af37e528a03f3584f1dd7">symboltype::to_string</a></div><div class="ttdeci">std::string to_string(symbol_type st)</div><div class="ttdoc">将 enum symbol_type 类型转换为字符串</div><div class="ttdef"><b>Definition:</b> symboltype.hpp:34</div></div>
+<div class="ttc" id="astructsymboltype_1_1symbol_html_ac078d0395ee291bf3a7b0c5dcce4c1e9"><div class="ttname"><a href="structsymboltype_1_1symbol.html#ac078d0395ee291bf3a7b0c5dcce4c1e9">symboltype::symbol::operator==</a></div><div class="ttdeci">bool operator==(const symbol &amp;other) const</div><div class="ttdef"><b>Definition:</b> symboltype.hpp:61</div></div>
+<div class="ttc" id="astructsymboltype_1_1symbol_html"><div class="ttname"><a href="structsymboltype_1_1symbol.html">symboltype::symbol</a></div><div class="ttdoc">符号结构体, 包含符号的类型、名称和地址。</div><div class="ttdef"><b>Definition:</b> symboltype.hpp:56</div></div>
+<div class="ttc" id="astructsymboltype_1_1symbol_html_a1eef53dd12c08ff0a6b6dc6c14279429"><div class="ttname"><a href="structsymboltype_1_1symbol.html#a1eef53dd12c08ff0a6b6dc6c14279429">symboltype::symbol::addr</a></div><div class="ttdeci">std::uintptr_t addr</div><div class="ttdef"><b>Definition:</b> symboltype.hpp:60</div></div>
+<div class="ttc" id="astructsymboltype_1_1symbol_html_ab4ad2bb61012f04d7ed63c0be02fe928"><div class="ttname"><a href="structsymboltype_1_1symbol.html#ab4ad2bb61012f04d7ed63c0be02fe928">symboltype::symbol::name</a></div><div class="ttdeci">std::string name</div><div class="ttdef"><b>Definition:</b> symboltype.hpp:59</div></div>
+<div class="ttc" id="anamespacesymboltype_html_a08ae65ac1a342e0291c33e161162f2f1a80625811f7f76305c1158d5601435896"><div class="ttname"><a href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a80625811f7f76305c1158d5601435896">symboltype::symbol_type::notype</a></div><div class="ttdeci">@ notype</div></div>
+<div class="ttc" id="anamespacesymboltype_html_a08ae65ac1a342e0291c33e161162f2f1aa8cfde6331bd59eb2ac96f8911c4b666"><div class="ttname"><a href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1aa8cfde6331bd59eb2ac96f8911c4b666">symboltype::symbol_type::object</a></div><div class="ttdeci">@ object</div></div>
+<div class="ttc" id="astructsymboltype_1_1symbol_html_a0f980413cc130cf58cb686b6d0cf47a2"><div class="ttname"><a href="structsymboltype_1_1symbol.html#a0f980413cc130cf58cb686b6d0cf47a2">symboltype::symbol::type</a></div><div class="ttdeci">symbol_type type</div><div class="ttdef"><b>Definition:</b> symboltype.hpp:58</div></div>
+<div class="ttc" id="anamespacesymboltype_html_a08ae65ac1a342e0291c33e161162f2f1a7df4935f4a5a2865191ef74f64df8754"><div class="ttname"><a href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a7df4935f4a5a2865191ef74f64df8754">symboltype::symbol_type::func</a></div><div class="ttdeci">@ func</div></div>
+<div class="ttc" id="anamespacesymboltype_html_a92af0a7d66c478a7baef4d31867b6c72"><div class="ttname"><a href="namespacesymboltype.html#a92af0a7d66c478a7baef4d31867b6c72">symboltype::to_symbol_type</a></div><div class="ttdeci">symbol_type to_symbol_type(elf::stt sym)</div><div class="ttdoc">将elf++库中的符号类型转换为 enum symbol_type</div><div class="ttdef"><b>Definition:</b> symboltype.hpp:73</div></div>
+<div class="ttc" id="anamespacesymboltype_html_a08ae65ac1a342e0291c33e161162f2f1"><div class="ttname"><a href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1">symboltype::symbol_type</a></div><div class="ttdeci">symbol_type</div><div class="ttdoc">符号类型枚举</div><div class="ttdef"><b>Definition:</b> symboltype.hpp:19</div></div>
+<div class="ttc" id="anamespacesymboltype_html"><div class="ttname"><a href="namespacesymboltype.html">symboltype</a></div><div class="ttdef"><b>Definition:</b> symboltype.hpp:12</div></div>
+<div class="ttc" id="anamespacesymboltype_html_a08ae65ac1a342e0291c33e161162f2f1a73d5342eba070f636ac3246f319bf77f"><div class="ttname"><a href="namespacesymboltype.html#a08ae65ac1a342e0291c33e161162f2f1a73d5342eba070f636ac3246f319bf77f">symboltype::symbol_type::section</a></div><div class="ttdeci">@ section</div></div>
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

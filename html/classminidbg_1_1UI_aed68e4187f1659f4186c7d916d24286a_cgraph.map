@@ -1,0 +1,7 @@
+<map id="minidbg::UI::showStack" name="minidbg::UI::showStack">
+<area shape="rect" id="node1" title="在 ImGui 窗口中显示堆栈信息。显示程序计数器rip、基址指针rbp和栈指针rsp的值。" alt="" coords="5,78,180,105"/>
+<area shape="rect" id="node2" href="$classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127" title="获取当前程序计数器（PC）的值。" alt="" coords="228,5,380,47"/>
+<area shape="rect" id="node4" href="$classminidbg_1_1debugger.html#abbf1ba35f894fac6403185e0acdd4536" title="获取当前基址寄存器（RBP）的值。" alt="" coords="228,71,380,112"/>
+<area shape="rect" id="node5" href="$classminidbg_1_1debugger.html#a7326411326dc7be2ca1780747b73c668" title="获取当前栈指针寄存器（RSP）的值。" alt="" coords="228,136,380,177"/>
+<area shape="rect" id="node3" href="$namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b" title="根据给定的进程ID和寄存器枚举变量，获取该寄存器的值。" alt="" coords="428,71,589,112"/>
+</map>

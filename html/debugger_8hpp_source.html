@@ -1,0 +1,878 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>My Project: include/debugger.hpp 源文件</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">My Project
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 制作者 Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'搜索');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','搜索');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">debugger.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<a href="debugger_8hpp.html">浏览该文件的文档.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef MINIDBG_DEBUGGER_HPP</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define MINIDBG_DEBUGGER_HPP</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;unordered_map&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;utility&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;linux/types.h&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;fstream&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;iomanip&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;errno.h&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;fcntl.h&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;inttypes.h&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;signal.h&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;sys/ptrace.h&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;sys/wait.h&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;cstdio&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="breakpoint_8hpp.html">breakpoint.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="registers_8hpp.html">registers.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;dwarf/dwarf++.hh&quot;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;elf/elf++.hh&quot;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="symboltype_8hpp.html">symboltype.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="asmparaser_8hpp.html">asmparaser.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceminidbg.html">minidbg</a></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;{</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">   38</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">is_prefix</a>(<span class="keyword">const</span> std::string &amp;s, <span class="keyword">const</span> std::string &amp;of)</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;{</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="comment">// 如果`s`是`of`的前缀</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="comment">// 例如：s=&quot;con&quot; of=&quot;continue&quot; 返回true</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordflow">if</span> (s.size() &gt; of.size())</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordflow">return</span> std::equal(s.begin(), s.end(), of.begin());</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;}</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html">   50</a></span>&#160;<span class="keyword">class </span><a class="code" href="classminidbg_1_1debugger.html">debugger</a></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;{</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="comment">// 需要展示的数据</span></div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#aba207285db39ae79e905ce84b3d4b304">   54</a></span>&#160;    std::vector&lt;asm_head&gt; <a class="code" href="classminidbg_1_1debugger.html#aba207285db39ae79e905ce84b3d4b304">m_asm_vct</a>;            </div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a17a12eeb3fc31453ba9e54e2c57aafa4">   55</a></span>&#160;    std::vector&lt;std::string&gt; <a class="code" href="classminidbg_1_1debugger.html#a17a12eeb3fc31453ba9e54e2c57aafa4">m_src_vct</a>;         </div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a634ab39fc9fbfa7c213629aaa9b0a9eb">   62</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classminidbg_1_1debugger.html#a634ab39fc9fbfa7c213629aaa9b0a9eb">kill_prog</a>()</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    {</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordflow">if</span> (ptrace(PTRACE_KILL, <a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, NULL, NULL) == -1) {</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            std::cerr &lt;&lt; <span class="stringliteral">&quot;Failed to ptrace PTRACE_KILL.&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        }</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    }</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#ad91741cf22396213a7f23dfa440d52a6">   77</a></span>&#160;    std::vector&lt;std::pair&lt;std::string, u_int64_t&gt;&gt; <a class="code" href="classminidbg_1_1debugger.html#ad91741cf22396213a7f23dfa440d52a6">get_ram_vct</a>()</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    {</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        std::vector&lt;std::pair&lt;std::string, u_int64_t&gt;&gt; m_ram_vct;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> &amp;rd : g_register_descriptors)</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        {</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            m_ram_vct.push_back(std::make_pair(rd.name, <a class="code" href="namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b">get_register_value</a>(<a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, rd.r)));</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        }</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keywordflow">return</span> m_ram_vct;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    };</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a8d63db538666ebb38ea899d1821a370b">   92</a></span>&#160;    <span class="keywordtype">unsigned</span> <a class="code" href="classminidbg_1_1debugger.html#a8d63db538666ebb38ea899d1821a370b">get_src_line</a>()</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        <span class="keyword">auto</span> line_entry = <a class="code" href="classminidbg_1_1debugger.html#ab0a72f56b837540af184db2c53de4aef">get_line_entry_from_pc</a>(<a class="code" href="classminidbg_1_1debugger.html#a56e26f0c99ba1bd0390cf2dba4e24a29">get_offset_pc</a>());</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keywordflow">return</span> line_entry-&gt;line;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    }</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127">  103</a></span>&#160;    uint64_t <a class="code" href="classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127">get_pc</a>()</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    {</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b">get_register_value</a>(<a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, <a class="code" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83dab50a2e500294807caa75f3a835796682">reg::rip</a>);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    };</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#abbf1ba35f894fac6403185e0acdd4536">  113</a></span>&#160;    uint64_t <a class="code" href="classminidbg_1_1debugger.html#abbf1ba35f894fac6403185e0acdd4536">get_rbp</a>()</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    {</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b">get_register_value</a>(<a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, <a class="code" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da5fb4c09ffcf0a2564a2eca001edde421">reg::rbp</a>);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    }</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a7326411326dc7be2ca1780747b73c668">  123</a></span>&#160;    uint64_t <a class="code" href="classminidbg_1_1debugger.html#a7326411326dc7be2ca1780747b73c668">get_rsp</a>()</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    {</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b">get_register_value</a>(<a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, <a class="code" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da451e86cb8c690e064ceb3078192d8615">reg::rsp</a>);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    }</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a5c019420f24ef96e95a145b3a62c5973">  133</a></span>&#160;    std::vector&lt;std::pair&lt;uint64_t, std::string&gt;&gt; <a class="code" href="classminidbg_1_1debugger.html#a5c019420f24ef96e95a145b3a62c5973">get_backtrace_vct</a>()</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    {</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        std::vector&lt;std::pair&lt;uint64_t, std::string&gt;&gt; backtrace_vct;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <span class="keyword">auto</span> current_func = <a class="code" href="classminidbg_1_1debugger.html#a1f8a4061ffd8420395b9d8a83358567a">get_function_from_pc</a>(<a class="code" href="classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127">get_pc</a>());</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;        <span class="comment">// 结束地址为0表示没有找到有效的函数信息，可能已经到达了程序的起始位置</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        <span class="keywordflow">if</span> (current_func.end_addr == 0)</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        {</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;            <span class="keywordflow">return</span> backtrace_vct;</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        }</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="comment">// 将当前函数的起始地址和函数名加入回溯函数列表</span></div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        backtrace_vct.push_back(std::make_pair(current_func.start_addr, current_func.function_name));</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <span class="comment">// 获取当前栈帧的帧指针（RBP寄存器的值）</span></div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <span class="keyword">auto</span> frame_pointer = <a class="code" href="namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b">get_register_value</a>(<a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, <a class="code" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da5fb4c09ffcf0a2564a2eca001edde421">reg::rbp</a>);</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        <span class="keyword">auto</span> return_address = <a class="code" href="classminidbg_1_1debugger.html#aabde5dd3945efd3cffdec4e6cd245cff">read_memory</a>(frame_pointer + 8);       <span class="comment">// 读取返回地址，即上一级函数调用的地址</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        <span class="comment">// 开始不断循环回溯，直到当前函数为main函数为止   </span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        <span class="keywordflow">while</span> (current_func.function_name != <span class="stringliteral">&quot;main&quot;</span>)</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        {</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;            current_func = <a class="code" href="classminidbg_1_1debugger.html#a1f8a4061ffd8420395b9d8a83358567a">get_function_from_pc</a>(return_address);</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;            <span class="keywordflow">if</span> (current_func.end_addr == 0)         <span class="comment">// 检查获取到的函数信息是否有效</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;            {</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                <span class="keywordflow">return</span> backtrace_vct;</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;            }</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;            backtrace_vct.push_back(std::make_pair(current_func.start_addr, current_func.function_name));</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;            frame_pointer = <a class="code" href="classminidbg_1_1debugger.html#aabde5dd3945efd3cffdec4e6cd245cff">read_memory</a>(frame_pointer);         <span class="comment">// 获取上一级函数的帧指针         </span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;            return_address = <a class="code" href="classminidbg_1_1debugger.html#aabde5dd3945efd3cffdec4e6cd245cff">read_memory</a>(frame_pointer + 8);        <span class="comment">//上一级函数的返回地址，即再上一级函数的地址        </span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        }</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        <span class="keywordflow">return</span> backtrace_vct;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    }</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160; </div>
+<div class="line"><a name="l00178"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a622b0db8714bdea3a20003d0a0fc3cb6">  178</a></span>&#160;    std::vector&lt;std::pair&lt;uint64_t, std::vector&lt;uint8_t&gt;&gt;&gt; <a class="code" href="classminidbg_1_1debugger.html#a622b0db8714bdea3a20003d0a0fc3cb6">get_global_stack_vct</a>(uint64_t start_addr, uint64_t end_addr)</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    {</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        std::vector&lt;std::pair&lt;uint64_t, std::vector&lt;uint8_t&gt;&gt;&gt; global_stack_vct;    <span class="comment">// 存储全局堆栈信息的向量，每个元素为一个地址和对应的字节向量        </span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="comment">// 以8字节为单位遍历内存区域，读取每个地址处的数据，将其转换为字节向量存储起来</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = start_addr; i &lt; end_addr; i += 8)</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        {</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            uint64_t temp_data = <a class="code" href="classminidbg_1_1debugger.html#aabde5dd3945efd3cffdec4e6cd245cff">read_memory</a>(i);        <span class="comment">// 读取内存地址处的数据</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;            std::vector&lt;uint8_t&gt; temp_byte_vct(8);          <span class="comment">// 存储当前地址处数据的字节向量</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;            <span class="comment">// 提取uint64_t的每一个字节并存储到字节向量中</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> j = 0; j &lt; 8; ++j)</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;            {</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;                temp_byte_vct[j] = <span class="keyword">static_cast&lt;</span>uint8_t<span class="keyword">&gt;</span>((temp_data &gt;&gt; (8 * j)) &amp; 0xff);</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;            }</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160; </div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;            <span class="comment">// 将当前地址和对应的字节向量存储为一对键值对，并加入全局堆栈信息的向量中</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            global_stack_vct.push_back(std::make_pair(i, temp_byte_vct));</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        }</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    </div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <span class="keywordflow">return</span> global_stack_vct;</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    }</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; </div>
+<div class="line"><a name="l00202"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a115f14a7fc9aea645df019c541d3aa60">  202</a></span>&#160;    <a class="code" href="classminidbg_1_1debugger.html#a115f14a7fc9aea645df019c541d3aa60">debugger</a>()</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    {</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    }</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160; </div>
+<div class="line"><a name="l00212"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a644b99a4260aa9c5373a1c0b375cf9c5">  212</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#a644b99a4260aa9c5373a1c0b375cf9c5">initDbg</a>(std::string prog_name, pid_t pid)</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;    {</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        <span class="comment">// 清理旧的调试状态</span></div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a1cce554a29ebf07ec4ae259facc08af4">m_breakpoints</a>.clear(); <span class="comment">// 清除所有的断点</span></div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a180f020ca79e07ea89d05e48434f1696">m_prog_name</a> = std::move(prog_name);</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a> = pid;</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a89cd8e6f638de0139c3ddad334b2a4d9">m_asm_name</a> = <a class="code" href="classminidbg_1_1debugger.html#a180f020ca79e07ea89d05e48434f1696">m_prog_name</a> + <span class="stringliteral">&quot;.asm&quot;</span>;</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <span class="keyword">auto</span> fd = open(<a class="code" href="classminidbg_1_1debugger.html#a180f020ca79e07ea89d05e48434f1696">m_prog_name</a>.c_str(), O_RDONLY);</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a92f21939a0c73f068627c153828dc2a6">m_elf</a> = elf::elf{elf::create_mmap_loader(fd)};</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a702325100d56cf362bcd1668250614d7">m_dwarf</a> = dwarf::dwarf{dwarf::elf::create_loader(<a class="code" href="classminidbg_1_1debugger.html#a92f21939a0c73f068627c153828dc2a6">m_elf</a>)};</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        <span class="comment">// 等待目标进程发送信号</span></div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#ade2972e37458f63870e18c34f0a44bc1">wait_for_signal</a>();</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        <span class="comment">// 初始化加载地址</span></div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#aa16b14e2a5c30f85a19b60dfed2436ee">initialise_load_address</a>();</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;        <span class="comment">// 运行objdump获取汇编信息，加载源代码和汇编信息</span></div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a61dff0e30d6837427da037845dca7516">initialise_run_objdump</a>();</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a6d445a16899ac9ced43f17bc61e5ce20">initialise_load_asm</a>();</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a859bd0fa6bf7b2981ca554be9d13505b">initialise_load_src</a>();</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        std::cout &lt;&lt; <span class="stringliteral">&quot;初始化minidbg成功\n&quot;</span>;</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;    }</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160; </div>
+<div class="line"><a name="l00239"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a2686dd54e6d39c86d0321bd617b115d4">  239</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#a2686dd54e6d39c86d0321bd617b115d4">continue_execution</a>()</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    {</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#acc81497da4da399495135ed332fe01e7">step_over_breakpoint</a>();</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        ptrace(PTRACE_CONT, <a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, <span class="keyword">nullptr</span>, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#ade2972e37458f63870e18c34f0a44bc1">wait_for_signal</a>();</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    }</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160; </div>
+<div class="line"><a name="l00260"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#aab4f65554d4750e16bc1c01b046edb0d">  260</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#aab4f65554d4750e16bc1c01b046edb0d">break_execution</a>(std::string command)</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    {</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160; </div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        <span class="comment">// 0x&lt;hexadecimal&gt; -&gt; address breakpoint</span></div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        <span class="comment">// &lt;filename&gt;:&lt;line&gt; -&gt; line number breakpoint</span></div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        <span class="comment">// &lt;anything else&gt; -&gt; function name breakpoint</span></div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        <span class="keywordflow">if</span> (command[0] == <span class="charliteral">&#39;0&#39;</span> &amp;&amp; command[1] == <span class="charliteral">&#39;x&#39;</span>)</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        {</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            std::string addr{command, 2}; <span class="comment">// naively assume that the user has written 0xADDRESS like 0xff</span></div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#a33de60b0cf721c1fd24e5a3b5159e205">set_breakpoint_at_address</a>(std::stol(addr, 0, 16) + <a class="code" href="classminidbg_1_1debugger.html#a4a4639149d22529617f5a694ee40a5cf">m_load_address</a>);</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        }</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (command.find(<span class="charliteral">&#39;:&#39;</span>) != std::string::npos)</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        {</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;            <span class="keyword">auto</span> file_and_line = <a class="code" href="namespaceminidbg.html#a53e4cc1dcf1b9920f8128717c710b6b3">split</a>(command, <span class="charliteral">&#39;:&#39;</span>);</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#a3953940c630495e035444371643727aa">set_breakpoint_at_source_file</a>(file_and_line[0], std::stoi(file_and_line[1]));</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        }</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        {</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#ad4e95fd23fd5391089f97a198c04c8b5">set_breakpoint_at_function</a>(command);</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        }</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    }</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
+<div class="line"><a name="l00282"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#aa06d1327a1c6b32427035bee28cc83dd">  282</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#aa06d1327a1c6b32427035bee28cc83dd">next_execution</a>()</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    {</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#aa08ae391b77f28a593e435516dc2f50b">step_over</a>();</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    }</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
+<div class="line"><a name="l00287"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a9075df44cb4df2729c1036c035b0c85c">  287</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#a9075df44cb4df2729c1036c035b0c85c">finish_execution</a>()</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    {</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a16c19e64daba632bf0807d58bff713f7">step_out</a>();</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    }</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160; </div>
+<div class="line"><a name="l00292"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#acb73e8080bbd2fa305b8d383b4ddd3e4">  292</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#acb73e8080bbd2fa305b8d383b4ddd3e4">step_into_execution</a>()</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    {</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a36f22ffa07e4cf1d70480573c2075328">step_in</a>();</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    }</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160; </div>
+<div class="line"><a name="l00297"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#aaff1e34730485fa0ac3900fb8c88d448">  297</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#aaff1e34730485fa0ac3900fb8c88d448">si_execution</a>()</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    {</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a60c395083ae6156ababe81561ab17a76">single_step_instruction_with_breakpoint_check</a>();</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;    }</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160; </div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00303"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a180f020ca79e07ea89d05e48434f1696">  303</a></span>&#160;    std::string <a class="code" href="classminidbg_1_1debugger.html#a180f020ca79e07ea89d05e48434f1696">m_prog_name</a>;</div>
+<div class="line"><a name="l00304"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a89cd8e6f638de0139c3ddad334b2a4d9">  304</a></span>&#160;    std::string <a class="code" href="classminidbg_1_1debugger.html#a89cd8e6f638de0139c3ddad334b2a4d9">m_asm_name</a>;</div>
+<div class="line"><a name="l00305"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">  305</a></span>&#160;    pid_t <a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>;</div>
+<div class="line"><a name="l00306"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a1cce554a29ebf07ec4ae259facc08af4">  306</a></span>&#160;    std::unordered_map&lt;std::intptr_t, breakpoint&gt; <a class="code" href="classminidbg_1_1debugger.html#a1cce554a29ebf07ec4ae259facc08af4">m_breakpoints</a>;</div>
+<div class="line"><a name="l00307"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a702325100d56cf362bcd1668250614d7">  307</a></span>&#160;    dwarf::dwarf <a class="code" href="classminidbg_1_1debugger.html#a702325100d56cf362bcd1668250614d7">m_dwarf</a>;</div>
+<div class="line"><a name="l00308"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a92f21939a0c73f068627c153828dc2a6">  308</a></span>&#160;    elf::elf <a class="code" href="classminidbg_1_1debugger.html#a92f21939a0c73f068627c153828dc2a6">m_elf</a>;</div>
+<div class="line"><a name="l00309"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a4a4639149d22529617f5a694ee40a5cf">  309</a></span>&#160;    uint64_t <a class="code" href="classminidbg_1_1debugger.html#a4a4639149d22529617f5a694ee40a5cf">m_load_address</a>; <span class="comment">// 偏移量，很重要</span></div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160; </div>
+<div class="line"><a name="l00330"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#ab5128ad097ff8fdb0cdb5bf17b979a58">  330</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#ab5128ad097ff8fdb0cdb5bf17b979a58">handle_command</a>(<span class="keyword">const</span> std::string &amp;line)</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    {</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        std::vector&lt;std::string&gt; args = <a class="code" href="namespaceminidbg.html#a53e4cc1dcf1b9920f8128717c710b6b3">split</a>(line, <span class="charliteral">&#39; &#39;</span>);</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        std::string command = args[0];</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160; </div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">is_prefix</a>(command, <span class="stringliteral">&quot;break&quot;</span>))</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        {</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;            <span class="keywordflow">if</span> (args[1][0] == <span class="charliteral">&#39;0&#39;</span> &amp;&amp; args[1][1] == <span class="charliteral">&#39;x&#39;</span>)</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;            {</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;                std::string addr{args[1], 2}; <span class="comment">// naively assume that the user has written 0xADDRESS like 0xff</span></div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;                <a class="code" href="classminidbg_1_1debugger.html#a33de60b0cf721c1fd24e5a3b5159e205">set_breakpoint_at_address</a>(std::stol(addr, 0, 16) + <a class="code" href="classminidbg_1_1debugger.html#a4a4639149d22529617f5a694ee40a5cf">m_load_address</a>);</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;            }</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (args[1].find(<span class="charliteral">&#39;:&#39;</span>) != std::string::npos)</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;            {</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;                <span class="keyword">auto</span> file_and_line = <a class="code" href="namespaceminidbg.html#a53e4cc1dcf1b9920f8128717c710b6b3">split</a>(args[1], <span class="charliteral">&#39;:&#39;</span>);</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;                <a class="code" href="classminidbg_1_1debugger.html#a3953940c630495e035444371643727aa">set_breakpoint_at_source_file</a>(file_and_line[0], std::stoi(file_and_line[1]));</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;            }</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;            {</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;                <a class="code" href="classminidbg_1_1debugger.html#ad4e95fd23fd5391089f97a198c04c8b5">set_breakpoint_at_function</a>(args[1]);</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;            }</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;        }</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">is_prefix</a>(command, <span class="stringliteral">&quot;register&quot;</span>))</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        {</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">is_prefix</a>(args[1], <span class="stringliteral">&quot;dump&quot;</span>))</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;            {</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;                <a class="code" href="classminidbg_1_1debugger.html#adddaa3f5b34d13a5c22b49ebb6ec58e4">dump_registers</a>();</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;            }</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">is_prefix</a>(args[1], <span class="stringliteral">&quot;read&quot;</span>))</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;            {</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;                std::cout &lt;&lt; <a class="code" href="namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b">get_register_value</a>(<a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, <a class="code" href="namespaceminidbg.html#a40ee5a3032ff64e74bbc60f507ee61e6">get_register_from_name</a>(args[2])) &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;            }</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">is_prefix</a>(args[1], <span class="stringliteral">&quot;write&quot;</span>))</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;            {</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;                std::string val{args[3], 2}; <span class="comment">// assume 0xVALUE</span></div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;                <a class="code" href="namespaceminidbg.html#a1d7f2dc1f8a79d86673a623564b97cc8">set_register_value</a>(<a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, <a class="code" href="namespaceminidbg.html#a40ee5a3032ff64e74bbc60f507ee61e6">get_register_from_name</a>(args[2]), std::stol(val, 0, 16));</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;                std::cout &lt;&lt; <span class="stringliteral">&quot;write data &quot;</span> &lt;&lt; args[3] &lt;&lt; <span class="stringliteral">&quot; into reg &quot;</span> &lt;&lt; args[2] &lt;&lt; <span class="stringliteral">&quot; successfully\n&quot;</span>;</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;            }</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;            {</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;                std::cout &lt;&lt; <span class="stringliteral">&quot;unknow command for register\n&quot;</span>;</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;            }</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;        }</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">is_prefix</a>(command, <span class="stringliteral">&quot;symbol&quot;</span>))</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;        {</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;            <span class="keyword">auto</span> syms = <a class="code" href="classminidbg_1_1debugger.html#a268b73756c673c5a34cf25030bff03a1">lookup_symbol</a>(args[1]);</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;s : syms)</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;            {</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;                std::cout &lt;&lt; s.name &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; <a class="code" href="namespacesymboltype.html#a9bd44f3f011af37e528a03f3584f1dd7">to_string</a>(s.type) &lt;&lt; <span class="stringliteral">&quot; 0x&quot;</span> &lt;&lt; std::hex &lt;&lt; s.addr &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;            }</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;        }</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">is_prefix</a>(command, <span class="stringliteral">&quot;memory&quot;</span>))</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        {</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;            std::string addr{args[2], 2}; <span class="comment">// assume 0xADDRESS</span></div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160; </div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">is_prefix</a>(args[1], <span class="stringliteral">&quot;read&quot;</span>))</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;            {</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;                std::cout &lt;&lt; std::hex &lt;&lt; <a class="code" href="classminidbg_1_1debugger.html#aabde5dd3945efd3cffdec4e6cd245cff">read_memory</a>(std::stol(addr, 0, 16)) &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;            }</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;            <span class="keywordflow">if</span> (<a class="code" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">is_prefix</a>(args[1], <span class="stringliteral">&quot;write&quot;</span>))</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;            {</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;                std::string val{args[3], 2}; <span class="comment">// assume 0xVAL</span></div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;                <a class="code" href="classminidbg_1_1debugger.html#a8111b5ed151d51b9e0a8480a0a845286">write_memory</a>(std::stol(addr, 0, 16), std::stol(val, 0, 16));</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;            }</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;        }</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">is_prefix</a>(command, <span class="stringliteral">&quot;si&quot;</span>))</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;        {</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#a60c395083ae6156ababe81561ab17a76">single_step_instruction_with_breakpoint_check</a>();</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;            <span class="keyword">auto</span> offset_pc = <a class="code" href="classminidbg_1_1debugger.html#ace071934f7fedb171618a830e0b2f856">offset_load_address</a>(<a class="code" href="classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127">get_pc</a>());</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;            <span class="keyword">auto</span> line_entry = <a class="code" href="classminidbg_1_1debugger.html#ab0a72f56b837540af184db2c53de4aef">get_line_entry_from_pc</a>(offset_pc);</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        }</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">is_prefix</a>(command, <span class="stringliteral">&quot;step&quot;</span>))</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        {</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#a36f22ffa07e4cf1d70480573c2075328">step_in</a>();</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;        }</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">is_prefix</a>(command, <span class="stringliteral">&quot;next&quot;</span>))</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;        {</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#aa08ae391b77f28a593e435516dc2f50b">step_over</a>();</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        }</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">is_prefix</a>(command, <span class="stringliteral">&quot;finish&quot;</span>))</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;        {</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#a16c19e64daba632bf0807d58bff713f7">step_out</a>();</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;        }</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">is_prefix</a>(command, <span class="stringliteral">&quot;backtrace&quot;</span>))</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;        {</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;            <span class="comment">// print_backtrace();</span></div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;        }</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code" href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">is_prefix</a>(command, <span class="stringliteral">&quot;ls&quot;</span>))</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;        {</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160; </div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;            <span class="keyword">auto</span> line_entry = <a class="code" href="classminidbg_1_1debugger.html#ab0a72f56b837540af184db2c53de4aef">get_line_entry_from_pc</a>(<a class="code" href="classminidbg_1_1debugger.html#a56e26f0c99ba1bd0390cf2dba4e24a29">get_offset_pc</a>());</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;            <span class="comment">// print_source(line_entry-&gt;file-&gt;path, line_entry-&gt;line);</span></div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;            <span class="comment">// print_asm(m_asm_name, get_offset_pc());</span></div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;        }</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;        {</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;            std::cerr &lt;&lt; <span class="stringliteral">&quot;unknow command\n&quot;</span>;</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;        }</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    }</div>
+<div class="line"><a name="l00450"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a5679e71844ee8af9206377b3f9d61f82">  450</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#a5679e71844ee8af9206377b3f9d61f82">handle_sigtrap</a>(siginfo_t info)</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;    {</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;        <span class="keywordflow">switch</span> (info.si_code)</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;        {</div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;        <span class="keywordflow">case</span> SI_KERNEL:</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;        <span class="keywordflow">case</span> TRAP_BRKPT:</div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;        {</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;            <span class="keyword">auto</span> nowpc = <a class="code" href="classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127">get_pc</a>();</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#ab6efac5e854a13f0bc1e6a07a8a208d2">set_pc</a>(nowpc - 1);</div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;            nowpc--;</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;            <span class="comment">// std::cout &lt;&lt; &quot;hit breakpoint at address 0x&quot; &lt;&lt; std::hex &lt;&lt; nowpc &lt;&lt; std::endl;</span></div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;            <span class="comment">// auto offset_pc = offset_load_address(nowpc);</span></div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;            <span class="comment">// auto line_entry = get_line_entry_from_pc(offset_pc);</span></div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;            <span class="comment">// print_source(line_entry-&gt;file-&gt;path, line_entry-&gt;line);</span></div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;        }</div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;        <span class="keywordflow">case</span> TRAP_TRACE:</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;            std::cout &lt;&lt; <span class="stringliteral">&quot;get signal trap_trace&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;            std::cout &lt;&lt; <span class="stringliteral">&quot;unknow sigtrap code&quot;</span> &lt;&lt; info.si_code &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        }</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;    };</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160; </div>
+<div class="line"><a name="l00479"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#ace071934f7fedb171618a830e0b2f856">  479</a></span>&#160;    uint64_t <a class="code" href="classminidbg_1_1debugger.html#ace071934f7fedb171618a830e0b2f856">offset_load_address</a>(uint64_t addr)</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;    {</div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;        <span class="keywordflow">return</span> addr - <a class="code" href="classminidbg_1_1debugger.html#a4a4639149d22529617f5a694ee40a5cf">m_load_address</a>;</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;    }</div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160; </div>
+<div class="line"><a name="l00488"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#aadec3114b66ec64774be46873a97e307">  488</a></span>&#160;    uint64_t <a class="code" href="classminidbg_1_1debugger.html#aadec3114b66ec64774be46873a97e307">offset_dwarf_address</a>(uint64_t addr)</div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;    {</div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;        <span class="keywordflow">return</span> addr + <a class="code" href="classminidbg_1_1debugger.html#a4a4639149d22529617f5a694ee40a5cf">m_load_address</a>;</div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;    }</div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160; </div>
+<div class="line"><a name="l00493"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a56e26f0c99ba1bd0390cf2dba4e24a29">  493</a></span>&#160;    uint64_t <a class="code" href="classminidbg_1_1debugger.html#a56e26f0c99ba1bd0390cf2dba4e24a29">get_offset_pc</a>()</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;    {</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classminidbg_1_1debugger.html#ace071934f7fedb171618a830e0b2f856">offset_load_address</a>(<a class="code" href="classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127">get_pc</a>());</div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;    }</div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160; </div>
+<div class="line"><a name="l00498"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#aabde5dd3945efd3cffdec4e6cd245cff">  498</a></span>&#160;    uint64_t <a class="code" href="classminidbg_1_1debugger.html#aabde5dd3945efd3cffdec4e6cd245cff">read_memory</a>(uint64_t address)</div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;    {</div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;        <span class="keywordflow">return</span> ptrace(PTRACE_PEEKDATA, <a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, address, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;    };</div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160; </div>
+<div class="line"><a name="l00503"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a8111b5ed151d51b9e0a8480a0a845286">  503</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#a8111b5ed151d51b9e0a8480a0a845286">write_memory</a>(uint64_t address, uint64_t value)</div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;    {</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;        ptrace(PTRACE_POKEDATA, <a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, address, value);</div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;    };</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160; </div>
+<div class="line"><a name="l00513"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a33de60b0cf721c1fd24e5a3b5159e205">  513</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#a33de60b0cf721c1fd24e5a3b5159e205">set_breakpoint_at_address</a>(std::intptr_t addr)</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;    {</div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;        <span class="comment">// std::cout &lt;&lt; &quot;set breakpoint at address 0x&quot; &lt;&lt; std::hex &lt;&lt; addr &lt;&lt; std::endl;</span></div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;        <a class="code" href="classminidbg_1_1breakpoint.html">breakpoint</a> bp(<a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, addr);</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;        bp.<a class="code" href="classminidbg_1_1breakpoint.html#a8c4099c042923198070f27bd5c9edcb8">enable</a>();</div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a1cce554a29ebf07ec4ae259facc08af4">m_breakpoints</a>[addr] = bp;</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;    };</div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160; </div>
+<div class="line"><a name="l00527"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#adddaa3f5b34d13a5c22b49ebb6ec58e4">  527</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#adddaa3f5b34d13a5c22b49ebb6ec58e4">dump_registers</a>()</div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;    {</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> &amp;rd : g_register_descriptors)</div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;        {                                                           <span class="comment">// 最小宽度为 16 个字符</span></div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;            std::cout &lt;&lt; rd.name &lt;&lt; <span class="stringliteral">&quot;  0x&quot;</span> &lt;&lt; std::setfill(<span class="charliteral">&#39;0&#39;</span>) &lt;&lt; std::setw(16) &lt;&lt; std::hex &lt;&lt; <a class="code" href="namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b">get_register_value</a>(<a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, rd.r) &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;        }</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;    };</div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160; </div>
+<div class="line"><a name="l00535"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#ab6efac5e854a13f0bc1e6a07a8a208d2">  535</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#ab6efac5e854a13f0bc1e6a07a8a208d2">set_pc</a>(uint64_t pc)</div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;    {</div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;        <a class="code" href="namespaceminidbg.html#a1d7f2dc1f8a79d86673a623564b97cc8">set_register_value</a>(<a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, <a class="code" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83dab50a2e500294807caa75f3a835796682">reg::rip</a>, pc);</div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;    };</div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160; </div>
+<div class="line"><a name="l00547"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#ade2972e37458f63870e18c34f0a44bc1">  547</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#ade2972e37458f63870e18c34f0a44bc1">wait_for_signal</a>()</div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;    {</div>
+<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;        <span class="keywordtype">int</span> wait_status;</div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;        <span class="keyword">auto</span> options = 0;</div>
+<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;        <span class="comment">// 将状态信息存储到 wait_status 中</span></div>
+<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;        waitpid(<a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, &amp;wait_status, options);</div>
+<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;        <span class="keyword">auto</span> siginfo = <a class="code" href="classminidbg_1_1debugger.html#a4875fc7f36cb21d20c02bc0778f986d5">get_signal_info</a>();</div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160; </div>
+<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;        <span class="keywordflow">switch</span> (siginfo.si_signo)</div>
+<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;        {</div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;        <span class="keywordflow">case</span> SIGTRAP:           <span class="comment">// 遇到断点</span></div>
+<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#a5679e71844ee8af9206377b3f9d61f82">handle_sigtrap</a>(siginfo);</div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;        <span class="keywordflow">case</span> SIGSEGV:           <span class="comment">// 段错误</span></div>
+<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;            std::cout &lt;&lt; <span class="stringliteral">&quot;sorry, segment fault . reason : &quot;</span> &lt;&lt; siginfo.si_code &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;        <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;            std::cout &lt;&lt; <span class="stringliteral">&quot;get signal  &quot;</span> &lt;&lt; strsignal(siginfo.si_signo) &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;            <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;        }</div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;    }</div>
+<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160; </div>
+<div class="line"><a name="l00574"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#acc81497da4da399495135ed332fe01e7">  574</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#acc81497da4da399495135ed332fe01e7">step_over_breakpoint</a>()</div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;    {</div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;        <span class="comment">// 判断当前指令地址是否处于断点集合中</span></div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classminidbg_1_1debugger.html#a1cce554a29ebf07ec4ae259facc08af4">m_breakpoints</a>.count(<a class="code" href="classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127">get_pc</a>()))</div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;        {</div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;            <span class="keyword">auto</span> &amp;bp = <a class="code" href="classminidbg_1_1debugger.html#a1cce554a29ebf07ec4ae259facc08af4">m_breakpoints</a>[<a class="code" href="classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127">get_pc</a>()];   <span class="comment">// 获取对映射中特定键值的引用</span></div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;            <span class="keywordflow">if</span> (bp.is_enabled())</div>
+<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;            {</div>
+<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;                bp.disable();       <span class="comment">// 禁用当前断点，即将断点位置的0xcc替换为原指令，以允许程序继续执行</span></div>
+<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;                ptrace(PTRACE_SINGLESTEP, <a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, <span class="keyword">nullptr</span>, <span class="keyword">nullptr</span>);     <span class="comment">// 使用 ptrace 让目标进程执行一条指令，然后暂停, 方便调试器进行下一步操作。</span></div>
+<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;                <a class="code" href="classminidbg_1_1debugger.html#ade2972e37458f63870e18c34f0a44bc1">wait_for_signal</a>();</div>
+<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;                bp.enable();        <span class="comment">// 恢复当前断点，确保在下次执行到该断点时，程序会暂停执行</span></div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;            }</div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;        }</div>
+<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;    };</div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160; </div>
+<div class="line"><a name="l00594"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a1f8a4061ffd8420395b9d8a83358567a">  594</a></span>&#160;    <a class="code" href="structminidbg_1_1asm__head.html">asm_head</a> <a class="code" href="classminidbg_1_1debugger.html#a1f8a4061ffd8420395b9d8a83358567a">get_function_from_pc</a>(uint64_t pc)</div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;    {</div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;head : <a class="code" href="classminidbg_1_1debugger.html#aba207285db39ae79e905ce84b3d4b304">m_asm_vct</a>)</div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;        {</div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;            <span class="comment">// 该 PC 地址位于当前函数的代码范围内，返回当前函数的信息</span></div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;            <span class="keywordflow">if</span> (pc &gt;= head.start_addr &amp;&amp; pc &lt;= head.end_addr)</div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;            {</div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;                <span class="keywordflow">return</span> head;</div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;            }</div>
+<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;        }</div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;        <a class="code" href="structminidbg_1_1asm__head.html">asm_head</a> temp;</div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;        temp.<a class="code" href="structminidbg_1_1asm__head.html#a1ed83181dbfb7c7a1c05447541b40d37">end_addr</a> = 0;</div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;        <span class="keywordflow">return</span> temp;</div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;    }</div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160; </div>
+<div class="line"><a name="l00614"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#ab0a72f56b837540af184db2c53de4aef">  614</a></span>&#160;    dwarf::line_table::iterator <a class="code" href="classminidbg_1_1debugger.html#ab0a72f56b837540af184db2c53de4aef">get_line_entry_from_pc</a>(uint64_t pc)</div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;    {</div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;cu : <a class="code" href="classminidbg_1_1debugger.html#a702325100d56cf362bcd1668250614d7">m_dwarf</a>.compilation_units())</div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;        {</div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;            <span class="comment">// 判断给定的 PC 地址是否在当前编译单元的调试信息条目范围内</span></div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;            <span class="keywordflow">if</span> (die_pc_range(cu.root()).contains(pc))       <span class="comment">// die_pc_range(): 计算给定编译单元的根DIE的地址范围</span></div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;            {</div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;                <span class="keyword">auto</span> &amp;lt = cu.get_line_table();</div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;                <span class="keyword">auto</span> it = lt.find_address(pc);</div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;                <span class="keywordflow">if</span> (it == lt.end())</div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;                {</div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;                    <span class="keywordflow">return</span> lt.begin();</div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;                }</div>
+<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;                {</div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;                    <span class="keywordflow">return</span> it;</div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;                }</div>
+<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;            }</div>
+<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;        }</div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;        <span class="keywordflow">throw</span> std::out_of_range{<span class="stringliteral">&quot;can&#39;t find line entry&quot;</span>};</div>
+<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;    }</div>
+<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160; </div>
+<div class="line"><a name="l00648"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a5317fd19f40e33920e7235bb4406b460">  648</a></span>&#160;    dwarf::line_table::iterator <a class="code" href="classminidbg_1_1debugger.html#a5317fd19f40e33920e7235bb4406b460">get_next_line_entry_from_pc</a>(uint64_t pc)</div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;    {</div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;        <span class="keyword">auto</span> line_entry = <a class="code" href="classminidbg_1_1debugger.html#ab0a72f56b837540af184db2c53de4aef">get_line_entry_from_pc</a>(pc);</div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;        line_entry++;</div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;        <span class="keywordflow">return</span> line_entry;</div>
+<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;    }</div>
+<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160; </div>
+<div class="line"><a name="l00660"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a4875fc7f36cb21d20c02bc0778f986d5">  660</a></span>&#160;    siginfo_t <a class="code" href="classminidbg_1_1debugger.html#a4875fc7f36cb21d20c02bc0778f986d5">get_signal_info</a>()</div>
+<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;    {</div>
+<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;        siginfo_t info;</div>
+<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;        ptrace(PTRACE_GETSIGINFO, <a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, <span class="keyword">nullptr</span>, &amp;info);</div>
+<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;        <span class="keywordflow">return</span> info;</div>
+<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;    }</div>
+<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160; </div>
+<div class="line"><a name="l00673"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#ae9ff213c04734e537744be8a3e915345">  673</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#ae9ff213c04734e537744be8a3e915345">single_step_instruction</a>()</div>
+<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;    {</div>
+<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;        ptrace(PTRACE_SINGLESTEP, <a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, <span class="keyword">nullptr</span>, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#ade2972e37458f63870e18c34f0a44bc1">wait_for_signal</a>();</div>
+<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;    }</div>
+<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160; </div>
+<div class="line"><a name="l00682"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a60c395083ae6156ababe81561ab17a76">  682</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#a60c395083ae6156ababe81561ab17a76">single_step_instruction_with_breakpoint_check</a>()</div>
+<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;    {</div>
+<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classminidbg_1_1debugger.html#a1cce554a29ebf07ec4ae259facc08af4">m_breakpoints</a>.count(<a class="code" href="classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127">get_pc</a>()))</div>
+<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;        {</div>
+<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#acc81497da4da399495135ed332fe01e7">step_over_breakpoint</a>();</div>
+<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;        }</div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;        {</div>
+<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#ae9ff213c04734e537744be8a3e915345">single_step_instruction</a>();</div>
+<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;        }</div>
+<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;    }</div>
+<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160; </div>
+<div class="line"><a name="l00698"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a57cd3a2d4d8a89d1c61e516f0d0db128">  698</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#a57cd3a2d4d8a89d1c61e516f0d0db128">remove_breakpoint</a>(std::intptr_t addr)</div>
+<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;    {</div>
+<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classminidbg_1_1debugger.html#a1cce554a29ebf07ec4ae259facc08af4">m_breakpoints</a>.at(addr).is_enabled())</div>
+<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;        {</div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#a1cce554a29ebf07ec4ae259facc08af4">m_breakpoints</a>.at(addr).disable();</div>
+<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;        }</div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a1cce554a29ebf07ec4ae259facc08af4">m_breakpoints</a>.erase(addr);</div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;    }</div>
+<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160; </div>
+<div class="line"><a name="l00711"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a16c19e64daba632bf0807d58bff713f7">  711</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#a16c19e64daba632bf0807d58bff713f7">step_out</a>()</div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;    {</div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;        <span class="keyword">auto</span> frame_pointer = <a class="code" href="namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b">get_register_value</a>(<a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>, <a class="code" href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da5fb4c09ffcf0a2564a2eca001edde421">reg::rbp</a>);</div>
+<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;        <span class="keyword">auto</span> return_address = <a class="code" href="classminidbg_1_1debugger.html#aabde5dd3945efd3cffdec4e6cd245cff">read_memory</a>(frame_pointer + 8);</div>
+<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160; </div>
+<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;        <span class="keywordtype">bool</span> should_remove_breakpoint = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="classminidbg_1_1debugger.html#a1cce554a29ebf07ec4ae259facc08af4">m_breakpoints</a>.count(return_address))</div>
+<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;        {</div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#a33de60b0cf721c1fd24e5a3b5159e205">set_breakpoint_at_address</a>(return_address);</div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;            should_remove_breakpoint = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;        }</div>
+<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160; </div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a2686dd54e6d39c86d0321bd617b115d4">continue_execution</a>();</div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160; </div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;        <span class="keywordflow">if</span> (should_remove_breakpoint)</div>
+<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;        {</div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#a57cd3a2d4d8a89d1c61e516f0d0db128">remove_breakpoint</a>(return_address);</div>
+<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;        }</div>
+<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;    }</div>
+<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160; </div>
+<div class="line"><a name="l00735"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a36f22ffa07e4cf1d70480573c2075328">  735</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#a36f22ffa07e4cf1d70480573c2075328">step_in</a>()</div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;    {</div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;        <span class="keyword">auto</span> line = <a class="code" href="classminidbg_1_1debugger.html#ab0a72f56b837540af184db2c53de4aef">get_line_entry_from_pc</a>(<a class="code" href="classminidbg_1_1debugger.html#a56e26f0c99ba1bd0390cf2dba4e24a29">get_offset_pc</a>())-&gt;line;      <span class="comment">//  line 成员变量</span></div>
+<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;        <span class="comment">// 源代码行号没有改变，循环继续</span></div>
+<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;        <span class="keywordflow">while</span> (<a class="code" href="classminidbg_1_1debugger.html#ab0a72f56b837540af184db2c53de4aef">get_line_entry_from_pc</a>(<a class="code" href="classminidbg_1_1debugger.html#a56e26f0c99ba1bd0390cf2dba4e24a29">get_offset_pc</a>())-&gt;line == line)</div>
+<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;        {</div>
+<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#a60c395083ae6156ababe81561ab17a76">single_step_instruction_with_breakpoint_check</a>();</div>
+<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;        }</div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160; </div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;        <span class="keyword">auto</span> line_entry = <a class="code" href="classminidbg_1_1debugger.html#ab0a72f56b837540af184db2c53de4aef">get_line_entry_from_pc</a>(<a class="code" href="classminidbg_1_1debugger.html#a56e26f0c99ba1bd0390cf2dba4e24a29">get_offset_pc</a>());</div>
+<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;        <span class="comment">//print_source(line_entry-&gt;file-&gt;path, line_entry-&gt;line);</span></div>
+<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;    }</div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160; </div>
+<div class="line"><a name="l00752"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#aa08ae391b77f28a593e435516dc2f50b">  752</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#aa08ae391b77f28a593e435516dc2f50b">step_over</a>()</div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;    {</div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;        <span class="comment">// std::cout &lt;&lt; &quot;now pc is 0x&quot; &lt;&lt; std::hex &lt;&lt; get_pc() &lt;&lt; &quot;\n&quot;;</span></div>
+<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;        <span class="keyword">auto</span> line_entry = <a class="code" href="classminidbg_1_1debugger.html#a5317fd19f40e33920e7235bb4406b460">get_next_line_entry_from_pc</a>(<a class="code" href="classminidbg_1_1debugger.html#a56e26f0c99ba1bd0390cf2dba4e24a29">get_offset_pc</a>());</div>
+<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;        <span class="keyword">auto</span> newpc = <a class="code" href="classminidbg_1_1debugger.html#aadec3114b66ec64774be46873a97e307">offset_dwarf_address</a>(line_entry-&gt;address);</div>
+<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;        <span class="comment">// std::cout &lt;&lt; &quot;my new pc is 0x&quot; &lt;&lt; std::hex &lt;&lt; get_pc() &lt;&lt; &quot;\n&quot;;</span></div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;        <span class="keywordflow">if</span> (!<a class="code" href="classminidbg_1_1debugger.html#a1cce554a29ebf07ec4ae259facc08af4">m_breakpoints</a>.count(newpc))</div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;        {</div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#a33de60b0cf721c1fd24e5a3b5159e205">set_breakpoint_at_address</a>(newpc);</div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;        }</div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a2686dd54e6d39c86d0321bd617b115d4">continue_execution</a>();</div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160; </div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a57cd3a2d4d8a89d1c61e516f0d0db128">remove_breakpoint</a>(newpc);</div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;        <span class="comment">// std::cout &lt;&lt; &quot;after continue 0x&quot; &lt;&lt; std::hex &lt;&lt; get_pc() &lt;&lt; &quot;\n&quot;;</span></div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;    };</div>
+<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160; </div>
+<div class="line"><a name="l00772"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#ad4e95fd23fd5391089f97a198c04c8b5">  772</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#ad4e95fd23fd5391089f97a198c04c8b5">set_breakpoint_at_function</a>(<span class="keyword">const</span> std::string &amp;name)</div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;    {</div>
+<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;        <span class="keywordtype">bool</span> flag = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> &amp;cu : <a class="code" href="classminidbg_1_1debugger.html#a702325100d56cf362bcd1668250614d7">m_dwarf</a>.compilation_units())</div>
+<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;        {</div>
+<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;            <span class="comment">// 检查每个 DIE 是否具有名称属性并且与参数匹配.</span></div>
+<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> &amp;die : cu.root())</div>
+<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;            {</div>
+<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;                <span class="keywordflow">if</span> (die.has(dwarf::DW_AT::name) &amp;&amp; at_name(die) == name)</div>
+<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;                {</div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;                    flag = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;                    <span class="keyword">auto</span> low_pc = at_low_pc(die);</div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;                    <span class="keyword">auto</span> entry = <a class="code" href="classminidbg_1_1debugger.html#ab0a72f56b837540af184db2c53de4aef">get_line_entry_from_pc</a>(low_pc);</div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;                    <span class="comment">// 在源代码行条目的下一行设置断点. 函数定义通常位于函数体的开头，如果停在函数定义的位置，调试器会在函数被调用前就停止执行，无法观察到函数内部的变量状态、参数传递等信息。</span></div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;                    ++entry;</div>
+<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;                    <a class="code" href="classminidbg_1_1debugger.html#a33de60b0cf721c1fd24e5a3b5159e205">set_breakpoint_at_address</a>(<a class="code" href="classminidbg_1_1debugger.html#aadec3114b66ec64774be46873a97e307">offset_dwarf_address</a>(entry-&gt;address));</div>
+<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;                }</div>
+<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;            }</div>
+<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;        }</div>
+<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;        <span class="keywordflow">if</span> (!flag)</div>
+<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;        {</div>
+<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;            std::cout &lt;&lt; <span class="stringliteral">&quot;fails to set breakpoint at function &quot;</span> &lt;&lt; name &lt;&lt; <span class="stringliteral">&quot;\nCan&#39;t find it\n&quot;</span>;</div>
+<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;        }</div>
+<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;    }</div>
+<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160; </div>
+<div class="line"><a name="l00803"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a3953940c630495e035444371643727aa">  803</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#a3953940c630495e035444371643727aa">set_breakpoint_at_source_file</a>(<span class="keyword">const</span> std::string &amp;file, <span class="keywordtype">unsigned</span> line)</div>
+<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;    {</div>
+<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> &amp;cu : <a class="code" href="classminidbg_1_1debugger.html#a702325100d56cf362bcd1668250614d7">m_dwarf</a>.compilation_units())</div>
+<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;        {</div>
+<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;            <span class="keyword">auto</span> rootName = at_name(cu.root());         <span class="comment">// 源文件的完整路径名</span></div>
+<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;            <span class="keywordtype">size_t</span> pos = rootName.rfind(<span class="charliteral">&#39;/&#39;</span>);</div>
+<div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160;            <span class="keywordflow">if</span> (pos != std::string::npos &amp;&amp; pos != rootName.size() - 1)</div>
+<div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160;            {</div>
+<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;                rootName = rootName.substr(pos + 1);</div>
+<div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160;            }</div>
+<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160; </div>
+<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;            <span class="keywordflow">if</span> (file == rootName)</div>
+<div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160;            {</div>
+<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;                <span class="keyword">const</span> <span class="keyword">auto</span> &amp;lt = cu.get_line_table();</div>
+<div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160;                <span class="comment">// 在行表中查找与目标行匹配的行条目                    </span></div>
+<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> &amp;entry : lt)</div>
+<div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160;                {</div>
+<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;                    <span class="keywordflow">if</span> (entry.is_stmt &amp;&amp; entry.line == line)</div>
+<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;                    {</div>
+<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160;                        <a class="code" href="classminidbg_1_1debugger.html#a33de60b0cf721c1fd24e5a3b5159e205">set_breakpoint_at_address</a>(<a class="code" href="classminidbg_1_1debugger.html#aadec3114b66ec64774be46873a97e307">offset_dwarf_address</a>(entry.address));</div>
+<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;                        <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160;                    }</div>
+<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;                }</div>
+<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;            }</div>
+<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160;        }</div>
+<div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;        std::cout &lt;&lt; <span class="stringliteral">&quot;set breakpoint at function &quot;</span> &lt;&lt; file &lt;&lt; <span class="stringliteral">&quot; and line &quot;</span> &lt;&lt; line &lt;&lt; <span class="stringliteral">&quot; fails\n&quot;</span>;</div>
+<div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;    }</div>
+<div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160; </div>
+<div class="line"><a name="l00844"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a268b73756c673c5a34cf25030bff03a1">  844</a></span>&#160;    std::vector&lt;symboltype::symbol&gt; <a class="code" href="classminidbg_1_1debugger.html#a268b73756c673c5a34cf25030bff03a1">lookup_symbol</a>(<span class="keyword">const</span> std::string &amp;name)</div>
+<div class="line"><a name="l00845"></a><span class="lineno">  845</span>&#160;    {</div>
+<div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160;        std::vector&lt;symboltype::symbol&gt; syms;</div>
+<div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160; </div>
+<div class="line"><a name="l00848"></a><span class="lineno">  848</span>&#160;        <span class="comment">// 遍历ELF文件的所有节            </span></div>
+<div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;sec : <a class="code" href="classminidbg_1_1debugger.html#a92f21939a0c73f068627c153828dc2a6">m_elf</a>.sections())</div>
+<div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160;        {</div>
+<div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160;            <span class="comment">// 跳过非符号表和动态符号表类型的节</span></div>
+<div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160;            <span class="keywordflow">if</span> (sec.get_hdr().type != elf::sht::symtab &amp;&amp; sec.get_hdr().type != elf::sht::dynsym)</div>
+<div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160;                <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160; </div>
+<div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> sym : sec.as_symtab())</div>
+<div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160;            {</div>
+<div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;                <span class="keywordflow">if</span> (sym.get_name() == name)</div>
+<div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160;                {</div>
+<div class="line"><a name="l00859"></a><span class="lineno">  859</span>&#160;                    <span class="keyword">auto</span> &amp;d = sym.get_data();</div>
+<div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160;                    syms.push_back(<a class="code" href="structsymboltype_1_1symbol.html">symboltype::symbol</a>{<a class="code" href="namespacesymboltype.html#a92af0a7d66c478a7baef4d31867b6c72">symboltype::to_symbol_type</a>(d.type()), sym.get_name(), d.value});</div>
+<div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160;                }</div>
+<div class="line"><a name="l00862"></a><span class="lineno">  862</span>&#160;            }</div>
+<div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160;        }</div>
+<div class="line"><a name="l00864"></a><span class="lineno">  864</span>&#160;        <span class="comment">// 去重</span></div>
+<div class="line"><a name="l00865"></a><span class="lineno">  865</span>&#160;        std::vector&lt;symboltype::symbol&gt;::iterator unique_end = std::unique(syms.begin(), syms.end());</div>
+<div class="line"><a name="l00866"></a><span class="lineno">  866</span>&#160;        syms.erase(unique_end, syms.end());</div>
+<div class="line"><a name="l00867"></a><span class="lineno">  867</span>&#160;        <span class="keywordflow">return</span> syms;</div>
+<div class="line"><a name="l00868"></a><span class="lineno">  868</span>&#160;    }</div>
+<div class="line"><a name="l00869"></a><span class="lineno">  869</span>&#160; </div>
+<div class="line"><a name="l00870"></a><span class="lineno">  870</span>&#160; </div>
+<div class="line"><a name="l00884"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#aa16b14e2a5c30f85a19b60dfed2436ee">  884</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#aa16b14e2a5c30f85a19b60dfed2436ee">initialise_load_address</a>()</div>
+<div class="line"><a name="l00885"></a><span class="lineno">  885</span>&#160;    {</div>
+<div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160;        <span class="comment">//  动态库</span></div>
+<div class="line"><a name="l00887"></a><span class="lineno">  887</span>&#160;        <span class="keywordflow">if</span> (<a class="code" href="classminidbg_1_1debugger.html#a92f21939a0c73f068627c153828dc2a6">m_elf</a>.get_hdr().type == elf::et::dyn)</div>
+<div class="line"><a name="l00888"></a><span class="lineno">  888</span>&#160;        {</div>
+<div class="line"><a name="l00889"></a><span class="lineno">  889</span>&#160;            <span class="comment">// The load address is found in /proc/&amp;lt;pid&amp;gt;/maps</span></div>
+<div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160;            std::ifstream map(<span class="stringliteral">&quot;/proc/&quot;</span> + <a class="code" href="namespacesymboltype.html#a9bd44f3f011af37e528a03f3584f1dd7">std::to_string</a>(<a class="code" href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">m_pid</a>) + <span class="stringliteral">&quot;/maps&quot;</span>);</div>
+<div class="line"><a name="l00891"></a><span class="lineno">  891</span>&#160; </div>
+<div class="line"><a name="l00892"></a><span class="lineno">  892</span>&#160;            std::string addr;</div>
+<div class="line"><a name="l00893"></a><span class="lineno">  893</span>&#160;            std::getline(map, addr, <span class="charliteral">&#39;-&#39;</span>);</div>
+<div class="line"><a name="l00894"></a><span class="lineno">  894</span>&#160;            addr = <span class="stringliteral">&quot;0x&quot;</span> + addr;</div>
+<div class="line"><a name="l00895"></a><span class="lineno">  895</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#a4a4639149d22529617f5a694ee40a5cf">m_load_address</a> = std::stoul(addr, 0, 16);       <span class="comment">// 将字符串转换为unsigned long</span></div>
+<div class="line"><a name="l00896"></a><span class="lineno">  896</span>&#160;        }</div>
+<div class="line"><a name="l00897"></a><span class="lineno">  897</span>&#160;    }</div>
+<div class="line"><a name="l00898"></a><span class="lineno">  898</span>&#160; </div>
+<div class="line"><a name="l00903"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a6d445a16899ac9ced43f17bc61e5ce20">  903</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#a6d445a16899ac9ced43f17bc61e5ce20">initialise_load_asm</a>()</div>
+<div class="line"><a name="l00904"></a><span class="lineno">  904</span>&#160;    {</div>
+<div class="line"><a name="l00905"></a><span class="lineno">  905</span>&#160;        <a class="code" href="classminidbg_1_1asmparaser.html">asmparaser</a> paraser;</div>
+<div class="line"><a name="l00906"></a><span class="lineno">  906</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#aba207285db39ae79e905ce84b3d4b304">m_asm_vct</a> = move(paraser.<a class="code" href="classminidbg_1_1asmparaser.html#a570ad5713f2f54e9472ea6edb857bc3a">get_asm_data</a>(<a class="code" href="classminidbg_1_1debugger.html#a89cd8e6f638de0139c3ddad334b2a4d9">m_asm_name</a>));</div>
+<div class="line"><a name="l00907"></a><span class="lineno">  907</span>&#160;        <span class="comment">// 将汇编数据块的起始地址和结束地址, 条目地址, 都加上加载地址，换为真实地址</span></div>
+<div class="line"><a name="l00908"></a><span class="lineno">  908</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;head : <a class="code" href="classminidbg_1_1debugger.html#aba207285db39ae79e905ce84b3d4b304">m_asm_vct</a>)</div>
+<div class="line"><a name="l00909"></a><span class="lineno">  909</span>&#160;        {</div>
+<div class="line"><a name="l00910"></a><span class="lineno">  910</span>&#160;            head.start_addr += <a class="code" href="classminidbg_1_1debugger.html#a4a4639149d22529617f5a694ee40a5cf">m_load_address</a>;</div>
+<div class="line"><a name="l00911"></a><span class="lineno">  911</span>&#160;            head.end_addr += <a class="code" href="classminidbg_1_1debugger.html#a4a4639149d22529617f5a694ee40a5cf">m_load_address</a>;</div>
+<div class="line"><a name="l00912"></a><span class="lineno">  912</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;entry : head.asm_entris)</div>
+<div class="line"><a name="l00913"></a><span class="lineno">  913</span>&#160;            {</div>
+<div class="line"><a name="l00914"></a><span class="lineno">  914</span>&#160;                entry.addr += <a class="code" href="classminidbg_1_1debugger.html#a4a4639149d22529617f5a694ee40a5cf">m_load_address</a>;</div>
+<div class="line"><a name="l00915"></a><span class="lineno">  915</span>&#160;            }</div>
+<div class="line"><a name="l00916"></a><span class="lineno">  916</span>&#160;        }</div>
+<div class="line"><a name="l00917"></a><span class="lineno">  917</span>&#160;    }</div>
+<div class="line"><a name="l00918"></a><span class="lineno">  918</span>&#160; </div>
+<div class="line"><a name="l00923"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a61dff0e30d6837427da037845dca7516">  923</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#a61dff0e30d6837427da037845dca7516">initialise_run_objdump</a>()</div>
+<div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160;    {</div>
+<div class="line"><a name="l00925"></a><span class="lineno">  925</span>&#160;        std::string binaryFile = <a class="code" href="classminidbg_1_1debugger.html#a180f020ca79e07ea89d05e48434f1696">m_prog_name</a>;</div>
+<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160;        std::string middleFile = <a class="code" href="classminidbg_1_1debugger.html#a180f020ca79e07ea89d05e48434f1696">m_prog_name</a> + <span class="stringliteral">&quot;.asm&quot;</span>;</div>
+<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160; </div>
+<div class="line"><a name="l00928"></a><span class="lineno">  928</span>&#160;        <a class="code" href="classminidbg_1_1debugger.html#a17a12eeb3fc31453ba9e54e2c57aafa4">m_src_vct</a>.clear();              <span class="comment">//fatal!</span></div>
+<div class="line"><a name="l00929"></a><span class="lineno">  929</span>&#160; </div>
+<div class="line"><a name="l00930"></a><span class="lineno">  930</span>&#160;        <span class="comment">// 使用 objdump 命令生成反汇编代码</span></div>
+<div class="line"><a name="l00931"></a><span class="lineno">  931</span>&#160;        std::string command = <span class="stringliteral">&quot;objdump -d &quot;</span> + binaryFile + <span class="stringliteral">&quot;  | tail -n +4 &gt; &quot;</span> + middleFile;</div>
+<div class="line"><a name="l00932"></a><span class="lineno">  932</span>&#160;        <span class="keywordtype">int</span> result = std::system(command.c_str());</div>
+<div class="line"><a name="l00933"></a><span class="lineno">  933</span>&#160; </div>
+<div class="line"><a name="l00934"></a><span class="lineno">  934</span>&#160;        <span class="keywordflow">if</span> (result != 0)</div>
+<div class="line"><a name="l00935"></a><span class="lineno">  935</span>&#160;        {</div>
+<div class="line"><a name="l00936"></a><span class="lineno">  936</span>&#160;            std::cerr &lt;&lt; <span class="stringliteral">&quot;error when run command: &quot;</span> + command &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00937"></a><span class="lineno">  937</span>&#160;        }</div>
+<div class="line"><a name="l00938"></a><span class="lineno">  938</span>&#160;    }</div>
+<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160; </div>
+<div class="line"><a name="l00944"></a><span class="lineno"><a class="line" href="classminidbg_1_1debugger.html#a859bd0fa6bf7b2981ca554be9d13505b">  944</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classminidbg_1_1debugger.html#a859bd0fa6bf7b2981ca554be9d13505b">initialise_load_src</a>()</div>
+<div class="line"><a name="l00945"></a><span class="lineno">  945</span>&#160;    {</div>
+<div class="line"><a name="l00946"></a><span class="lineno">  946</span>&#160;        <span class="keyword">auto</span> offset_pc = <a class="code" href="classminidbg_1_1debugger.html#ace071934f7fedb171618a830e0b2f856">offset_load_address</a>(<a class="code" href="classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127">get_pc</a>());</div>
+<div class="line"><a name="l00947"></a><span class="lineno">  947</span>&#160;        <span class="keyword">auto</span> line_entry = <a class="code" href="classminidbg_1_1debugger.html#a702325100d56cf362bcd1668250614d7">m_dwarf</a>.compilation_units().begin()-&gt;get_line_table().begin();</div>
+<div class="line"><a name="l00948"></a><span class="lineno">  948</span>&#160;        std::string file_path = std::string(line_entry-&gt;file-&gt;path);</div>
+<div class="line"><a name="l00949"></a><span class="lineno">  949</span>&#160;        std::cout&lt;&lt;<span class="stringliteral">&quot;trying to open src &quot;</span>&lt;&lt;file_path&lt;&lt;<span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line"><a name="l00950"></a><span class="lineno">  950</span>&#160; </div>
+<div class="line"><a name="l00951"></a><span class="lineno">  951</span>&#160;        std::ifstream inFile(file_path);</div>
+<div class="line"><a name="l00952"></a><span class="lineno">  952</span>&#160;        std::string line;</div>
+<div class="line"><a name="l00953"></a><span class="lineno">  953</span>&#160; </div>
+<div class="line"><a name="l00954"></a><span class="lineno">  954</span>&#160;        <span class="keywordflow">if</span> (!inFile)</div>
+<div class="line"><a name="l00955"></a><span class="lineno">  955</span>&#160;        {</div>
+<div class="line"><a name="l00956"></a><span class="lineno">  956</span>&#160;            std::cerr &lt;&lt; <span class="stringliteral">&quot;Failed to open input file &quot;</span> &lt;&lt; file_path &lt;&lt; std::endl;</div>
+<div class="line"><a name="l00957"></a><span class="lineno">  957</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00958"></a><span class="lineno">  958</span>&#160;        }</div>
+<div class="line"><a name="l00959"></a><span class="lineno">  959</span>&#160; </div>
+<div class="line"><a name="l00960"></a><span class="lineno">  960</span>&#160;        <span class="keywordflow">while</span> (std::getline(inFile, line))</div>
+<div class="line"><a name="l00961"></a><span class="lineno">  961</span>&#160;        {</div>
+<div class="line"><a name="l00962"></a><span class="lineno">  962</span>&#160;            <a class="code" href="classminidbg_1_1debugger.html#a17a12eeb3fc31453ba9e54e2c57aafa4">m_src_vct</a>.push_back(line);</div>
+<div class="line"><a name="l00963"></a><span class="lineno">  963</span>&#160;        }</div>
+<div class="line"><a name="l00964"></a><span class="lineno">  964</span>&#160; </div>
+<div class="line"><a name="l00965"></a><span class="lineno">  965</span>&#160;        inFile.close();</div>
+<div class="line"><a name="l00966"></a><span class="lineno">  966</span>&#160;        <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00967"></a><span class="lineno">  967</span>&#160;    };</div>
+<div class="line"><a name="l00968"></a><span class="lineno">  968</span>&#160;};</div>
+<div class="line"><a name="l00969"></a><span class="lineno">  969</span>&#160; </div>
+<div class="line"><a name="l00970"></a><span class="lineno">  970</span>&#160;}</div>
+<div class="line"><a name="l00971"></a><span class="lineno">  971</span>&#160; </div>
+<div class="line"><a name="l00972"></a><span class="lineno">  972</span>&#160;<span class="preprocessor">#endif</span></div>
+</div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a7326411326dc7be2ca1780747b73c668"><div class="ttname"><a href="classminidbg_1_1debugger.html#a7326411326dc7be2ca1780747b73c668">minidbg::debugger::get_rsp</a></div><div class="ttdeci">uint64_t get_rsp()</div><div class="ttdoc">获取当前栈指针寄存器（RSP）的值。</div><div class="ttdef"><b>Definition:</b> debugger.hpp:123</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a644b99a4260aa9c5373a1c0b375cf9c5"><div class="ttname"><a href="classminidbg_1_1debugger.html#a644b99a4260aa9c5373a1c0b375cf9c5">minidbg::debugger::initDbg</a></div><div class="ttdeci">void initDbg(std::string prog_name, pid_t pid)</div><div class="ttdoc">初始化mini调试器。</div><div class="ttdef"><b>Definition:</b> debugger.hpp:212</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a60c395083ae6156ababe81561ab17a76"><div class="ttname"><a href="classminidbg_1_1debugger.html#a60c395083ae6156ababe81561ab17a76">minidbg::debugger::single_step_instruction_with_breakpoint_check</a></div><div class="ttdeci">void single_step_instruction_with_breakpoint_check()</div><div class="ttdoc">让子进程执行一条指令。根据当前指令是否有断点，分别调用step_over_breakpoint()和single_step()</div><div class="ttdef"><b>Definition:</b> debugger.hpp:682</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_ad4e95fd23fd5391089f97a198c04c8b5"><div class="ttname"><a href="classminidbg_1_1debugger.html#ad4e95fd23fd5391089f97a198c04c8b5">minidbg::debugger::set_breakpoint_at_function</a></div><div class="ttdeci">void set_breakpoint_at_function(const std::string &amp;name)</div><div class="ttdoc">Set the breakpoint at function object</div><div class="ttdef"><b>Definition:</b> debugger.hpp:772</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a56e26f0c99ba1bd0390cf2dba4e24a29"><div class="ttname"><a href="classminidbg_1_1debugger.html#a56e26f0c99ba1bd0390cf2dba4e24a29">minidbg::debugger::get_offset_pc</a></div><div class="ttdeci">uint64_t get_offset_pc()</div><div class="ttdef"><b>Definition:</b> debugger.hpp:493</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a4a4639149d22529617f5a694ee40a5cf"><div class="ttname"><a href="classminidbg_1_1debugger.html#a4a4639149d22529617f5a694ee40a5cf">minidbg::debugger::m_load_address</a></div><div class="ttdeci">uint64_t m_load_address</div><div class="ttdef"><b>Definition:</b> debugger.hpp:309</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a4875fc7f36cb21d20c02bc0778f986d5"><div class="ttname"><a href="classminidbg_1_1debugger.html#a4875fc7f36cb21d20c02bc0778f986d5">minidbg::debugger::get_signal_info</a></div><div class="ttdeci">siginfo_t get_signal_info()</div><div class="ttdoc">Get the signal info</div><div class="ttdef"><b>Definition:</b> debugger.hpp:660</div></div>
+<div class="ttc" id="astructminidbg_1_1asm__head_html"><div class="ttname"><a href="structminidbg_1_1asm__head.html">minidbg::asm_head</a></div><div class="ttdef"><b>Definition:</b> asmparaser.hpp:44</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_ab0a72f56b837540af184db2c53de4aef"><div class="ttname"><a href="classminidbg_1_1debugger.html#ab0a72f56b837540af184db2c53de4aef">minidbg::debugger::get_line_entry_from_pc</a></div><div class="ttdeci">dwarf::line_table::iterator get_line_entry_from_pc(uint64_t pc)</div><div class="ttdoc">Get the line entry from pc object</div><div class="ttdef"><b>Definition:</b> debugger.hpp:614</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_abbf1ba35f894fac6403185e0acdd4536"><div class="ttname"><a href="classminidbg_1_1debugger.html#abbf1ba35f894fac6403185e0acdd4536">minidbg::debugger::get_rbp</a></div><div class="ttdeci">uint64_t get_rbp()</div><div class="ttdoc">获取当前基址寄存器（RBP）的值。</div><div class="ttdef"><b>Definition:</b> debugger.hpp:113</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a2686dd54e6d39c86d0321bd617b115d4"><div class="ttname"><a href="classminidbg_1_1debugger.html#a2686dd54e6d39c86d0321bd617b115d4">minidbg::debugger::continue_execution</a></div><div class="ttdeci">void continue_execution()</div><div class="ttdoc">step_over()_breakpoint()跳过当前断点，然后ptrace_continue，让子进程继续执行</div><div class="ttdef"><b>Definition:</b> debugger.hpp:239</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a782a179d08d545c03c989f54f7aa3127"><div class="ttname"><a href="classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127">minidbg::debugger::get_pc</a></div><div class="ttdeci">uint64_t get_pc()</div><div class="ttdoc">获取当前程序计数器（PC）的值。</div><div class="ttdef"><b>Definition:</b> debugger.hpp:103</div></div>
+<div class="ttc" id="anamespaceminidbg_html_abb5c65a7eb3c93593b5da8fbd6905385"><div class="ttname"><a href="namespaceminidbg.html#abb5c65a7eb3c93593b5da8fbd6905385">minidbg::is_prefix</a></div><div class="ttdeci">bool is_prefix(const std::string &amp;s, const std::string &amp;of)</div><div class="ttdoc">判断字符串s是否为字符串of的前缀。</div><div class="ttdef"><b>Definition:</b> debugger.hpp:38</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_ade2972e37458f63870e18c34f0a44bc1"><div class="ttname"><a href="classminidbg_1_1debugger.html#ade2972e37458f63870e18c34f0a44bc1">minidbg::debugger::wait_for_signal</a></div><div class="ttdeci">void wait_for_signal()</div><div class="ttdoc">等待目标进程发送信号并做出相应处理.</div><div class="ttdef"><b>Definition:</b> debugger.hpp:547</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a5317fd19f40e33920e7235bb4406b460"><div class="ttname"><a href="classminidbg_1_1debugger.html#a5317fd19f40e33920e7235bb4406b460">minidbg::debugger::get_next_line_entry_from_pc</a></div><div class="ttdeci">dwarf::line_table::iterator get_next_line_entry_from_pc(uint64_t pc)</div><div class="ttdoc">根据程序计数器获取下一行的DWARF调试信息。</div><div class="ttdef"><b>Definition:</b> debugger.hpp:648</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a17a12eeb3fc31453ba9e54e2c57aafa4"><div class="ttname"><a href="classminidbg_1_1debugger.html#a17a12eeb3fc31453ba9e54e2c57aafa4">minidbg::debugger::m_src_vct</a></div><div class="ttdeci">std::vector&lt; std::string &gt; m_src_vct</div><div class="ttdef"><b>Definition:</b> debugger.hpp:55</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_aabde5dd3945efd3cffdec4e6cd245cff"><div class="ttname"><a href="classminidbg_1_1debugger.html#aabde5dd3945efd3cffdec4e6cd245cff">minidbg::debugger::read_memory</a></div><div class="ttdeci">uint64_t read_memory(uint64_t address)</div><div class="ttdef"><b>Definition:</b> debugger.hpp:498</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_aa16b14e2a5c30f85a19b60dfed2436ee"><div class="ttname"><a href="classminidbg_1_1debugger.html#aa16b14e2a5c30f85a19b60dfed2436ee">minidbg::debugger::initialise_load_address</a></div><div class="ttdeci">void initialise_load_address()</div><div class="ttdoc">初始化</div><div class="ttdef"><b>Definition:</b> debugger.hpp:884</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a8d63db538666ebb38ea899d1821a370b"><div class="ttname"><a href="classminidbg_1_1debugger.html#a8d63db538666ebb38ea899d1821a370b">minidbg::debugger::get_src_line</a></div><div class="ttdeci">unsigned get_src_line()</div><div class="ttdoc">获取当前源代码行号。</div><div class="ttdef"><b>Definition:</b> debugger.hpp:92</div></div>
+<div class="ttc" id="anamespacesymboltype_html_a9bd44f3f011af37e528a03f3584f1dd7"><div class="ttname"><a href="namespacesymboltype.html#a9bd44f3f011af37e528a03f3584f1dd7">symboltype::to_string</a></div><div class="ttdeci">std::string to_string(symbol_type st)</div><div class="ttdoc">将 enum symbol_type 类型转换为字符串</div><div class="ttdef"><b>Definition:</b> symboltype.hpp:34</div></div>
+<div class="ttc" id="astructminidbg_1_1asm__head_html_a1ed83181dbfb7c7a1c05447541b40d37"><div class="ttname"><a href="structminidbg_1_1asm__head.html#a1ed83181dbfb7c7a1c05447541b40d37">minidbg::asm_head::end_addr</a></div><div class="ttdeci">uint64_t end_addr</div><div class="ttdef"><b>Definition:</b> asmparaser.hpp:46</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a16c19e64daba632bf0807d58bff713f7"><div class="ttname"><a href="classminidbg_1_1debugger.html#a16c19e64daba632bf0807d58bff713f7">minidbg::debugger::step_out</a></div><div class="ttdeci">void step_out()</div><div class="ttdoc">跳出函数：从rbp获取返回地址，检查是否有断点，无则设置，然后continue；如刚设置了断点，则去除，如原有则不动。</div><div class="ttdef"><b>Definition:</b> debugger.hpp:711</div></div>
+<div class="ttc" id="aclassminidbg_1_1asmparaser_html"><div class="ttname"><a href="classminidbg_1_1asmparaser.html">minidbg::asmparaser</a></div><div class="ttdef"><b>Definition:</b> asmparaser.hpp:52</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_aadec3114b66ec64774be46873a97e307"><div class="ttname"><a href="classminidbg_1_1debugger.html#aadec3114b66ec64774be46873a97e307">minidbg::debugger::offset_dwarf_address</a></div><div class="ttdeci">uint64_t offset_dwarf_address(uint64_t addr)</div><div class="ttdoc">将相对地址转换为实际地址</div><div class="ttdef"><b>Definition:</b> debugger.hpp:488</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_adddaa3f5b34d13a5c22b49ebb6ec58e4"><div class="ttname"><a href="classminidbg_1_1debugger.html#adddaa3f5b34d13a5c22b49ebb6ec58e4">minidbg::debugger::dump_registers</a></div><div class="ttdeci">void dump_registers()</div><div class="ttdoc">打印目标进程的寄存器信息</div><div class="ttdef"><b>Definition:</b> debugger.hpp:527</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a3953940c630495e035444371643727aa"><div class="ttname"><a href="classminidbg_1_1debugger.html#a3953940c630495e035444371643727aa">minidbg::debugger::set_breakpoint_at_source_file</a></div><div class="ttdeci">void set_breakpoint_at_source_file(const std::string &amp;file, unsigned line)</div><div class="ttdoc">通过'file:line'形式的命令设置断点。</div><div class="ttdef"><b>Definition:</b> debugger.hpp:803</div></div>
+<div class="ttc" id="asymboltype_8hpp_html"><div class="ttname"><a href="symboltype_8hpp.html">symboltype.hpp</a></div><div class="ttdoc">定义了符号类型的枚举类、符号描述结构体，符号与elf中的符号类型一一对应并有转换函数。</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a1f8a4061ffd8420395b9d8a83358567a"><div class="ttname"><a href="classminidbg_1_1debugger.html#a1f8a4061ffd8420395b9d8a83358567a">minidbg::debugger::get_function_from_pc</a></div><div class="ttdeci">asm_head get_function_from_pc(uint64_t pc)</div><div class="ttdoc">确定当前指令所属的函数</div><div class="ttdef"><b>Definition:</b> debugger.hpp:594</div></div>
+<div class="ttc" id="anamespaceminidbg_html_a1d7f2dc1f8a79d86673a623564b97cc8"><div class="ttname"><a href="namespaceminidbg.html#a1d7f2dc1f8a79d86673a623564b97cc8">minidbg::set_register_value</a></div><div class="ttdeci">void set_register_value(pid_t pid, reg r, uint64_t value)</div><div class="ttdoc">设置（改写）指定寄存器的值。</div><div class="ttdef"><b>Definition:</b> registers.hpp:125</div></div>
+<div class="ttc" id="astructsymboltype_1_1symbol_html"><div class="ttname"><a href="structsymboltype_1_1symbol.html">symboltype::symbol</a></div><div class="ttdoc">符号结构体, 包含符号的类型、名称和地址。</div><div class="ttdef"><b>Definition:</b> symboltype.hpp:56</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_ab6efac5e854a13f0bc1e6a07a8a208d2"><div class="ttname"><a href="classminidbg_1_1debugger.html#ab6efac5e854a13f0bc1e6a07a8a208d2">minidbg::debugger::set_pc</a></div><div class="ttdeci">void set_pc(uint64_t pc)</div><div class="ttdef"><b>Definition:</b> debugger.hpp:535</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a92f21939a0c73f068627c153828dc2a6"><div class="ttname"><a href="classminidbg_1_1debugger.html#a92f21939a0c73f068627c153828dc2a6">minidbg::debugger::m_elf</a></div><div class="ttdeci">elf::elf m_elf</div><div class="ttdef"><b>Definition:</b> debugger.hpp:308</div></div>
+<div class="ttc" id="abreakpoint_8hpp_html"><div class="ttname"><a href="breakpoint_8hpp.html">breakpoint.hpp</a></div><div class="ttdoc">断点类，包含启用和禁用功能，实例化后存储于debugger类中的m_breakpoints向量。</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a9075df44cb4df2729c1036c035b0c85c"><div class="ttname"><a href="classminidbg_1_1debugger.html#a9075df44cb4df2729c1036c035b0c85c">minidbg::debugger::finish_execution</a></div><div class="ttdeci">void finish_execution()</div><div class="ttdef"><b>Definition:</b> debugger.hpp:287</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_aaff1e34730485fa0ac3900fb8c88d448"><div class="ttname"><a href="classminidbg_1_1debugger.html#aaff1e34730485fa0ac3900fb8c88d448">minidbg::debugger::si_execution</a></div><div class="ttdeci">void si_execution()</div><div class="ttdef"><b>Definition:</b> debugger.hpp:297</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a8111b5ed151d51b9e0a8480a0a845286"><div class="ttname"><a href="classminidbg_1_1debugger.html#a8111b5ed151d51b9e0a8480a0a845286">minidbg::debugger::write_memory</a></div><div class="ttdeci">void write_memory(uint64_t address, uint64_t value)</div><div class="ttdef"><b>Definition:</b> debugger.hpp:503</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_ae9ff213c04734e537744be8a3e915345"><div class="ttname"><a href="classminidbg_1_1debugger.html#ae9ff213c04734e537744be8a3e915345">minidbg::debugger::single_step_instruction</a></div><div class="ttdeci">void single_step_instruction()</div><div class="ttdoc">向子进程发送信号，让子进程只执行一条指令</div><div class="ttdef"><b>Definition:</b> debugger.hpp:673</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_acc81497da4da399495135ed332fe01e7"><div class="ttname"><a href="classminidbg_1_1debugger.html#acc81497da4da399495135ed332fe01e7">minidbg::debugger::step_over_breakpoint</a></div><div class="ttdeci">void step_over_breakpoint()</div><div class="ttdoc">跳过当前断点（执行一条指令），若当前指令没有断点，则不做任何事。</div><div class="ttdef"><b>Definition:</b> debugger.hpp:574</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a268b73756c673c5a34cf25030bff03a1"><div class="ttname"><a href="classminidbg_1_1debugger.html#a268b73756c673c5a34cf25030bff03a1">minidbg::debugger::lookup_symbol</a></div><div class="ttdeci">std::vector&lt; symboltype::symbol &gt; lookup_symbol(const std::string &amp;name)</div><div class="ttdoc">查找符号, handle_command() 中使用.</div><div class="ttdef"><b>Definition:</b> debugger.hpp:844</div></div>
+<div class="ttc" id="anamespaceminidbg_html"><div class="ttname"><a href="namespaceminidbg.html">minidbg</a></div><div class="ttdef"><b>Definition:</b> asmparaser.hpp:18</div></div>
+<div class="ttc" id="aclassminidbg_1_1breakpoint_html"><div class="ttname"><a href="classminidbg_1_1breakpoint.html">minidbg::breakpoint</a></div><div class="ttdoc">断点类，包含启用和禁用功能，实例化后存储于debugger类中的m_breakpoints向量。</div><div class="ttdef"><b>Definition:</b> breakpoint.hpp:23</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a33de60b0cf721c1fd24e5a3b5159e205"><div class="ttname"><a href="classminidbg_1_1debugger.html#a33de60b0cf721c1fd24e5a3b5159e205">minidbg::debugger::set_breakpoint_at_address</a></div><div class="ttdeci">void set_breakpoint_at_address(std::intptr_t addr)</div><div class="ttdoc">Set breakpoint by address</div><div class="ttdef"><b>Definition:</b> debugger.hpp:513</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_ace071934f7fedb171618a830e0b2f856"><div class="ttname"><a href="classminidbg_1_1debugger.html#ace071934f7fedb171618a830e0b2f856">minidbg::debugger::offset_load_address</a></div><div class="ttdeci">uint64_t offset_load_address(uint64_t addr)</div><div class="ttdoc">从实际地址转换为相对地址</div><div class="ttdef"><b>Definition:</b> debugger.hpp:479</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_aa08ae391b77f28a593e435516dc2f50b"><div class="ttname"><a href="classminidbg_1_1debugger.html#aa08ae391b77f28a593e435516dc2f50b">minidbg::debugger::step_over</a></div><div class="ttdeci">void step_over()</div><div class="ttdoc">检查下一行源码是否设置了断点，如没有则设置，然后continue，再删除；如有则直接continue.</div><div class="ttdef"><b>Definition:</b> debugger.hpp:752</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_aa06d1327a1c6b32427035bee28cc83dd"><div class="ttname"><a href="classminidbg_1_1debugger.html#aa06d1327a1c6b32427035bee28cc83dd">minidbg::debugger::next_execution</a></div><div class="ttdeci">void next_execution()</div><div class="ttdef"><b>Definition:</b> debugger.hpp:282</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_ad91741cf22396213a7f23dfa440d52a6"><div class="ttname"><a href="classminidbg_1_1debugger.html#ad91741cf22396213a7f23dfa440d52a6">minidbg::debugger::get_ram_vct</a></div><div class="ttdeci">std::vector&lt; std::pair&lt; std::string, u_int64_t &gt; &gt; get_ram_vct()</div><div class="ttdoc">获取程序中各个寄存器的值。</div><div class="ttdef"><b>Definition:</b> debugger.hpp:77</div></div>
+<div class="ttc" id="aasmparaser_8hpp_html"><div class="ttname"><a href="asmparaser_8hpp.html">asmparaser.hpp</a></div><div class="ttdoc">逐行解析汇编文件，分为函数头asm_head和指令asm_entry</div></div>
+<div class="ttc" id="aregisters_8hpp_html"><div class="ttname"><a href="registers_8hpp.html">registers.hpp</a></div><div class="ttdoc">本文件定义了常用寄存器枚举类型、寄存器描述符（结构体，包括寄存器对应的枚举变量、名称、dwarf编号），读取和设置寄存器值的函数。</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a57cd3a2d4d8a89d1c61e516f0d0db128"><div class="ttname"><a href="classminidbg_1_1debugger.html#a57cd3a2d4d8a89d1c61e516f0d0db128">minidbg::debugger::remove_breakpoint</a></div><div class="ttdeci">void remove_breakpoint(std::intptr_t addr)</div><div class="ttdoc">移除地址addr上的断点。</div><div class="ttdef"><b>Definition:</b> debugger.hpp:698</div></div>
+<div class="ttc" id="anamespaceminidbg_html_a00453778d7af0a2473834d873322a83dab50a2e500294807caa75f3a835796682"><div class="ttname"><a href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83dab50a2e500294807caa75f3a835796682">minidbg::reg::rip</a></div><div class="ttdeci">@ rip</div></div>
+<div class="ttc" id="anamespaceminidbg_html_a00453778d7af0a2473834d873322a83da451e86cb8c690e064ceb3078192d8615"><div class="ttname"><a href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da451e86cb8c690e064ceb3078192d8615">minidbg::reg::rsp</a></div><div class="ttdeci">@ rsp</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a5c019420f24ef96e95a145b3a62c5973"><div class="ttname"><a href="classminidbg_1_1debugger.html#a5c019420f24ef96e95a145b3a62c5973">minidbg::debugger::get_backtrace_vct</a></div><div class="ttdeci">std::vector&lt; std::pair&lt; uint64_t, std::string &gt; &gt; get_backtrace_vct()</div><div class="ttdoc">获取当前线程的函数调用链回溯信息息。</div><div class="ttdef"><b>Definition:</b> debugger.hpp:133</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a115f14a7fc9aea645df019c541d3aa60"><div class="ttname"><a href="classminidbg_1_1debugger.html#a115f14a7fc9aea645df019c541d3aa60">minidbg::debugger::debugger</a></div><div class="ttdeci">debugger()</div><div class="ttdef"><b>Definition:</b> debugger.hpp:202</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_acb73e8080bbd2fa305b8d383b4ddd3e4"><div class="ttname"><a href="classminidbg_1_1debugger.html#acb73e8080bbd2fa305b8d383b4ddd3e4">minidbg::debugger::step_into_execution</a></div><div class="ttdeci">void step_into_execution()</div><div class="ttdef"><b>Definition:</b> debugger.hpp:292</div></div>
+<div class="ttc" id="anamespaceminidbg_html_a40ee5a3032ff64e74bbc60f507ee61e6"><div class="ttname"><a href="namespaceminidbg.html#a40ee5a3032ff64e74bbc60f507ee61e6">minidbg::get_register_from_name</a></div><div class="ttdeci">reg get_register_from_name(const std::string &amp;name)</div><div class="ttdoc">根据给定的寄存器名称字符串，获取对应的寄存器枚举变量。</div><div class="ttdef"><b>Definition:</b> registers.hpp:177</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a89cd8e6f638de0139c3ddad334b2a4d9"><div class="ttname"><a href="classminidbg_1_1debugger.html#a89cd8e6f638de0139c3ddad334b2a4d9">minidbg::debugger::m_asm_name</a></div><div class="ttdeci">std::string m_asm_name</div><div class="ttdef"><b>Definition:</b> debugger.hpp:304</div></div>
+<div class="ttc" id="anamespacesymboltype_html_a92af0a7d66c478a7baef4d31867b6c72"><div class="ttname"><a href="namespacesymboltype.html#a92af0a7d66c478a7baef4d31867b6c72">symboltype::to_symbol_type</a></div><div class="ttdeci">symbol_type to_symbol_type(elf::stt sym)</div><div class="ttdoc">将elf++库中的符号类型转换为 enum symbol_type</div><div class="ttdef"><b>Definition:</b> symboltype.hpp:73</div></div>
+<div class="ttc" id="aclassminidbg_1_1breakpoint_html_a8c4099c042923198070f27bd5c9edcb8"><div class="ttname"><a href="classminidbg_1_1breakpoint.html#a8c4099c042923198070f27bd5c9edcb8">minidbg::breakpoint::enable</a></div><div class="ttdeci">void enable()</div><div class="ttdoc">启用断点 通过ptrace系统调用读取原始数据，将其最低有效字节（LSB） 替换为软件中断0xcc（用于暂停程序执行）， 然后使用PTRACE_POKEDATA将修改后的数据写入目标地址</div><div class="ttdef"><b>Definition:</b> breakpoint.hpp:38</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a634ab39fc9fbfa7c213629aaa9b0a9eb"><div class="ttname"><a href="classminidbg_1_1debugger.html#a634ab39fc9fbfa7c213629aaa9b0a9eb">minidbg::debugger::kill_prog</a></div><div class="ttdeci">bool kill_prog()</div><div class="ttdoc">终止被调试程序</div><div class="ttdef"><b>Definition:</b> debugger.hpp:62</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a61dff0e30d6837427da037845dca7516"><div class="ttname"><a href="classminidbg_1_1debugger.html#a61dff0e30d6837427da037845dca7516">minidbg::debugger::initialise_run_objdump</a></div><div class="ttdeci">void initialise_run_objdump()</div><div class="ttdoc">使用 objdump 命令生成反汇编代码</div><div class="ttdef"><b>Definition:</b> debugger.hpp:923</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_aab4f65554d4750e16bc1c01b046edb0d"><div class="ttname"><a href="classminidbg_1_1debugger.html#aab4f65554d4750e16bc1c01b046edb0d">minidbg::debugger::break_execution</a></div><div class="ttdeci">void break_execution(std::string command)</div><div class="ttdoc">根据命令设置断点</div><div class="ttdef"><b>Definition:</b> debugger.hpp:260</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a6d445a16899ac9ced43f17bc61e5ce20"><div class="ttname"><a href="classminidbg_1_1debugger.html#a6d445a16899ac9ced43f17bc61e5ce20">minidbg::debugger::initialise_load_asm</a></div><div class="ttdeci">void initialise_load_asm()</div><div class="ttdoc">加载汇编数据到m_asm_vct向量中</div><div class="ttdef"><b>Definition:</b> debugger.hpp:903</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_ab5128ad097ff8fdb0cdb5bf17b979a58"><div class="ttname"><a href="classminidbg_1_1debugger.html#ab5128ad097ff8fdb0cdb5bf17b979a58">minidbg::debugger::handle_command</a></div><div class="ttdeci">void handle_command(const std::string &amp;line)</div><div class="ttdoc">处理用户输入的调试器命令，并执行相应操作</div><div class="ttdef"><b>Definition:</b> debugger.hpp:330</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a36f22ffa07e4cf1d70480573c2075328"><div class="ttname"><a href="classminidbg_1_1debugger.html#a36f22ffa07e4cf1d70480573c2075328">minidbg::debugger::step_in</a></div><div class="ttdeci">void step_in()</div><div class="ttdoc">单步进入/进入到下一个源代码行: 循环执行单条指令，源代码行号发生变化，循环结束</div><div class="ttdef"><b>Definition:</b> debugger.hpp:735</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a859bd0fa6bf7b2981ca554be9d13505b"><div class="ttname"><a href="classminidbg_1_1debugger.html#a859bd0fa6bf7b2981ca554be9d13505b">minidbg::debugger::initialise_load_src</a></div><div class="ttdeci">void initialise_load_src()</div><div class="ttdoc">逐行读取源码到m_src_vct向量中</div><div class="ttdef"><b>Definition:</b> debugger.hpp:944</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a1cce554a29ebf07ec4ae259facc08af4"><div class="ttname"><a href="classminidbg_1_1debugger.html#a1cce554a29ebf07ec4ae259facc08af4">minidbg::debugger::m_breakpoints</a></div><div class="ttdeci">std::unordered_map&lt; std::intptr_t, breakpoint &gt; m_breakpoints</div><div class="ttdef"><b>Definition:</b> debugger.hpp:306</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html"><div class="ttname"><a href="classminidbg_1_1debugger.html">minidbg::debugger</a></div><div class="ttdoc">调试器类，用于跟踪和调试程序执行。</div><div class="ttdef"><b>Definition:</b> debugger.hpp:50</div></div>
+<div class="ttc" id="aclassminidbg_1_1asmparaser_html_a570ad5713f2f54e9472ea6edb857bc3a"><div class="ttname"><a href="classminidbg_1_1asmparaser.html#a570ad5713f2f54e9472ea6edb857bc3a">minidbg::asmparaser::get_asm_data</a></div><div class="ttdeci">std::vector&lt; asm_head &gt; get_asm_data(std::string file_path)</div><div class="ttdef"><b>Definition:</b> asmparaser.hpp:56</div></div>
+<div class="ttc" id="anamespaceminidbg_html_aaa5b1886e9ba4a1885c36441d2a7fb2b"><div class="ttname"><a href="namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b">minidbg::get_register_value</a></div><div class="ttdeci">uint64_t get_register_value(pid_t pid, reg r)</div><div class="ttdoc">根据给定的进程ID和寄存器枚举变量，获取该寄存器的值。</div><div class="ttdef"><b>Definition:</b> registers.hpp:104</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a5679e71844ee8af9206377b3f9d61f82"><div class="ttname"><a href="classminidbg_1_1debugger.html#a5679e71844ee8af9206377b3f9d61f82">minidbg::debugger::handle_sigtrap</a></div><div class="ttdeci">void handle_sigtrap(siginfo_t info)</div><div class="ttdoc">根据siginfo_t结构体中的si_code字段来判断SIGTRAP信号的具体类型，并进行相应的处理：</div><div class="ttdef"><b>Definition:</b> debugger.hpp:450</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_aba207285db39ae79e905ce84b3d4b304"><div class="ttname"><a href="classminidbg_1_1debugger.html#aba207285db39ae79e905ce84b3d4b304">minidbg::debugger::m_asm_vct</a></div><div class="ttdeci">std::vector&lt; asm_head &gt; m_asm_vct</div><div class="ttdef"><b>Definition:</b> debugger.hpp:54</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a1a30786c73dd4790c18db6f49802950d"><div class="ttname"><a href="classminidbg_1_1debugger.html#a1a30786c73dd4790c18db6f49802950d">minidbg::debugger::m_pid</a></div><div class="ttdeci">pid_t m_pid</div><div class="ttdef"><b>Definition:</b> debugger.hpp:305</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a702325100d56cf362bcd1668250614d7"><div class="ttname"><a href="classminidbg_1_1debugger.html#a702325100d56cf362bcd1668250614d7">minidbg::debugger::m_dwarf</a></div><div class="ttdeci">dwarf::dwarf m_dwarf</div><div class="ttdef"><b>Definition:</b> debugger.hpp:307</div></div>
+<div class="ttc" id="anamespaceminidbg_html_a53e4cc1dcf1b9920f8128717c710b6b3"><div class="ttname"><a href="namespaceminidbg.html#a53e4cc1dcf1b9920f8128717c710b6b3">minidbg::split</a></div><div class="ttdeci">std::vector&lt; std::string &gt; split(const std::string &amp;s, char delimiter)</div><div class="ttdef"><b>Definition:</b> asmparaser.hpp:21</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a180f020ca79e07ea89d05e48434f1696"><div class="ttname"><a href="classminidbg_1_1debugger.html#a180f020ca79e07ea89d05e48434f1696">minidbg::debugger::m_prog_name</a></div><div class="ttdeci">std::string m_prog_name</div><div class="ttdef"><b>Definition:</b> debugger.hpp:303</div></div>
+<div class="ttc" id="aclassminidbg_1_1debugger_html_a622b0db8714bdea3a20003d0a0fc3cb6"><div class="ttname"><a href="classminidbg_1_1debugger.html#a622b0db8714bdea3a20003d0a0fc3cb6">minidbg::debugger::get_global_stack_vct</a></div><div class="ttdeci">std::vector&lt; std::pair&lt; uint64_t, std::vector&lt; uint8_t &gt; &gt; &gt; get_global_stack_vct(uint64_t start_addr, uint64_t end_addr)</div><div class="ttdoc">获取全局堆栈信息。</div><div class="ttdef"><b>Definition:</b> debugger.hpp:178</div></div>
+<div class="ttc" id="anamespaceminidbg_html_a00453778d7af0a2473834d873322a83da5fb4c09ffcf0a2564a2eca001edde421"><div class="ttname"><a href="namespaceminidbg.html#a00453778d7af0a2473834d873322a83da5fb4c09ffcf0a2564a2eca001edde421">minidbg::reg::rbp</a></div><div class="ttdeci">@ rbp</div></div>
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+制作者 &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

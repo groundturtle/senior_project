@@ -1,0 +1,5 @@
+<map id="minidbg::UI::showRam" name="minidbg::UI::showRam">
+<area shape="rect" id="node1" title="显示内存中的数据" alt="" coords="5,13,175,39"/>
+<area shape="rect" id="node2" href="$classminidbg_1_1debugger.html#ad91741cf22396213a7f23dfa440d52a6" title="获取程序中各个寄存器的值。" alt="" coords="223,5,375,47"/>
+<area shape="rect" id="node3" href="$namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b" title="根据给定的进程ID和寄存器枚举变量，获取该寄存器的值。" alt="" coords="423,5,584,47"/>
+</map>

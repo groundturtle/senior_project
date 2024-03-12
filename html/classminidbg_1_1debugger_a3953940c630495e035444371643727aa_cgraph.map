@@ -1,0 +1,6 @@
+<map id="minidbg::debugger::set_breakpoint_at_source_file" name="minidbg::debugger::set_breakpoint_at_source_file">
+<area shape="rect" id="node1" title="通过&#39;file:line&#39;形式的命令设置断点。" alt="" coords="5,39,221,80"/>
+<area shape="rect" id="node2" href="$classminidbg_1_1debugger.html#aadec3114b66ec64774be46873a97e307" title="将相对地址转换为实际地址" alt="" coords="287,5,449,47"/>
+<area shape="rect" id="node3" href="$classminidbg_1_1debugger.html#a33de60b0cf721c1fd24e5a3b5159e205" title="Set breakpoint by address" alt="" coords="269,71,467,112"/>
+<area shape="rect" id="node4" href="$classminidbg_1_1breakpoint.html#a8c4099c042923198070f27bd5c9edcb8" title="启用断点 通过ptrace系统调用读取原始数据，将其最低有效字节（LSB） 替换为软件中断0xcc（用于暂停程序执行）， 然后使用PTRACE_POKEDATA将修改后的数据写入目标地址" alt="" coords="515,71,668,112"/>
+</map>

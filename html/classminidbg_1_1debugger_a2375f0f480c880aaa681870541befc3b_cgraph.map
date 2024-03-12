@@ -1,0 +1,22 @@
+<map id="minidbg::debugger::initGdb" name="minidbg::debugger::initGdb">
+<area shape="rect" id="node1" title=" " alt="" coords="5,136,157,177"/>
+<area shape="rect" id="node2" href="$classminidbg_1_1debugger.html#aa16b14e2a5c30f85a19b60dfed2436ee" title="初始化" alt="" coords="205,5,376,47"/>
+<area shape="rect" id="node4" href="$classminidbg_1_1debugger.html#a6d445a16899ac9ced43f17bc61e5ce20" title="加载汇编数据到m_asm_vct向量中" alt="" coords="215,71,367,112"/>
+<area shape="rect" id="node11" href="$classminidbg_1_1debugger.html#a859bd0fa6bf7b2981ca554be9d13505b" title="逐行读取源码到m_src_vct向量中" alt="" coords="215,136,367,177"/>
+<area shape="rect" id="node15" href="$classminidbg_1_1debugger.html#a61dff0e30d6837427da037845dca7516" title="使用 objdump 命令生成反汇编代码" alt="" coords="205,201,376,243"/>
+<area shape="rect" id="node16" href="$classminidbg_1_1debugger.html#ade2972e37458f63870e18c34f0a44bc1" title="等待目标进程发送信号并做出相应处理." alt="" coords="215,267,367,308"/>
+<area shape="rect" id="node3" href="$namespacesymboltype.html#a9bd44f3f011af37e528a03f3584f1dd7" title=" " alt="" coords="424,13,588,39"/>
+<area shape="rect" id="node5" href="$classminidbg_1_1asmparaser.html#a570ad5713f2f54e9472ea6edb857bc3a" title=" " alt="" coords="426,71,586,112"/>
+<area shape="rect" id="node6" href="$classminidbg_1_1asmparaser.html#a64ce750db87bae204f7409d6d4b6b513" title=" " alt="" coords="636,85,796,127"/>
+<area shape="rect" id="node10" href="$classminidbg_1_1asmparaser.html#a3d3b427fe29386e5a676f83f7ab663d7" title=" " alt="" coords="636,20,796,61"/>
+<area shape="rect" id="node7" href="$namespaceminidbg.html#a53e4cc1dcf1b9920f8128717c710b6b3" title=" " alt="" coords="869,29,980,55"/>
+<area shape="rect" id="node8" href="$classminidbg_1_1asmparaser.html#a0b9666545bf212807f06451c6a1e4b85" title=" " alt="" coords="845,83,1005,124"/>
+<area shape="rect" id="node9" href="$classminidbg_1_1asmparaser.html#acedec0c591a904b95de46ebff22dd27c" title=" " alt="" coords="845,148,1005,189"/>
+<area shape="rect" id="node12" href="$classminidbg_1_1debugger.html#a782a179d08d545c03c989f54f7aa3127" title="获取当前程序计数器（PC）的值。" alt="" coords="640,243,792,284"/>
+<area shape="rect" id="node14" href="$classminidbg_1_1debugger.html#ace071934f7fedb171618a830e0b2f856" title="从实际地址转换为相对地址" alt="" coords="430,191,582,232"/>
+<area shape="rect" id="node13" href="$namespaceminidbg.html#aaa5b1886e9ba4a1885c36441d2a7fb2b" title="根据给定的进程ID和寄存器枚举变量，获取该寄存器的值。" alt="" coords="844,243,1005,284"/>
+<area shape="rect" id="node17" href="$classminidbg_1_1debugger.html#a4875fc7f36cb21d20c02bc0778f986d5" title=" " alt="" coords="430,256,582,297"/>
+<area shape="rect" id="node18" href="$classminidbg_1_1debugger.html#a5679e71844ee8af9206377b3f9d61f82" title="根据siginfo_t结构体中的si_code字段来判断SIGTRAP信号的具体类型，并进行相应的处理：" alt="" coords="430,321,582,363"/>
+<area shape="rect" id="node19" href="$classminidbg_1_1debugger.html#ab6efac5e854a13f0bc1e6a07a8a208d2" title=" " alt="" coords="640,321,792,363"/>
+<area shape="rect" id="node20" href="$namespaceminidbg.html#a1d7f2dc1f8a79d86673a623564b97cc8" title="设置（改写）指定寄存器的值。" alt="" coords="845,321,1005,363"/>
+</map>
