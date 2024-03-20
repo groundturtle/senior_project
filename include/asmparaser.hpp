@@ -113,12 +113,18 @@ namespace minidbg
                 str.erase(index + 1);
         }
 
-        // 解析单个汇编指令将其转换为 asm_head 结构体.
+        /**
+         * @brief 解析单个汇编指令将其转换为 asm_entry 结构体.
+         * 
+         * @param command 
+         * @return asm_entry 
+         */
         asm_entry cope_asm_entry(std::string &command)
         {
+            asm_entry result;
             // 输入的字符串按制表符分割
             std::vector<std::string> args = split(command, '\t');
-            if (args.back().find('#') != std::string::npos)
+            if (args.back().find('#') != std::string::npos)         // 行尾注释
             {
                 std::vector<std::string> temp = split(args.back(), '#');
                 args.pop_back();
@@ -131,7 +137,6 @@ namespace minidbg
                 trimLeft(args[i]);
                 trimRight(args[i]);
             }
-            asm_entry result;
             if (args.size() < 3)
             {
                 return result;

@@ -369,7 +369,7 @@ void UI::showCallStack(bool *p_open)
         int index = 0;
         for (auto p : call_stack_vct)
         {
-            ImGui::Text("frame#%d:0x%lx\t%s", ++index, p.first, p.second.c_str());
+            ImGui::Text("f#%d:0x%lx\t%s", ++index, p.first, p.second.c_str());
         }
 
         ImGui::EndChild();
@@ -535,7 +535,6 @@ void UI::showOptionBar(bool *p_open)
                     dbg.initDbg(filePath, pid);
                     dbg.break_execution("main");
                     dbg.continue_execution();
-                    // buildWindows();
                 }
             }
         };

@@ -751,10 +751,8 @@ private:
         */
     void step_over()
     {
-        // std::cout << "now pc is 0x" << std::hex << get_pc() << "\n";
         auto line_entry = get_next_line_entry_from_pc(get_offset_pc());
         auto newpc = offset_dwarf_address(line_entry->address);
-        // std::cout << "my new pc is 0x" << std::hex << get_pc() << "\n";
         if (!m_breakpoints.count(newpc))
         {
             set_breakpoint_at_address(newpc);
@@ -762,13 +760,12 @@ private:
         continue_execution();
 
         remove_breakpoint(newpc);
-        // std::cout << "after continue 0x" << std::hex << get_pc() << "\n";
     };
 
     /**
-        * @brief Set the breakpoint at function object
-        * 
-        */
+    * @brief Set the breakpoint at function object
+    * 在源代码行条目的下一行设置断点. 如果停在函数序言，就无法观察到函数内部的变量状态、参数传递等信息。
+    */
     void set_breakpoint_at_function(const std::string &name)
     {
         bool flag = false;
@@ -782,8 +779,7 @@ private:
                     flag = true;
                     auto low_pc = at_low_pc(die);
                     auto entry = get_line_entry_from_pc(low_pc);
-                    // 在源代码行条目的下一行设置断点. 函数定义通常位于函数体的开头，如果停在函数定义的位置，调试器会在函数被调用前就停止执行，无法观察到函数内部的变量状态、参数传递等信息。
-                    ++entry;
+                    ++entry;                // 在源代码行条目的下一行设置断点
                     set_breakpoint_at_address(offset_dwarf_address(entry->address));
                 }
             }
@@ -795,11 +791,11 @@ private:
     }
 
     /**
-        * @brief 通过'file:line'形式的命令设置断点。
-        * 
-        * @param file 
-        * @param line 
-        */
+    * @brief 通过'file:line'形式的命令设置断点。
+    * 
+    * @param file 
+    * @param line 
+    */
     void set_breakpoint_at_source_file(const std::string &file, unsigned line)
     {
         for (const auto &cu : m_dwarf.compilation_units())
@@ -873,14 +869,14 @@ private:
 * 
 */
     /**
-        * @brief 获取程序的偏移量
-        * @details
-        * 首先，通过m_elf.get_hdr().type获取目标程序的 ELF 文件类型。
-        * 如果是动态链接库（et::dyn），则需要通过其他方式获取加载地址。
-        * /proc/<pid>/maps是一个特殊的 Linux 文件，用于列出进程的内存映射。
-        * 从maps文件中读取第一行，这一行包含了动态库的内存映射范围，形如<start_addr>-<end_addr>。
-        * 
-        */
+    * @brief 获取程序的偏移量
+    * @details
+    * 首先，通过m_elf.get_hdr().type获取目标程序的 ELF 文件类型。
+    * 如果是动态链接库（et::dyn），则需要通过其他方式获取加载地址。
+    * /proc/<pid>/maps是一个特殊的 Linux 文件，用于列出进程的内存映射。
+    * 从maps文件中读取第一行，这一行包含了动态库的内存映射范围，形如<start_addr>-<end_addr>。
+    * 
+    */
     void initialise_load_address()
     {
         //  动态库
@@ -897,9 +893,9 @@ private:
     }
 
     /**
-        * @brief 加载汇编数据到m_asm_vct向量中
-        * 
-        */
+    * @brief 加载汇编数据到m_asm_vct向量中
+    * 
+    */
     void initialise_load_asm()
     {
         asmparaser paraser;
@@ -917,15 +913,13 @@ private:
     }
 
     /**
-        * @brief 使用 objdump 命令生成反汇编代码
-        * 
-        */
+    * @brief 使用 objdump 命令生成反汇编代码
+    * 
+    */
     void initialise_run_objdump()
     {
         std::string binaryFile = m_prog_name;
         std::string middleFile = m_prog_name + ".asm";
-
-        m_src_vct.clear();              //fatal!
 
         // 使用 objdump 命令生成反汇编代码
         std::string command = "objdump -d " + binaryFile + "  | tail -n +4 > " + middleFile;
@@ -938,11 +932,12 @@ private:
     }
 
     /**
-        * @brief 逐行读取源码到m_src_vct向量中
-        * 
-        */
+     * @brief 逐行读取源代码到 m_src_vct 向量中。
+     * 
+     */
     void initialise_load_src()
     {
+        m_src_vct.clear();
         auto offset_pc = offset_load_address(get_pc());
         auto line_entry = m_dwarf.compilation_units().begin()->get_line_table().begin();
         std::string file_path = std::string(line_entry->file->path);
