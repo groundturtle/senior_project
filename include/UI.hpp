@@ -68,11 +68,16 @@ public:
     UI(debugger& dbg) : dbg(dbg) {  }
     int buildWindows();
     void render();
-    void renewWindow(){}        // @todo 如何实现刷新显示?
+
 
 private:
+
     debugger& dbg;
-    bool m_close_window;
+
+    char commandInput[256] = "";        // 命令行输入缓冲区
+    char newVariableName[256] = "";     // 输入变量名缓冲区
+    std::unordered_map<std::string, std::string> watchedVariables;      // 存储变量名和对应的值
+
     static bool show_program;
     static bool show_stack;
     static bool show_src;
@@ -80,7 +85,9 @@ private:
     static bool show_ram;
     static bool show_option_bar;
     static bool show_call_stack;
+    static bool show_command_inputBar;
     static bool show_demo_window;
+    static bool show_watcher;
     static int windows_status;
 
     void showProgram(bool* p_open);
@@ -91,6 +98,9 @@ private:
     void showCallStack(bool* p_open);
     void showOptionBar(bool* p_open);
     void showOptionMainMenuBar();
+    void showCommandInputBar();         // 命令输入栏
+    void showVariableWatcher();         // 变量监视窗口
+    void updateWatchedVariables();      // 新增：更新监视的变量的值
 };
 
 // Initialization of static members
@@ -101,6 +111,8 @@ bool UI::show_global_stack = true;
 bool UI::show_ram = true;
 bool UI::show_option_bar = true;
 bool UI::show_call_stack = true;
+bool UI::show_command_inputBar = true;
+bool UI::show_watcher = true;
 bool UI::show_demo_window = false;
 int UI::windows_status = (ImGuiWindowFlags_None);
 
@@ -130,6 +142,79 @@ void UI::render()
     }
     if (show_demo_window) {
         ImGui::ShowDemoWindow(&show_demo_window);
+    }
+
+// 新增窗口
+    if (show_command_inputBar){
+        showCommandInputBar();
+    }
+    if (show_watcher){
+        showVariableWatcher();
+    }
+}
+
+void UI::showCommandInputBar()
+{
+    ImGui::Begin("Command Input");      // 创建一个新的ImGui窗口
+    ImGui::InputText("Command", commandInput, IM_ARRAYSIZE(commandInput)); // 创建一个文本输入框
+    if (ImGui::Button("Submit")) {      // 创建一个提交按钮
+        std::string command = commandInput;    
+        dbg.handle_command(command);     
+        // memset(commandInput, 0, sizeof(commandInput));
+        commandInput[0] = '\0';         // 清空命令
+    }
+    ImGui::End();
+}
+
+class UI {
+public:
+    // UI类的其他部分...
+
+private:
+    debugger& dbg;
+    std::unordered_map<std::string, std::string> watchedVariables; // 存储变量名和对应的值
+    char newVariableName[256] = ""; // 用户输入的新变量名
+
+    void showVariableWatcher();
+    void updateWatchedVariables(); // 新增：更新监视的变量的值
+};
+
+/**
+ * @brief 变量监视窗口，输入变量名、点击Add即可进行监视。
+ * 
+ */
+void UI::showVariableWatcher() {
+    ImGui::Begin("Variable Watcher");
+    ImGui::SetWindowFontScale(1.5f); // 设置字体放大比例为1.5
+    {
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_HorizontalScrollbar;
+        ImGui::BeginChild("Variable Watcher Data", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), false, window_flags);
+
+        ImGui::InputText("New Variable Name", newVariableName, IM_ARRAYSIZE(newVariableName));
+        if (ImGui::Button("Add")) {
+            watchedVariables[std::string(newVariableName)] = "Pending...";       // 初始值
+            newVariableName[0] = '\0';          // 清空输入框
+        }
+
+        updateWatchedVariables(); // 更新变量的值
+
+        for (auto& var : watchedVariables) {
+            ImGui::Text("%s: %s", var.first.c_str(), var.second.c_str());
+        }
+
+        ImGui::EndChild();
+    }
+    ImGui::End();
+}
+
+/**
+ * @brief 调用debugger类的方法，刷新被监视的变量值
+ * 
+ */
+void UI::updateWatchedVariables() {
+    for (auto& var : watchedVariables) {
+        // todo: 实现 debugger 方法 getVariableValue，根据变量名返回其值
+        var.second = dbg.getVariableValue(var.first);
     }
 }
 
@@ -369,7 +454,7 @@ void UI::showCallStack(bool *p_open)
         int index = 0;
         for (auto p : call_stack_vct)
         {
-            ImGui::Text("frame#%d:0x%lx\t%s", ++index, p.first, p.second.c_str());
+            ImGui::Text("f#%d:0x%lx\t%s", ++index, p.first, p.second.c_str());
         }
 
         ImGui::EndChild();
@@ -535,7 +620,6 @@ void UI::showOptionBar(bool *p_open)
                     dbg.initDbg(filePath, pid);
                     dbg.break_execution("main");
                     dbg.continue_execution();
-                    // buildWindows();
                 }
             }
         };

@@ -70,6 +70,30 @@ public:
 
 
     /**
+     * @brief 
+     * 
+     * @param varName 
+     * @return std::string 
+     */
+    std::string debugger::getVariableValue(const std::string& varName) {
+        auto symbols = symbol_type::lookup_symbol(varName);          // 查找变量名对应的符号
+        if (symbols.empty()) {
+            return "Error: Variable not found";
+        }
+
+        for (auto& sym : symbols) {             // 假定找到的第一个变量为所需。无法处理复杂情况，如作用域有重叠的同名变量。
+            if (sym.type == symboltype::symbol_type::object || sym.type == symboltype::symbol_type::notype) {
+                uint64_t address = sym.addr + m_load_address;       // 考虑到加载地址的偏移
+                auto value = read_memory(address);              // 读取变量值
+                return std::to_string(value);                  // 返回变量值的字符串表示
+            }
+        }
+        return "not found";
+    }
+
+
+
+    /**
      * @brief 获取程序中各个寄存器的值。
      * 
      * @return std::vector<std::pair<std::string, u_int64_t>> 包含寄存器名称和值的向量
@@ -372,7 +396,7 @@ private:
         }
         else if (is_prefix(command, "symbol"))
         {
-            auto syms = lookup_symbol(args[1]);
+            auto syms = symboltype::lookup_symbol(args[1]);
             for (auto &s : syms)
             {
                 std::cout << s.name << " " << to_string(s.type) << " 0x" << std::hex << s.addr << std::endl;
@@ -751,10 +775,8 @@ private:
         */
     void step_over()
     {
-        // std::cout << "now pc is 0x" << std::hex << get_pc() << "\n";
         auto line_entry = get_next_line_entry_from_pc(get_offset_pc());
         auto newpc = offset_dwarf_address(line_entry->address);
-        // std::cout << "my new pc is 0x" << std::hex << get_pc() << "\n";
         if (!m_breakpoints.count(newpc))
         {
             set_breakpoint_at_address(newpc);
@@ -762,13 +784,12 @@ private:
         continue_execution();
 
         remove_breakpoint(newpc);
-        // std::cout << "after continue 0x" << std::hex << get_pc() << "\n";
     };
 
     /**
-        * @brief Set the breakpoint at function object
-        * 
-        */
+    * @brief Set the breakpoint at function object
+    * 在源代码行条目的下一行设置断点. 如果停在函数序言，就无法观察到函数内部的变量状态、参数传递等信息。
+    */
     void set_breakpoint_at_function(const std::string &name)
     {
         bool flag = false;
@@ -782,8 +803,7 @@ private:
                     flag = true;
                     auto low_pc = at_low_pc(die);
                     auto entry = get_line_entry_from_pc(low_pc);
-                    // 在源代码行条目的下一行设置断点. 函数定义通常位于函数体的开头，如果停在函数定义的位置，调试器会在函数被调用前就停止执行，无法观察到函数内部的变量状态、参数传递等信息。
-                    ++entry;
+                    ++entry;                // 在源代码行条目的下一行设置断点
                     set_breakpoint_at_address(offset_dwarf_address(entry->address));
                 }
             }
@@ -795,11 +815,11 @@ private:
     }
 
     /**
-        * @brief 通过'file:line'形式的命令设置断点。
-        * 
-        * @param file 
-        * @param line 
-        */
+    * @brief 通过'file:line'形式的命令设置断点。
+    * 
+    * @param file 
+    * @param line 
+    */
     void set_breakpoint_at_source_file(const std::string &file, unsigned line)
     {
         for (const auto &cu : m_dwarf.compilation_units())
@@ -828,59 +848,20 @@ private:
         std::cout << "set breakpoint at function " << file << " and line " << line << " fails\n";
     }
 
-    /**
-    * @brief 查找符号, handle_command() 中使用.
-    * 
-    * 根据给定的符号名称，查找ELF文件中对应的符号，并返回包含所有匹配符号的向量。
-    * 
-    * @details
-    * 该函数遍历ELF文件的所有节，检查类型为符号表（symtab）或动态符号表（dynsym）的节。
-    * 对于每个符号，如果名称与给定的名称匹配，则将符号生成 symbol 结构体添加到结果向量中。
-    * 最后，使用std::unique函数去除重复的符号，并返回结果向量。
-    * 
-    * @param name 符号名称
-    * @return std::vector<symboltype::symbol> 包含所有匹配符号的向量
-    */
-    std::vector<symboltype::symbol> lookup_symbol(const std::string &name)
-    {
-        std::vector<symboltype::symbol> syms;
-
-        // 遍历ELF文件的所有节            
-        for (auto &sec : m_elf.sections())
-        {
-            // 跳过非符号表和动态符号表类型的节
-            if (sec.get_hdr().type != elf::sht::symtab && sec.get_hdr().type != elf::sht::dynsym)
-                continue;
-
-            for (auto sym : sec.as_symtab())
-            {
-                if (sym.get_name() == name)
-                {
-                    auto &d = sym.get_data();
-                    syms.push_back(symboltype::symbol{symboltype::to_symbol_type(d.type()), sym.get_name(), d.value});
-                }
-            }
-        }
-        // 去重
-        std::vector<symboltype::symbol>::iterator unique_end = std::unique(syms.begin(), syms.end());
-        syms.erase(unique_end, syms.end());
-        return syms;
-    }
-
 
 /**
 * @brief 初始化 
 * 
 */
     /**
-        * @brief 获取程序的偏移量
-        * @details
-        * 首先，通过m_elf.get_hdr().type获取目标程序的 ELF 文件类型。
-        * 如果是动态链接库（et::dyn），则需要通过其他方式获取加载地址。
-        * /proc/<pid>/maps是一个特殊的 Linux 文件，用于列出进程的内存映射。
-        * 从maps文件中读取第一行，这一行包含了动态库的内存映射范围，形如<start_addr>-<end_addr>。
-        * 
-        */
+    * @brief 获取程序的偏移量
+    * @details
+    * 首先，通过m_elf.get_hdr().type获取目标程序的 ELF 文件类型。
+    * 如果是动态链接库（et::dyn），则需要通过其他方式获取加载地址。
+    * /proc/<pid>/maps是一个特殊的 Linux 文件，用于列出进程的内存映射。
+    * 从maps文件中读取第一行，这一行包含了动态库的内存映射范围，形如<start_addr>-<end_addr>。
+    * 
+    */
     void initialise_load_address()
     {
         //  动态库
@@ -897,9 +878,9 @@ private:
     }
 
     /**
-        * @brief 加载汇编数据到m_asm_vct向量中
-        * 
-        */
+    * @brief 加载汇编数据到m_asm_vct向量中
+    * 
+    */
     void initialise_load_asm()
     {
         asmparaser paraser;
@@ -917,15 +898,13 @@ private:
     }
 
     /**
-        * @brief 使用 objdump 命令生成反汇编代码
-        * 
-        */
+    * @brief 使用 objdump 命令生成反汇编代码
+    * 
+    */
     void initialise_run_objdump()
     {
         std::string binaryFile = m_prog_name;
         std::string middleFile = m_prog_name + ".asm";
-
-        m_src_vct.clear();              //fatal!
 
         // 使用 objdump 命令生成反汇编代码
         std::string command = "objdump -d " + binaryFile + "  | tail -n +4 > " + middleFile;
@@ -938,11 +917,12 @@ private:
     }
 
     /**
-        * @brief 逐行读取源码到m_src_vct向量中
-        * 
-        */
+     * @brief 逐行读取源代码到 m_src_vct 向量中。
+     * 
+     */
     void initialise_load_src()
     {
+        m_src_vct.clear();
         auto offset_pc = offset_load_address(get_pc());
         auto line_entry = m_dwarf.compilation_units().begin()->get_line_table().begin();
         std::string file_path = std::string(line_entry->file->path);

@@ -2,6 +2,9 @@
  * @file symboltype.hpp
  * @author your name (you@domain.com)
  * @brief 定义了符号类型的枚举类、符号描述结构体，符号与elf中的符号类型一一对应并有转换函数。
+ * @details 符号映射的作用：
+ * 1. 解耦合：将libelfin的符号类型映射到自定义枚举类型可以减少对特定第三方库的依赖。这意味着如果将来决定更换底层库，或者libelfin库发生了变化，只需更新这个映射函数即可，而不用修改整个代码库中对符号类型的引用。这样做提高了代码的模块化和可维护性。
+ * 2. 接口清晰：使用自定义枚举类型作为应用程序内部的标准，可以确保接口的一致和清晰（命名）。
  * @version 0.1
  * @date 2024-03-11
  * 
@@ -88,4 +91,43 @@ namespace symboltype
             return symbol_type::notype;
         }
     };
+
+
+
+    /**
+    * @brief 根据给定的符号名称，查找ELF文件中对应的符号，并返回包含所有匹配符号的向量。
+    * 
+    * @details
+    * 该函数遍历ELF文件的所有节，检查类型为符号表（symtab）或动态符号表（dynsym）的节。
+    * 对于每个符号，如果名称与给定的名称匹配，则将符号生成 symbol 结构体添加到结果向量中。
+    * 最后，使用std::unique函数去除重复的符号，并返回结果向量。
+    * 
+    * @param name 符号名称
+    * @return std::vector<symboltype::symbol> 包含所有匹配符号的向量
+    */
+    std::vector<symboltype::symbol> lookup_symbol(const std::string &name)
+    {
+        std::vector<symboltype::symbol> syms;
+
+        // 遍历ELF文件的所有节            
+        for (auto &sec : m_elf.sections())
+        {
+            // 跳过非符号表和动态符号表类型的节
+            if (sec.get_hdr().type != elf::sht::symtab && sec.get_hdr().type != elf::sht::dynsym)
+                continue;
+
+            for (auto sym : sec.as_symtab())
+            {
+                if (sym.get_name() == name)
+                {
+                    auto &d = sym.get_data();
+                    syms.push_back(symboltype::symbol{symboltype::to_symbol_type(d.type()), sym.get_name(), d.value});
+                }
+            }
+        }
+        // 去重
+        std::vector<symboltype::symbol>::iterator unique_end = std::unique(syms.begin(), syms.end());
+        syms.erase(unique_end, syms.end());
+        return syms;
+    }
 }
