@@ -31,14 +31,14 @@ make clean
 make
 ```
 
-3、运行
+3. 运行
 ./mindbg fileYouWantToDbg
 
 fileYouWantToDbg需要以-g选项编译
 
-4、bug
-    1) 源文件的中文注释无法显示
 
-5、功能完善
-    1) 显示程序运行状态
-    2) 用file按钮读取需要调试的文件
+|    Name    |   Address   |   Parameters    |   Return Type      |
+|------------|-------------|-----------------|--------------------|
+|   func(int)|  0x123456   |    int          |       int          |
+|func(int, int)|  0x789ABC  |    int, int     |       int          |
+|  func(char) |  0xDEADBEEF |    char         |       int          |
