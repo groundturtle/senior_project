@@ -105,7 +105,7 @@ namespace symboltype
     * @param name 符号名称
     * @return std::vector<symboltype::symbol> 包含所有匹配符号的向量
     */
-    std::vector<symboltype::symbol> lookup_symbol(const std::string &name)
+    std::vector<symboltype::symbol> lookup_symbol(const std::string &name, elf::elf& m_elf)
     {
         std::vector<symboltype::symbol> syms;
 

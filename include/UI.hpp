@@ -156,28 +156,24 @@ void UI::render()
 void UI::showCommandInputBar()
 {
     ImGui::Begin("Command Input");      // 创建一个新的ImGui窗口
-    ImGui::InputText("Command", commandInput, IM_ARRAYSIZE(commandInput)); // 创建一个文本输入框
-    if (ImGui::Button("Submit")) {      // 创建一个提交按钮
-        std::string command = commandInput;    
-        dbg.handle_command(command);     
-        // memset(commandInput, 0, sizeof(commandInput));
-        commandInput[0] = '\0';         // 清空命令
+    ImGui::SetWindowFontScale(1.5f); // 设置字体放大比例为1.5
+    {
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_HorizontalScrollbar;
+        ImGui::BeginChild("Command Input", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), false, window_flags);
+
+        ImGui::InputText("Command", commandInput, IM_ARRAYSIZE(commandInput));      // 创建一个文本输入框
+        if (ImGui::Button("Submit")) {          // 创建一个提交按钮
+            std::string command = commandInput;    
+            dbg.handle_command(command);     
+            // memset(commandInput, 0, sizeof(commandInput));
+            commandInput[0] = '\0';         // 清空命令
+        }
+
+        ImGui::EndChild();
     }
     ImGui::End();
 }
 
-class UI {
-public:
-    // UI类的其他部分...
-
-private:
-    debugger& dbg;
-    std::unordered_map<std::string, std::string> watchedVariables; // 存储变量名和对应的值
-    char newVariableName[256] = ""; // 用户输入的新变量名
-
-    void showVariableWatcher();
-    void updateWatchedVariables(); // 新增：更新监视的变量的值
-};
 
 /**
  * @brief 变量监视窗口，输入变量名、点击Add即可进行监视。
@@ -190,12 +186,11 @@ void UI::showVariableWatcher() {
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_HorizontalScrollbar;
         ImGui::BeginChild("Variable Watcher Data", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y), false, window_flags);
 
-        ImGui::InputText("New Variable Name", newVariableName, IM_ARRAYSIZE(newVariableName));
+        ImGui::InputText("Variable Name", newVariableName, IM_ARRAYSIZE(newVariableName));
         if (ImGui::Button("Add")) {
             watchedVariables[std::string(newVariableName)] = "Pending...";       // 初始值
             newVariableName[0] = '\0';          // 清空输入框
         }
-
         updateWatchedVariables(); // 更新变量的值
 
         for (auto& var : watchedVariables) {
@@ -213,8 +208,7 @@ void UI::showVariableWatcher() {
  */
 void UI::updateWatchedVariables() {
     for (auto& var : watchedVariables) {
-        // todo: 实现 debugger 方法 getVariableValue，根据变量名返回其值
-        var.second = dbg.getVariableValue(var.first);
+        var.second = dbg.read_variable(var.first);
     }
 }
 

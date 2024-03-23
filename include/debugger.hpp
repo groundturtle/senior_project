@@ -16,16 +16,79 @@
 #include <sys/wait.h>
 #include <cstdio>
 #include <algorithm>
+#include <iterator>
 
 #include "breakpoint.hpp"
 #include "registers.hpp"
 #include "dwarf/dwarf++.hh"
 #include "elf/elf++.hh"
+#include "dwarf/expr.cc"
 #include "symboltype.hpp"
 #include "asmparaser.hpp"
 
 namespace minidbg
 {
+
+   /**
+    * @class ptrace_expr_context
+    * @brief 为dwarf表达式提供评估环境，使用ptrace获取变量值。
+    * 
+    * @details 该类覆写了dwarf::expr_context中的几个关键函数，以便使用ptrace从调试目标进程获取寄存器和内存值。
+    */
+    class ptrace_expr_context : public dwarf::expr_context {
+    public:
+        /**
+        * @brief 构造函数，初始化pid和加载地址。
+        * @param pid 被调试的进程ID。
+        * @param load_address 程序的加载地址，用于地址计算。
+        */
+        ptrace_expr_context(pid_t pid, uint64_t load_address);
+
+        /**
+        * @brief 获取指定寄存器的值。
+        * @param regnum DWARF定义的寄存器编号。
+        * @return 寄存器的值。
+        */
+        dwarf::taddr reg(unsigned regnum) override;
+
+        /**
+        * @brief 获取程序计数器的当前值。
+        * @return 程序计数器的值，相对于加载地址。
+        */
+        dwarf::taddr pc();
+
+        /**
+        * @brief 读取指定地址的内存值。
+        * @param address 目标地址，相对于加载地址。
+        * @param size 读取的数据大小（目前未使用）。
+        * @return 地址处的内存值。
+        */
+        dwarf::taddr deref_size(dwarf::taddr address, unsigned size) override;
+
+    private:
+        pid_t m_pid; // 被调试的进程ID
+        uint64_t m_load_address; // 程序加载地址
+    };
+
+
+    ptrace_expr_context::ptrace_expr_context(pid_t pid, uint64_t load_address) 
+        : m_pid(pid), m_load_address(load_address) {}
+
+    dwarf::taddr ptrace_expr_context::reg(unsigned regnum) {
+        return get_register_value_from_dwarf_register(m_pid, regnum);
+    }
+
+    dwarf::taddr ptrace_expr_context::pc(){
+        struct user_regs_struct regs;
+        ptrace(PTRACE_GETREGS, m_pid, nullptr, &regs);
+        return regs.rip - m_load_address;
+    }
+
+    dwarf::taddr ptrace_expr_context::deref_size(dwarf::taddr address, unsigned size) {
+        return ptrace(PTRACE_PEEKDATA, m_pid, address + m_load_address, nullptr);
+    }
+
+
 
 /**
  * @brief 判断字符串s是否为字符串of的前缀。
@@ -55,6 +118,213 @@ public:
     std::vector<std::string> m_src_vct;         /**< 存储源代码 */
 
 
+
+public:
+    dwarf::die get_function_die_from_pc(uint64_t pc) {
+        for (auto &cu : m_dwarf.compilation_units()) {
+            if (die_pc_range(cu.root()).contains(pc)) {
+                for (const auto& die : cu.root()) {
+                    if (die.tag == dwarf::DW_TAG::subprogram) {
+                        if (die_pc_range(die).contains(pc)) {
+                            return die;
+                        }
+                    }
+                }
+            }
+        }
+
+        throw std::out_of_range{"Cannot find function"};
+    }
+
+    /**
+     * @brief 读取并打印当前函数中所有变量的值。
+     * 
+     * @details 遍历当前函数的所有变量DIE，评估它们的位置表达式（如果存在），然后根据表达式的结果读取并打印变量的值。
+    */
+    std::string read_variable(const std::string& var_name) {
+        using namespace dwarf;
+        std::string error_msg;
+
+        try {
+            auto func = get_function_die_from_pc(get_offset_pc());
+            for (const auto& die : func) {
+                // 跳过非变量
+                if (die.tag != DW_TAG::variable) continue;
+
+                // 检查变量名是否匹配
+                if (!die.has(DW_AT::name) || at_name(die) != var_name) continue;
+
+                auto loc_val = die[DW_AT::location];
+                // 只支持exprlocs类型的位置表达式
+                if (loc_val.get_type() == value::type::exprloc) {
+                    ptrace_expr_context context(m_pid, m_load_address);
+                    auto result = loc_val.as_exprloc().evaluate(&context);
+
+                    // 根据位置类型读取并返回变量的值
+                    switch (result.location_type) {
+                    case expr_result::type::address: {  // 地址
+                        auto offset_addr = result.value;
+                        long data = ptrace(PTRACE_PEEKDATA, m_pid, reinterpret_cast<void*>(offset_addr), nullptr);
+                        if (errno != 0) {
+                            error_msg = "Error: Failed to read memory at address " + std::to_string(offset_addr);
+                            return error_msg;
+                        }
+                        return std::to_string(data);
+                    }
+                    case expr_result::type::reg: {  // 寄存器
+                        try {
+                            auto value = get_register_value_from_dwarf_register(m_pid, result.value);
+                            return std::to_string(value);
+                        } catch(const std::exception& e) {
+                            error_msg = "Error: Failed to read register value, " + std::string(e.what());
+                            return error_msg;
+                        }
+                    }
+                    default:
+                        return "Error: Unhandled variable location type.";
+                    }
+                } else {
+                    return "Error: Variable location not supported.";
+                }
+            }
+            return "Error: Variable not found.";
+        } catch (const std::exception& e) {
+            // 处理所有预期之外的异常，并记录足够的信息来修复bug
+            std::stringstream ss;
+            ss << "Exception caught in read_variable: " << e.what() << "\n";
+            ss << "Variable name: " << var_name << "\n";
+            ss << "PID: " << m_pid << ", Load Address: " << std::hex << m_load_address << "\n";
+            // 输出异常信息到标准错误
+            std::cerr << ss.str();
+            // 返回明确的错误消息
+            return "Error: An exception occurred while reading variable.";
+        }
+    }
+
+
+
+    /**
+    * @brief 处理用户输入的调试器命令，并执行相应操作
+    * 
+    * @param line 用户输入的命令字符串
+    * 
+    * @details 根据命令的前缀进行分类处理，具体逻辑如下：
+    * 
+    * - 如果命令以 "break" 开头，则处理设置断点的逻辑。
+    * - 如果命令以 "register" 开头，则根据子命令执行相关的寄存器操作，包括查看寄存器内容、修改寄存器值等。
+    * - 如果命令以 "symbol" 开头，则查找并打印符号信息。
+    * - 如果命令以 "memory" 开头，则根据子命令执行内存读写操作。
+    * - 如果命令以 "si" 开头，则执行单步指令，并检查是否有断点。
+    * - 如果命令以 "step" 开头，则执行单步进入操作。
+    * - 如果命令以 "next" 开头，则执行下一步操作。
+    * - 如果命令以 "finish" 开头，则执行执行到函数返回操作。
+    * - 如果命令以 "backtrace" 开头，则打印回溯信息。
+    * - 如果命令以 "ls" 开头，则打印源代码和汇编信息。
+    * - 其他情况下，输出错误信息。
+    */
+    void handle_command(const std::string &line)
+    {
+        std::vector<std::string> args = split(line, ' ');
+        std::string command = args[0];
+
+        if (is_prefix(command, "break"))
+        {
+            if (args[1][0] == '0' && args[1][1] == 'x')
+            {
+                std::string addr{args[1], 2}; // naively assume that the user has written 0xADDRESS like 0xff
+                set_breakpoint_at_address(std::stol(addr, 0, 16) + m_load_address);
+            }
+            else if (args[1].find(':') != std::string::npos)
+            {
+                auto file_and_line = split(args[1], ':');
+                set_breakpoint_at_source_file(file_and_line[0], std::stoi(file_and_line[1]));
+            }
+            else
+            {
+                set_breakpoint_at_function(args[1]);
+            }
+        }
+        else if (is_prefix(command, "register"))
+        {
+            if (is_prefix(args[1], "dump"))
+            {
+                dump_registers();
+            }
+            else if (is_prefix(args[1], "read"))
+            {
+                std::cout << get_register_value(m_pid, get_register_from_name(args[2])) << std::endl;
+            }
+            else if (is_prefix(args[1], "write"))
+            {
+                std::string val{args[3], 2}; // assume 0xVALUE
+                set_register_value(m_pid, get_register_from_name(args[2]), std::stol(val, 0, 16));
+                std::cout << "write data " << args[3] << " into reg " << args[2] << " successfully\n";
+            }
+            else
+            {
+                std::cout << "unknow command for register\n";
+            }
+        }
+        else if (is_prefix(command, "symbol"))
+        {
+            auto syms = symboltype::lookup_symbol(args[1], m_elf);
+            for (auto &s : syms)
+            {
+                std::cout << s.name << " " << symboltype::to_string(s.type) << " 0x" << std::hex << s.addr << std::endl;
+            }
+        }
+        else if (is_prefix(command, "memory"))
+        {
+            std::string addr{args[2], 2}; // assume 0xADDRESS
+
+            if (is_prefix(args[1], "read"))
+            {
+                std::cout << std::hex << read_memory(std::stol(addr, 0, 16)) << std::endl;
+            }
+            if (is_prefix(args[1], "write"))
+            {
+                std::string val{args[3], 2}; // assume 0xVAL
+                write_memory(std::stol(addr, 0, 16), std::stol(val, 0, 16));
+            }
+        }
+        else if (is_prefix(command, "si"))
+        {
+            single_step_instruction_with_breakpoint_check();
+            auto offset_pc = offset_load_address(get_pc());
+            auto line_entry = get_line_entry_from_pc(offset_pc);
+        }
+        else if (is_prefix(command, "step"))
+        {
+            step_in();
+        }
+        else if (is_prefix(command, "next"))
+        {
+            step_over();
+        }
+        else if (is_prefix(command, "finish"))
+        {
+            step_out();
+        }
+        else if (is_prefix(command, "backtrace"))
+        {
+            // print_backtrace();
+        }
+        else if (is_prefix(command, "ls"))
+        {
+
+            auto line_entry = get_line_entry_from_pc(get_offset_pc());
+            // print_source(line_entry->file->path, line_entry->line);
+            // print_asm(m_asm_name, get_offset_pc());
+        }
+        else
+        {
+            std::cerr << "unknow command\n";
+        }
+    }
+
+
+
+
     /**
      * @brief 终止被调试程序
      * 
@@ -66,29 +336,6 @@ public:
             return false;
         }
         return true;
-    }
-
-
-    /**
-     * @brief 
-     * 
-     * @param varName 
-     * @return std::string 
-     */
-    std::string debugger::getVariableValue(const std::string& varName) {
-        auto symbols = symbol_type::lookup_symbol(varName);          // 查找变量名对应的符号
-        if (symbols.empty()) {
-            return "Error: Variable not found";
-        }
-
-        for (auto& sym : symbols) {             // 假定找到的第一个变量为所需。无法处理复杂情况，如作用域有重叠的同名变量。
-            if (sym.type == symboltype::symbol_type::object || sym.type == symboltype::symbol_type::notype) {
-                uint64_t address = sym.addr + m_load_address;       // 考虑到加载地址的偏移
-                auto value = read_memory(address);              // 读取变量值
-                return std::to_string(value);                  // 返回变量值的字符串表示
-            }
-        }
-        return "not found";
     }
 
 
@@ -332,124 +579,6 @@ private:
     elf::elf m_elf;
     uint64_t m_load_address; // 偏移量，很重要
 
-    /**
-    * @brief 处理用户输入的调试器命令，并执行相应操作
-    * 
-    * @param line 用户输入的命令字符串
-    * 
-    * @details 根据命令的前缀进行分类处理，具体逻辑如下：
-    * 
-    * - 如果命令以 "break" 开头，则处理设置断点的逻辑。
-    * - 如果命令以 "register" 开头，则根据子命令执行相关的寄存器操作，包括查看寄存器内容、修改寄存器值等。
-    * - 如果命令以 "symbol" 开头，则查找并打印符号信息。
-    * - 如果命令以 "memory" 开头，则根据子命令执行内存读写操作。
-    * - 如果命令以 "si" 开头，则执行单步指令，并检查是否有断点。
-    * - 如果命令以 "step" 开头，则执行单步进入操作。
-    * - 如果命令以 "next" 开头，则执行下一步操作。
-    * - 如果命令以 "finish" 开头，则执行执行到函数返回操作。
-    * - 如果命令以 "backtrace" 开头，则打印回溯信息。
-    * - 如果命令以 "ls" 开头，则打印源代码和汇编信息。
-    * - 其他情况下，输出错误信息。
-    */
-    void handle_command(const std::string &line)
-    {
-        std::vector<std::string> args = split(line, ' ');
-        std::string command = args[0];
-
-        if (is_prefix(command, "break"))
-        {
-            if (args[1][0] == '0' && args[1][1] == 'x')
-            {
-                std::string addr{args[1], 2}; // naively assume that the user has written 0xADDRESS like 0xff
-                set_breakpoint_at_address(std::stol(addr, 0, 16) + m_load_address);
-            }
-            else if (args[1].find(':') != std::string::npos)
-            {
-                auto file_and_line = split(args[1], ':');
-                set_breakpoint_at_source_file(file_and_line[0], std::stoi(file_and_line[1]));
-            }
-            else
-            {
-                set_breakpoint_at_function(args[1]);
-            }
-        }
-        else if (is_prefix(command, "register"))
-        {
-            if (is_prefix(args[1], "dump"))
-            {
-                dump_registers();
-            }
-            else if (is_prefix(args[1], "read"))
-            {
-                std::cout << get_register_value(m_pid, get_register_from_name(args[2])) << std::endl;
-            }
-            else if (is_prefix(args[1], "write"))
-            {
-                std::string val{args[3], 2}; // assume 0xVALUE
-                set_register_value(m_pid, get_register_from_name(args[2]), std::stol(val, 0, 16));
-                std::cout << "write data " << args[3] << " into reg " << args[2] << " successfully\n";
-            }
-            else
-            {
-                std::cout << "unknow command for register\n";
-            }
-        }
-        else if (is_prefix(command, "symbol"))
-        {
-            auto syms = symboltype::lookup_symbol(args[1]);
-            for (auto &s : syms)
-            {
-                std::cout << s.name << " " << to_string(s.type) << " 0x" << std::hex << s.addr << std::endl;
-            }
-        }
-        else if (is_prefix(command, "memory"))
-        {
-            std::string addr{args[2], 2}; // assume 0xADDRESS
-
-            if (is_prefix(args[1], "read"))
-            {
-                std::cout << std::hex << read_memory(std::stol(addr, 0, 16)) << std::endl;
-            }
-            if (is_prefix(args[1], "write"))
-            {
-                std::string val{args[3], 2}; // assume 0xVAL
-                write_memory(std::stol(addr, 0, 16), std::stol(val, 0, 16));
-            }
-        }
-        else if (is_prefix(command, "si"))
-        {
-            single_step_instruction_with_breakpoint_check();
-            auto offset_pc = offset_load_address(get_pc());
-            auto line_entry = get_line_entry_from_pc(offset_pc);
-        }
-        else if (is_prefix(command, "step"))
-        {
-            step_in();
-        }
-        else if (is_prefix(command, "next"))
-        {
-            step_over();
-        }
-        else if (is_prefix(command, "finish"))
-        {
-            step_out();
-        }
-        else if (is_prefix(command, "backtrace"))
-        {
-            // print_backtrace();
-        }
-        else if (is_prefix(command, "ls"))
-        {
-
-            auto line_entry = get_line_entry_from_pc(get_offset_pc());
-            // print_source(line_entry->file->path, line_entry->line);
-            // print_asm(m_asm_name, get_offset_pc());
-        }
-        else
-        {
-            std::cerr << "unknow command\n";
-        }
-    }
     /**
         * @brief 根据siginfo_t结构体中的si_code字段来判断SIGTRAP信号的具体类型，并进行相应的处理：     
 

@@ -101,16 +101,32 @@ namespace minidbg
     * @param r 要获取值的寄存器枚举变量
     * @return uint64_t 寄存器中存储的值
     */
-    uint64_t get_register_value(pid_t pid, reg r)
-    {
+    uint64_t get_register_value(pid_t pid, reg r) {
         user_regs_struct regs;
-        ptrace(PTRACE_GETREGS, pid, nullptr, &regs);
-        auto it = std::find_if(begin(g_register_descriptors), end(g_register_descriptors),
-                            [r](auto &&rd)
-                            { return rd.r == r; });
+        if (ptrace(PTRACE_GETREGS, pid, nullptr, &regs) != 0) {
+            std::ostringstream oss;
+            oss << "Failed to get registers for pid " << pid;
+            throw std::runtime_error(oss.str());
+        }
 
-        return *(reinterpret_cast<uint64_t *>(&regs) + (it - begin(g_register_descriptors)));
+        auto it = std::find_if(begin(g_register_descriptors), end(g_register_descriptors),
+                            [r](const auto& rd)
+                            { return rd.r == r; });
+        if (it == end(g_register_descriptors)) {
+            std::ostringstream oss;
+            oss << "Register " << r << " not found among register descriptors";
+            throw std::out_of_range(oss.str());
+        }
+
+        // Here, ensure the offset calculation is correct for your architecture.
+        auto offset = it - begin(g_register_descriptors);
+        if (offset >= sizeof(regs) / sizeof(uint64_t)) {
+            throw std::runtime_error("Register offset out of bounds");
+        }
+
+        return *(reinterpret_cast<uint64_t *>(&regs) + offset);
     }
+
 
     /**
     * @brief 设置（改写）指定寄存器的值。
@@ -141,17 +157,23 @@ namespace minidbg
     * @param regnum DWARF寄存器编号
     * @return uint64_t 寄存器中存储的值
     */
-    uint64_t get_register_value_from_dwarf_register(pid_t pid, unsigned regnum)
-    {
+    uint64_t get_register_value_from_dwarf_register(pid_t pid, unsigned regnum) {
         auto it = std::find_if(begin(g_register_descriptors), end(g_register_descriptors),
-                            [regnum](auto &&rd)
+                            [regnum](const auto& rd)
                             { return rd.dwarf_r == regnum; });
-        if (it == end(g_register_descriptors))
-        {
-            throw std::out_of_range{"Unknown dwarf register"};
+        if (it == end(g_register_descriptors)) {
+            std::ostringstream oss;
+            oss << "Unknown dwarf register number: " << regnum;
+            throw std::out_of_range(oss.str());
         }
 
-        return get_register_value(pid, it->r);
+        try {
+            return get_register_value(pid, it->r);
+        } catch (const std::exception& e) {
+            std::ostringstream oss;
+            oss << "Failed to get value for register number " << regnum << " due to: " << e.what();
+            throw std::runtime_error(oss.str());
+        }
     }
 
     /**
