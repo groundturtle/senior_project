@@ -192,8 +192,8 @@ void UI::showVariableWatcher() {
             newVariableName[0] = '\0';          // 清空输入框
         }
         updateWatchedVariables(); // 更新变量的值
-
         for (auto& var : watchedVariables) {
+            std::cout<<var.first<<"  "<<var.second<<std::endl;
             ImGui::Text("%s: %s", var.first.c_str(), var.second.c_str());
         }
 

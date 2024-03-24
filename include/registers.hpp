@@ -95,6 +95,21 @@ namespace minidbg
     }};
 
     /**
+    * @brief 获取给定寄存器枚举变量的人类可读名称。
+    * 
+    * @param r 寄存器枚举变量
+    * @return std::string 寄存器名称的字符串表示
+    */
+    std::string get_register_name(reg r)
+    {
+        auto it = std::find_if(begin(g_register_descriptors), end(g_register_descriptors),
+                            [r](auto &&rd)
+                            { return rd.r == r; });
+        return it->name;
+    }
+
+    
+    /**
     * @brief 根据给定的进程ID和寄存器枚举变量，获取该寄存器的值。
     * 
     * @param pid 目标进程的进程ID
@@ -114,7 +129,7 @@ namespace minidbg
                             { return rd.r == r; });
         if (it == end(g_register_descriptors)) {
             std::ostringstream oss;
-            oss << "Register " << r << " not found among register descriptors";
+            oss << "Register " << get_register_name(r) << " not found among register descriptors";
             throw std::out_of_range(oss.str());
         }
 
@@ -176,19 +191,6 @@ namespace minidbg
         }
     }
 
-    /**
-    * @brief 获取给定寄存器枚举变量的人类可读名称。
-    * 
-    * @param r 寄存器枚举变量
-    * @return std::string 寄存器名称的字符串表示
-    */
-    std::string get_register_name(reg r)
-    {
-        auto it = std::find_if(begin(g_register_descriptors), end(g_register_descriptors),
-                            [r](auto &&rd)
-                            { return rd.r == r; });
-        return it->name;
-    }
 
     /**
     * @brief 根据给定的寄存器名称字符串，获取对应的寄存器枚举变量。
