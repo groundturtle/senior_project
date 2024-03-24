@@ -26,6 +26,9 @@
 #include "symboltype.hpp"
 #include "asmparaser.hpp"
 
+
+template class std::initializer_list<dwarf::taddr>; 
+
 namespace minidbg
 {
 
@@ -120,21 +123,40 @@ public:
 
 
 public:
+    // dwarf::die get_function_die_from_pc(uint64_t pc) {
+    //     for (const auto &cu : m_dwarf.compilation_units()) {
+    //         std::cout << "finding CU containing PC...\n";
+    //         if (dwarf::die_pc_range(cu.root()).contains(pc)) {
+    //             std::cout<<"finding subprogram containing PC...\n";
+    //             for (const auto& die : cu.root()) {
+    //                 if (die.tag == dwarf::DW_TAG::subprogram) {
+    //                     if (dwarf::die_pc_range(die).contains(pc)) {
+    //                         std::cout << "Found.\n";
+    //                         return die;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     throw std::out_of_range{"get_function_die_from_pc(): funtion die not found.\n"};
+    // }
+
     dwarf::die get_function_die_from_pc(uint64_t pc) {
-        for (auto &cu : m_dwarf.compilation_units()) {
-            if (die_pc_range(cu.root()).contains(pc)) {
-                for (const auto& die : cu.root()) {
-                    if (die.tag == dwarf::DW_TAG::subprogram) {
-                        if (die_pc_range(die).contains(pc)) {
-                            return die;
-                        }
-                    }
+        for (const auto &cu : m_dwarf.compilation_units()) {        // 找到编译单元
+            for(auto die : cu.root()){                   // 对于其中的每条die
+                std::cout<<"finding function die...\n";
+                if (die.tag == dwarf::DW_TAG::subprogram            // 如果是函数，且为当前正在执行的函数
+                    && get_function_from_pc(pc).function_name == dwarf::at_name(die)) 
+                {     
+                        std::cout << "function "+dwarf::at_name(die)+"'s die found.\n";
+                        return die;
                 }
             }
         }
-
-        throw std::out_of_range{"Cannot find function"};
+        throw std::out_of_range{"get_function_die_from_pc(): funtion die not found.\n"};
     }
+
+
 
     /**
      * @brief 读取并打印当前函数中所有变量的值。
@@ -142,46 +164,52 @@ public:
      * @details 遍历当前函数的所有变量DIE，评估它们的位置表达式（如果存在），然后根据表达式的结果读取并打印变量的值。
     */
     std::string read_variable(const std::string& var_name) {
-        using namespace dwarf;
         std::string error_msg;
 
         try {
-            auto func = get_function_die_from_pc(get_offset_pc());
-            for (const auto& die : func) {
-                // 跳过非变量
-                if (die.tag != DW_TAG::variable) continue;
+            // auto func = get_function_die_from_pc(get_offset_pc());
+            auto func_die = get_function_die_from_pc(get_pc());
 
-                // 检查变量名是否匹配
-                if (!die.has(DW_AT::name) || at_name(die) != var_name) continue;
+            std::cout<<"now in function: "<<dwarf::at_name(func_die)<<"\n";
 
-                auto loc_val = die[DW_AT::location];
+            for (const auto& die : func_die) {
+                // 跳过非变量, 检查变量名是否匹配
+                if (die.tag != dwarf::DW_TAG::variable) continue;
+                if (!die.has(dwarf::DW_AT::name) || dwarf::at_name(die) != var_name) continue;
+
+                auto loc_val = die[dwarf::DW_AT::location];
+                //debug
+                std::cout<<"get location exprloc, to evaluate.\n";
+
                 // 只支持exprlocs类型的位置表达式
-                if (loc_val.get_type() == value::type::exprloc) {
+                if (loc_val.get_type() == dwarf::value::type::exprloc) {
                     ptrace_expr_context context(m_pid, m_load_address);
                     auto result = loc_val.as_exprloc().evaluate(&context);
 
+                    //debug
+                    std::cout<<"evaluated, to read memory.\n";
                     // 根据位置类型读取并返回变量的值
                     switch (result.location_type) {
-                    case expr_result::type::address: {  // 地址
-                        auto offset_addr = result.value;
-                        long data = ptrace(PTRACE_PEEKDATA, m_pid, reinterpret_cast<void*>(offset_addr), nullptr);
-                        if (errno != 0) {
-                            error_msg = "Error: Failed to read memory at address " + std::to_string(offset_addr);
-                            return error_msg;
+                        case dwarf::expr_result::type::address: {  // 地址
+                            auto offset_addr = result.value;
+                            long data = ptrace(PTRACE_PEEKDATA, m_pid, reinterpret_cast<void*>(offset_addr), nullptr);
+                            if (errno != 0) {
+                                error_msg = "Error: Failed to read memory at address " + std::to_string(offset_addr);
+                                return error_msg;
+                            }
+                            return std::to_string(data);
                         }
-                        return std::to_string(data);
-                    }
-                    case expr_result::type::reg: {  // 寄存器
-                        try {
-                            auto value = get_register_value_from_dwarf_register(m_pid, result.value);
-                            return std::to_string(value);
-                        } catch(const std::exception& e) {
-                            error_msg = "Error: Failed to read register value, " + std::string(e.what());
-                            return error_msg;
+                        case dwarf::expr_result::type::reg: {  // 寄存器
+                            try {
+                                auto value = get_register_value_from_dwarf_register(m_pid, result.value);
+                                return std::to_string(value);
+                            } catch(const std::exception& e) {
+                                error_msg = "Error: Failed to read register value, " + std::string(e.what());
+                                return error_msg;
+                            }
                         }
-                    }
-                    default:
-                        return "Error: Unhandled variable location type.";
+                        default:
+                            return "Error: Unhandled variable location type.";
                     }
                 } else {
                     return "Error: Variable location not supported.";
@@ -191,8 +219,8 @@ public:
         } catch (const std::exception& e) {
             // 处理所有预期之外的异常，并记录足够的信息来修复bug
             std::stringstream ss;
-            ss << "Exception caught in read_variable: " << e.what() << "\n";
-            ss << "Variable name: " << var_name << "\n";
+            ss << "read_variable(): exception: " << e.what() << "\n";
+            ss << "Variable name: " << var_name << ", ";
             ss << "PID: " << m_pid << ", Load Address: " << std::hex << m_load_address << "\n";
             // 输出异常信息到标准错误
             std::cerr << ss.str();
@@ -243,6 +271,10 @@ public:
             {
                 set_breakpoint_at_function(args[1]);
             }
+        }
+        else if(is_prefix(command, "continue"))
+        {
+            continue_execution();
         }
         else if (is_prefix(command, "register"))
         {
@@ -969,6 +1001,7 @@ private:
                     if (entry.is_stmt && entry.line == line)
                     {
                         set_breakpoint_at_address(offset_dwarf_address(entry.address));
+                        std::cout<<"set breakpoint at " + file + ":" + std::to_string(line)<<std::endl;
                         return;
                     }
                 }
@@ -1004,6 +1037,7 @@ private:
             addr = "0x" + addr;
             m_load_address = std::stoul(addr, 0, 16);       // 将字符串转换为unsigned long
         }
+        std::cout<< "PID: " << m_pid << ", Load Address: 0x" << std::hex << m_load_address << "\n";
     }
 
     /**
@@ -1055,7 +1089,6 @@ private:
         auto offset_pc = offset_load_address(get_pc());
         auto line_entry = m_dwarf.compilation_units().begin()->get_line_table().begin();
         std::string file_path = std::string(line_entry->file->path);
-        std::cout<<"trying to open src "<<file_path<<"\n";
 
         std::ifstream inFile(file_path);
         std::string line;
