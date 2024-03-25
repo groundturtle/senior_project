@@ -22,6 +22,16 @@ sudo apt-get install libgtk-3-dev
 
 2. 编译程序
 ```
+# 编译库
+cd ./ext/libelfbin
+make
+
+# 编译程序
+cd ../../
+mkdir build
+cd build
+cmake ..
+make
 ```
 
 3. 运行

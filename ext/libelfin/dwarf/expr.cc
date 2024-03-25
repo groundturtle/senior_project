@@ -41,9 +41,10 @@ expr::evaluate(expr_context *ctx, const std::initializer_list<taddr> &arguments)
         // Create the initial stack.  arguments are in reverse order
         // (that is, element 0 is TOS), so reverse it.
         stack.reserve(arguments.size());
-        for (const taddr *elt = arguments.end() - 1;
-             elt >= arguments.begin(); elt--)
-                stack.push_back(*elt);
+        if(arguments.size() != 0){
+                for (const taddr *elt = arguments.end() - 1;    elt >= arguments.begin();       elt--)
+                        stack.push_back(*elt);
+        }
 
         // Create a subsection for just this expression so we can
         // easily detect the end (including premature end).
@@ -126,10 +127,14 @@ expr::evaluate(expr_context *ctx, const std::initializer_list<taddr> &arguments)
                         stack.push_back(cur.sleb128());
                         break;
 
+                //@todo type of offset?
                         // 2.5.1.2 Register based addressing
-                case DW_OP::fbreg:
-                        // XXX
-                        throw runtime_error("DW_OP_fbreg not implemented");
+                case DW_OP::fbreg: {
+                        uint64_t offset = cur.sleb128(); // 获取SLEB128编码的偏移量
+                        auto frameBase = ctx->reg(6); // 
+                        stack.push_back(frameBase + offset); // 将帧基址和偏移量相加的结果压栈
+                        break;
+                }
                 case DW_OP::breg0...DW_OP::breg31:
                         tmp1.u = (unsigned)op - (unsigned)DW_OP::breg0;
                         tmp2.s = cur.sleb128();

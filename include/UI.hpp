@@ -193,7 +193,7 @@ void UI::showVariableWatcher() {
         }
         updateWatchedVariables(); // 更新变量的值
         for (auto& var : watchedVariables) {
-            std::cout<<var.first<<"  "<<var.second<<std::endl;
+            // std::cout<<var.first<<"  "<<var.second<<std::endl;
             ImGui::Text("%s: %s", var.first.c_str(), var.second.c_str());
         }
 

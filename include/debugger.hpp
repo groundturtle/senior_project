@@ -25,6 +25,7 @@
 #include "dwarf/expr.cc"
 #include "symboltype.hpp"
 #include "asmparaser.hpp"
+#include "utility.hpp"
 
 
 template class std::initializer_list<dwarf::taddr>; 
@@ -88,27 +89,24 @@ namespace minidbg
     }
 
     dwarf::taddr ptrace_expr_context::deref_size(dwarf::taddr address, unsigned size) {
-        return ptrace(PTRACE_PEEKDATA, m_pid, address + m_load_address, nullptr);
+
+        uint64_t full_address = address + m_load_address;
+        if (!is_valid_address(m_pid, full_address)) {
+            std::cerr << "Attempt to dereference invalid address: " << std::hex << full_address << std::endl;
+            return 0; // 或其他错误处理方式
+        }
+        errno = 0;
+        long data = ptrace(PTRACE_PEEKDATA, m_pid, full_address, nullptr);
+        if (errno != 0) {
+            // 处理错误，例如打印错误消息或返回一个特定的错误值
+            std::cerr << "ptrace PEEKDATA failed at address: " << std::hex << full_address << std::dec << " with errno: " << errno << std::endl;
+            return 0; // 或者其他合适的错误处理方式
+        }
+        return data;
     }
 
 
 
-/**
- * @brief 判断字符串s是否为字符串of的前缀。
- * 
- * @param s 要检查的前缀字符串
- * @param of 目标字符串
- * @return true 如果s是of的前缀
- * @return false 如果s不是of的前缀
- */
-bool is_prefix(const std::string &s, const std::string &of)
-{
-    // 如果`s`是`of`的前缀
-    // 例如：s="con" of="continue" 返回true
-    if (s.size() > of.size())
-        return false;
-    return std::equal(s.begin(), s.end(), of.begin());
-}
 
 /**
  * @brief 调试器类，用于跟踪和调试程序执行。
@@ -144,7 +142,6 @@ public:
     dwarf::die get_function_die_from_pc(uint64_t pc) {
         for (const auto &cu : m_dwarf.compilation_units()) {        // 找到编译单元
             for(auto die : cu.root()){                   // 对于其中的每条die
-                std::cout<<"finding function die...\n";
                 if (die.tag == dwarf::DW_TAG::subprogram            // 如果是函数，且为当前正在执行的函数
                     && get_function_from_pc(pc).function_name == dwarf::at_name(die)) 
                 {     
@@ -164,30 +161,28 @@ public:
      * @details 遍历当前函数的所有变量DIE，评估它们的位置表达式（如果存在），然后根据表达式的结果读取并打印变量的值。
     */
     std::string read_variable(const std::string& var_name) {
+        //@todo: 
         std::string error_msg;
 
         try {
             // auto func = get_function_die_from_pc(get_offset_pc());
             auto func_die = get_function_die_from_pc(get_pc());
 
-            std::cout<<"now in function: "<<dwarf::at_name(func_die)<<"\n";
-
             for (const auto& die : func_die) {
                 // 跳过非变量, 检查变量名是否匹配
                 if (die.tag != dwarf::DW_TAG::variable) continue;
                 if (!die.has(dwarf::DW_AT::name) || dwarf::at_name(die) != var_name) continue;
 
-                auto loc_val = die[dwarf::DW_AT::location];
                 //debug
-                std::cout<<"get location exprloc, to evaluate.\n";
+                std::cout<<"read_variable(): variable " + var_name + "/" + dwarf::at_name(die) + "'s die" + " found.\n";
+
+                auto loc_val = die[dwarf::DW_AT::location];
 
                 // 只支持exprlocs类型的位置表达式
                 if (loc_val.get_type() == dwarf::value::type::exprloc) {
                     ptrace_expr_context context(m_pid, m_load_address);
                     auto result = loc_val.as_exprloc().evaluate(&context);
 
-                    //debug
-                    std::cout<<"evaluated, to read memory.\n";
                     // 根据位置类型读取并返回变量的值
                     switch (result.location_type) {
                         case dwarf::expr_result::type::address: {  // 地址
@@ -219,9 +214,9 @@ public:
         } catch (const std::exception& e) {
             // 处理所有预期之外的异常，并记录足够的信息来修复bug
             std::stringstream ss;
-            ss << "read_variable(): exception: " << e.what() << "\n";
+            ss << "read_variable(): exception: " << e.what();
             ss << "Variable name: " << var_name << ", ";
-            ss << "PID: " << m_pid << ", Load Address: " << std::hex << m_load_address << "\n";
+            ss << "PID: " << m_pid << ", Load Address: " << std::hex << m_load_address << "\n\n";
             // 输出异常信息到标准错误
             std::cerr << ss.str();
             // 返回明确的错误消息
