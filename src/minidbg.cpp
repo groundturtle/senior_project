@@ -16,7 +16,7 @@
 
 #include <GLFW/glfw3.h>
 
-#include "debugger.hpp"
+#include "debugger.h"
 #include "UI.hpp"
 
 using namespace minidbg;
