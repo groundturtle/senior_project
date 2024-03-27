@@ -1,3 +1,6 @@
+#ifndef UTILITY_HPP
+#define UTILITY_HPP
+
 #include<string>
 
 /**
@@ -36,3 +39,5 @@ bool is_valid_address(pid_t pid, uintptr_t address) {
     }
     return false; // 地址无效
 }
+
+#endif

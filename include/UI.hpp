@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include "debugger.hpp"
+#include "debugger.h"
 #include <gtk/gtk.h>
 #include <sys/ptrace.h>
 #include <sys/wait.h>

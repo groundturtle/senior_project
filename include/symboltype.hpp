@@ -11,6 +11,10 @@
  * @copyright Copyright (c) 2024
  * 
  */
+
+#ifndef SYMBOLTYPE_HPP
+#define SYMBOLTYPE_HPP
+
 #include "elf/elf++.hh"
 namespace symboltype
 {
@@ -131,3 +135,6 @@ namespace symboltype
         return syms;
     }
 }
+
+
+#endif
