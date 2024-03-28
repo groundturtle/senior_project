@@ -1,4 +1,5 @@
 #include "debugger.h"
+#include "utility.hpp"
 
 template class std::initializer_list<dwarf::taddr>; 
 
@@ -87,10 +88,10 @@ std::string debugger::read_variable(const std::string& var_name) {
 
 void debugger::handle_command(const std::string &line)
 {
-    std::vector<std::string> args = split(line, ' ');
+    std::vector<std::string> args = utility::split(line, ' ');
     std::string command = args[0];
 
-    if (is_prefix(command, "break"))
+    if (utility::is_prefix(command, "break"))
     {
         if (args[1][0] == '0' && args[1][1] == 'x')
         {
@@ -99,7 +100,7 @@ void debugger::handle_command(const std::string &line)
         }
         else if (args[1].find(':') != std::string::npos)
         {
-            auto file_and_line = split(args[1], ':');
+            auto file_and_line = utility::split(args[1], ':');
             set_breakpoint_at_source_file(file_and_line[0], std::stoi(file_and_line[1]));
         }
         else
@@ -107,21 +108,21 @@ void debugger::handle_command(const std::string &line)
             set_breakpoint_at_function(args[1]);
         }
     }
-    else if(is_prefix(command, "continue"))
+    else if(utility::is_prefix(command, "continue"))
     {
         continue_execution();
     }
-    else if (is_prefix(command, "register"))
+    else if (utility::is_prefix(command, "register"))
     {
-        if (is_prefix(args[1], "dump"))
+        if (utility::is_prefix(args[1], "dump"))
         {
             dump_registers();
         }
-        else if (is_prefix(args[1], "read"))
+        else if (utility::is_prefix(args[1], "read"))
         {
             std::cout << get_register_value(m_pid, get_register_from_name(args[2])) << std::endl;
         }
-        else if (is_prefix(args[1], "write"))
+        else if (utility::is_prefix(args[1], "write"))
         {
             std::string val{args[3], 2}; // assume 0xVALUE
             set_register_value(m_pid, get_register_from_name(args[2]), std::stol(val, 0, 16));
@@ -132,7 +133,7 @@ void debugger::handle_command(const std::string &line)
             std::cout << "unknow command for register\n";
         }
     }
-    else if (is_prefix(command, "symbol"))
+    else if (utility::is_prefix(command, "symbol"))
     {
         auto syms = symboltype::lookup_symbol(args[1], m_elf);
         for (auto &s : syms)
@@ -140,43 +141,43 @@ void debugger::handle_command(const std::string &line)
             std::cout << s.name << " " << symboltype::to_string(s.type) << " 0x" << std::hex << s.addr << std::endl;
         }
     }
-    else if (is_prefix(command, "memory"))
+    else if (utility::is_prefix(command, "memory"))
     {
         std::string addr{args[2], 2}; // assume 0xADDRESS
 
-        if (is_prefix(args[1], "read"))
+        if (utility::is_prefix(args[1], "read"))
         {
             std::cout << std::hex << read_memory(std::stol(addr, 0, 16)) << std::endl;
         }
-        if (is_prefix(args[1], "write"))
+        if (utility::is_prefix(args[1], "write"))
         {
             std::string val{args[3], 2}; // assume 0xVAL
             write_memory(std::stol(addr, 0, 16), std::stol(val, 0, 16));
         }
     }
-    else if (is_prefix(command, "si"))
+    else if (utility::is_prefix(command, "si"))
     {
         single_step_instruction_with_breakpoint_check();
         auto offset_pc = offset_load_address(get_pc());
         auto line_entry = get_line_entry_from_pc(offset_pc);
     }
-    else if (is_prefix(command, "step"))
+    else if (utility::is_prefix(command, "step"))
     {
         step_in();
     }
-    else if (is_prefix(command, "next"))
+    else if (utility::is_prefix(command, "next"))
     {
         step_over();
     }
-    else if (is_prefix(command, "finish"))
+    else if (utility::is_prefix(command, "finish"))
     {
         step_out();
     }
-    else if (is_prefix(command, "backtrace"))
+    else if (utility::is_prefix(command, "backtrace"))
     {
         // print_backtrace();
     }
-    else if (is_prefix(command, "ls"))
+    else if (utility::is_prefix(command, "ls"))
     {
 
         auto line_entry = get_line_entry_from_pc(get_offset_pc());
@@ -348,7 +349,7 @@ void debugger::break_execution(std::string command)
     }
     else if (command.find(':') != std::string::npos)
     {
-        auto file_and_line = split(command, ':');
+        auto file_and_line = utility::split(command, ':');
         set_breakpoint_at_source_file(file_and_line[0], std::stoi(file_and_line[1]));
     }
     else

@@ -20,6 +20,12 @@ add_definitions(${GTK3_CFLAGS_OTHER})
 add_executable(minidbg
    src/minidbg.cpp 
    src/debugger.cpp        
+   src/asmparaser.cpp
+   src/breakpoint.cpp
+   src/ptrace_expr_context.cpp
+   src/registers.cpp
+   src/symboltype.cpp
+   src/UI.cpp
    ## add source file here.
    imgui/imgui.cpp
    imgui/imgui_widgets.cpp
