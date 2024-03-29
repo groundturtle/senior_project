@@ -35,7 +35,7 @@ std::string debugger::read_variable(const std::string& var_name) {
             if (!die.has(dwarf::DW_AT::name) || dwarf::at_name(die) != var_name) continue;
 
             //debug
-            std::cout<<"read_variable(): variable " + var_name + "/" + dwarf::at_name(die) + "'s die" + " found.\n";
+            // std::cout<<"read_variable(): variable " + var_name + "/" + dwarf::at_name(die) + "'s die" + " found.\n";
 
             auto loc_val = die[dwarf::DW_AT::location];
 

@@ -2,6 +2,7 @@
 #include "utility.hpp"
 
 
+namespace minidbg{
 /**
  * @brief 解析汇编文件，将汇编条目填入向量中。
  * 
@@ -127,4 +128,6 @@ asm_head asmparaser::cope_asm_head(std::string &command)
     head.start_addr = std::stol(temp[0], 0, 16);
     head.function_name = temp[1].substr(1, temp[1].size() - 3);
     return head;
+}
+
 }

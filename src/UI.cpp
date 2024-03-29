@@ -1,4 +1,5 @@
 #include "UI.h"
+#include <GLFW/glfw3.h>
 
 namespace minidbg 
 {
@@ -43,8 +44,8 @@ static void glfw_error_callback(int error, const char *description)
 }
 
 UI::UI(debugger& dbg) : dbg(dbg) {
-    commandInput[256] = "";        // 命令行输入缓冲区
-    newVariableName[256] = "";     // 输入变量名缓冲区
+    commandInput[0] = '\0';        // 命令行输入缓冲区
+    newVariableName[0] = '\0';     // 输入变量名缓冲区
 }
 
 

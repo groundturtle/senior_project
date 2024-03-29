@@ -18,7 +18,7 @@ link_directories(${GTK3_LIBRARY_DIRS})
 add_definitions(${GTK3_CFLAGS_OTHER})
 
 add_executable(minidbg
-   src/minidbg.cpp 
+   src/main.cpp 
    src/debugger.cpp        
    src/asmparaser.cpp
    src/breakpoint.cpp

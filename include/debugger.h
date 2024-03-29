@@ -18,15 +18,15 @@
 #include <algorithm>
 #include <iterator>
 
-#include "breakpoint.hpp"
-#include "registers.hpp"
+#include "breakpoint.h"
+#include "registers.h"
 #include "dwarf/dwarf++.hh"
 #include "elf/elf++.hh"
 // #include "dwarf/expr.cc"
-#include "symboltype.hpp"
-#include "asmparaser.hpp"
+#include "symboltype.h"
+#include "asmparaser.h"
 #include "utility.hpp"
-#include "ptrace_expr_context.hpp"
+#include "ptrace_expr_context.h"
 
 
 namespace minidbg
@@ -205,7 +205,7 @@ private:
     std::string m_prog_name;
     std::string m_asm_name;
     pid_t m_pid;
-    std::unordered_map<std::intptr_t, breakpoint> m_breakpoints;
+    std::unordered_map<std::intptr_t, minidbg::breakpoint> m_breakpoints;
     dwarf::dwarf m_dwarf;
     elf::elf m_elf;
     uint64_t m_load_address; // 偏移量，很重要

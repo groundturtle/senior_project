@@ -1,10 +1,18 @@
 #include "ptrace_expr_context.h"
+#include "utility.hpp"
+#include <iostream>
+#include <iomanip>  
+#include <sys/ptrace.h> 
+#include "registers.h"
+#include "utility.hpp"
+
+namespace minidbg{
 
 ptrace_expr_context::ptrace_expr_context(pid_t pid, uint64_t load_address) 
     : m_pid(pid), m_load_address(load_address) {}
 
 dwarf::taddr ptrace_expr_context::reg(unsigned regnum) {
-    return minidbg::get_register_value_from_dwarf_register(m_pid, regnum);
+    return get_register_value_from_dwarf_register(m_pid, regnum);
 }
 
 dwarf::taddr ptrace_expr_context::pc(){
@@ -28,4 +36,6 @@ dwarf::taddr ptrace_expr_context::deref_size(dwarf::taddr address, unsigned size
         return 0; // 或者其他合适的错误处理方式
     }
     return data;
+}
+
 }

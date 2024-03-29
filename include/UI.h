@@ -20,7 +20,7 @@
 
 #include "breakpoint.h"
 #include "registers.h"
-#include "asmparaser.p"
+#include "asmparaser.h"
 
 namespace minidbg {
 

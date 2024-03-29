@@ -1,7 +1,8 @@
-#include "asmparaser.h"
+#include "breakpoint.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <sys/ptrace.h> 
 
 namespace minidbg
 {

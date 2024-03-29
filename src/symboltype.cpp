@@ -5,6 +5,8 @@
 
 #include "elf/elf++.hh"
 #include "symboltype.h"
+#include <algorithm>
+
 
 
 namespace symboltype

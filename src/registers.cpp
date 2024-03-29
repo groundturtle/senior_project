@@ -1,13 +1,16 @@
 #include <sys/user.h>
 #include <algorithm>
+#include <sys/ptrace.h>
 
+#include <sstream>
 #include "registers.h"
+
 
 namespace minidbg
 {
 
     // 静态数组，包含寄存器描述符的实例, 每个实例表示一个寄存器的信息
-    static const std::array<reg_descriptor, n_registers> g_register_descriptors{{
+    const std::array<reg_descriptor, n_registers> g_register_descriptors{{
         {reg::r15, 15, "r15"},
         {reg::r14, 14, "r14"},
         {reg::r13, 13, "r13"},
@@ -116,4 +119,3 @@ namespace minidbg
     }
 
 }
-#endif

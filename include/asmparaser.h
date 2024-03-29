@@ -12,7 +12,7 @@
 
 #include <vector>
 #include <string>
-#include "utility.h"
+#include "utility.hpp"
 
 namespace minidbg {
 
@@ -37,7 +37,8 @@ struct asm_head {
  * 
  */
 class asmparaser {
-    public:
+
+public:
 
     /**
      * @brief 解析汇编文件，将汇编条目填入向量中。

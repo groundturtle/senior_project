@@ -3,7 +3,11 @@
 
 #include "dwarf/dwarf++.hh"
 #include "elf/elf++.hh"
-#include "dwarf/expr.cc"
+// #include "dwarf/expr.cc"
+
+
+namespace minidbg{
+
 /**
 * @class ptrace_expr_context
 * @brief 为dwarf表达式提供评估环境，使用ptrace获取变量值。
@@ -44,5 +48,7 @@ private:
     pid_t m_pid; // 被调试的进程ID
     uint64_t m_load_address; // 程序加载地址
 };
+
+}
 
 #endif

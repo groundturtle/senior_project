@@ -1,46 +1,42 @@
 /**
- * @file asmparaser.h
- * @brief 逐行解析汇编文件，分为函数头asm_head和指令asm_entry
+ * @file breakpoint.h
+ * @brief 断点类，包含启用和禁用功能，实例化后存储于debugger类中的m_breakpoints向量。
  * @version 0.1
- * @date 2024-02-19
+ * @date 2024-03-11
  * 
- * @copyright Copyright (c) 2024
+ * Copyright (c) 2024
  * 
  */
-#ifndef MINIDBG_ASMPARASER_H
-#define MINIDBG_ASMPARASER_H
+#ifndef BREAKPOINT_H
+#define BREAKPOINT_H
 
-#include <vector>
+#include <linux/types.h>
+#include "utility.hpp"
 #include <string>
 
 namespace minidbg
 {
-    struct asm_entry
-    {
-        uint64_t addr;
-        std::string mechine_code;
-        std::string asm_code;
-        std::string comment;
-    };
-
-    struct asm_head {
-        uint64_t start_addr;
-        uint64_t end_addr;
-        std::string function_name;
-        std::vector<asm_entry> asm_entris;
-    };
-
-    class asmparaser
+    /**
+     * @brief 断点类，包含启用和禁用功能，实例化后存储于debugger类中的m_breakpoints向量。
+     * 
+     */
+    class breakpoint
     {
     public:
-        std::vector<asm_head> get_asm_data(std::string file_path);
+        breakpoint();
+        breakpoint(pid_t pid, std::intptr_t addr);
+
+        void enable();
+        void disable();
+        auto is_enabled() const -> bool;
+        auto get_address() const -> intptr_t;
 
     private:
-        void trimLeft(std::string &str);
-        void trimRight(std::string &str);
-        asm_entry cope_asm_entry(std::string &command);
-        asm_head cope_asm_head(std::string &command);
+        pid_t m_pid;
+        std::intptr_t m_addr;
+        bool m_enabled;
+        uint8_t m_save_data;
     };
-};
+}
 
-#endif // MINIDBG_ASMPARASER_H
+#endif // BREAKPOINT_H

@@ -2,6 +2,12 @@
 #define UTILITY_HPP
 
 #include<string>
+#include<vector>
+#include <sstream>
+#include <iostream>
+#include <fstream>
+
+namespace minidbg{
 
 class utility{
 
@@ -65,5 +71,6 @@ public:
 
 };
 
+}
 
 #endif
