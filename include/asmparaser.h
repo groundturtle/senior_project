@@ -1,6 +1,6 @@
 /**
  * @file asmparaser.h
- * @brief 逐行解析汇编文件，分为函数头asm_head和指令asm_entry
+ * @brief 逐行解析汇编文件，用于在调试过程中确定当前所在函数。汇编文件内容分为函数头asm_head和指令asm_entry。
  * @version 0.1
  * @date 2024-02-19
  * 

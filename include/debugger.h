@@ -1,3 +1,9 @@
+/**
+ * @file debugger.h
+ * @brief 调试器核心逻辑实现。调试器及UI启动和初始化、被调试程序控制流管理、程序数据读取等均在debugger类中实现。
+ * @version 0.1
+ * @date 2024-04-22
+ */
 #ifndef MINIDBG_DEBUGGER_H
 #define MINIDBG_DEBUGGER_H
 
@@ -214,9 +220,9 @@ private:
      * @brief 根据 SIGTRAP 信号信息执行不同的操作，包括触发断点、打印调试信息等。
      * 
      * @details
-     * 该函数根据接收到的信号信息执行不同的操作：
-     * - 如果信号代码为SI_KERNEL或TRAP_BRKPT，则表示触发了断点，将当前程序计数器减一，并打印断点信息。
-     * - 如果信号代码为TRAP_TRACE，则表示接收到了追踪信号。
+     * 根据 info.si_code 判断具体的触发原因：
+     * - TRAP_BRKPT：断点触发了 SIGTRAP。此时代码将程序计数器（PC）后退一位，确保继续执行时从断点前的地址开始。
+     * - TRAP_TRACE：单步跟踪触发了 SIGTRAP。在这种情况下，函数仅打印一条信息，表明接收到 SIGTRAP。
      * - 对于其他信号代码，打印出未知的信号代码信息。
      * 
      * @param info 信号信息

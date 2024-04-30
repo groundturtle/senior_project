@@ -1,5 +1,3 @@
-
-
 #ifndef SYMBOLTYPE_HPP
 #define SYMBOLTYPE_HPP
 

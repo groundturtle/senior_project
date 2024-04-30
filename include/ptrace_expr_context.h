@@ -1,3 +1,9 @@
+/**
+ * @file ptrace_expr_context.h
+ * @brief 为dwarf能够使用evaluate()函数而实现的类，继承自dwarf::expr_context，实现pc(), reg(), dref_size()三个函数。
+ * @version 0.1
+ * @date 2024-04-22
+ */
 #ifndef PTRACE_EXPR_CONTEXT_H
 #define PTRACE_EXPR_CONTEXT_H
 

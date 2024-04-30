@@ -22,7 +22,6 @@ dwarf::die debugger::get_function_die_from_pc(uint64_t pc) {
 
 
 std::string debugger::read_variable(const std::string& var_name) {
-    //@todo: 
     std::string error_msg;
 
     try {
@@ -48,7 +47,7 @@ std::string debugger::read_variable(const std::string& var_name) {
                 switch (result.location_type) {
                     case dwarf::expr_result::type::address: {  // 地址
                         auto offset_addr = result.value;
-                        long data = ptrace(PTRACE_PEEKDATA, m_pid, reinterpret_cast<void*>(offset_addr), nullptr);
+                        long data = ptrace(PTRACE_PEEKDATA, m_pid, reinterpret_cast<void*>(offset_addr) + 16, nullptr);
                         if (errno != 0) {
                             error_msg = "Error: Failed to read memory at address " + std::to_string(offset_addr);
                             return error_msg;
@@ -378,7 +377,6 @@ void debugger::si_execution()
     single_step_instruction_with_breakpoint_check();
 }
 
-// todo: figure out
 void debugger::handle_sigtrap(siginfo_t info)
 {
     switch (info.si_code)

@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 {
 
     debugger dbg;
-    UI ui(dbg);
+    // UI ui(dbg);
 
     if (argc < 2)
     {
@@ -51,6 +51,6 @@ int main(int argc, char *argv[])
         dbg.initDbg(prog, pid);
         dbg.break_execution("main");
         dbg.continue_execution();
-        ui.buildWindows();
+        // ui.buildWindows();
     }
 }
